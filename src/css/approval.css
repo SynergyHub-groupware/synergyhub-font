@@ -1,0 +1,5 @@
+.el_draftApply{display:inline-block;padding:5px 10px;border-radius:5px;border:1px solid #ebebeb;margin:5px 15px;margin-left:0;}
+.el_draftApply:hover{background-color:#e3f4ff;border-color:#e3f4ff;}
+
+.el_approvalSign{height:42px;background:no-repeat center/contain;padding:0px!important;min-width:120px;}
+.bl_rejectPop{position:absolute;}

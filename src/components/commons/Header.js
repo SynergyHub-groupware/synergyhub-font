@@ -9,7 +9,7 @@ function Header(){
                 </h1>
                 <ul className="bl_header__menuL">
                     <li><NavLink to="/employee">인사</NavLink></li>
-                    <li><NavLink to="/approval">결재</NavLink></li>
+                    <li><NavLink to="/approval/formList">결재</NavLink></li>
                     <li><NavLink to="/post">게시판</NavLink></li>
                     <li><NavLink to="/attendance">근태</NavLink></li>
                     <li><NavLink to="/calendar">일정</NavLink></li>

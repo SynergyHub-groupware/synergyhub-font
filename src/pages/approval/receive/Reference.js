@@ -1,7 +1,7 @@
-function Temporary(){
+function Reference(){
     return(
         <div className="ly_cont">
-            <h4 className="el_lv1Head hp_mb30">임시저장</h4>
+            <h4 className="el_lv1Head hp_mb30">받은결재함 [참조/열람]</h4>
             <div className="ly_spaceBetween">
                 <button type="button" className="el_btnS el_btn8Back">삭제</button>
                 <form action="" method="">
@@ -17,33 +17,38 @@ function Temporary(){
                         <col style={{width:'120px'}}/>
                         <col style={{width:'*'}}/>
                         <col style={{width:'120px'}}/>
+                        <col style={{width:'120px'}}/>
+                        <col style={{width:'120px'}}/>
                     </colgroup>
                     <thead>
                         <tr>
                             <th scope="col"><input type="checkbox" className="" id="" name="" value="checkAll"/></th>
-                            <th scope="col">작성일</th>
+                            <th scope="col">공유형태</th>
                             <th scope="col">결재양식</th>
                             <th scope="col">제목</th>
                             <th scope="col">첨부파일</th>
+                            <th scope="col">작성자</th>
+                            <th scope="col">완료일</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <th scope="row"><input type="checkbox" className="" id="" name="" value="checkOne"/></th>
-                            <td>2024.12.34</td>
+                            <td>참조</td>
                             <td>휴가신청서</td>
                             <td className="hp_alignL">휴가신청서_홍길동</td>
                             <td></td>
+                            <td>김철수</td>
+                            <td>2024.12.34</td>
                         </tr>
                         <tr>
                             <th scope="row"><input type="checkbox" className="" id="" name="" value="checkOne"/></th>
-                            <td>2024.12.34</td>
+                            <td>열람</td>
                             <td>휴가신청서</td>
-                            <td className="hp_alignL">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quibusdam, deleniti!</td>
+                            <td className="hp_alignL">휴가신청서_홍길동</td>
                             <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5" className="hp_pt50 hp_pb50 hp_7Color">목록이 없습니다.</td>
+                            <td>김철수</td>
+                            <td>2024.12.34</td>
                         </tr>
                     </tbody>
                 </table>
@@ -66,5 +71,4 @@ function Temporary(){
         </div>
     )
 }
-
-export default Temporary;
+export default Reference;

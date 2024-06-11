@@ -1,11 +1,11 @@
-function ExceptionWork(){
+function Leave(){
     return(
         <div className="ly_cont">
-            <h4 className="el_lv1Head hp_mb30">예외근무신청서</h4>
+            <h4 className="el_lv1Head hp_mb30">휴직신청서</h4>
             <section className="bl_sect hp_padding15">
                 <div className="ly_spaceBetween hp_mb10">
                     <h5 className="hp_fw700 hp_fs18">결재라인</h5>
-                    <button type="button" className="el_btnS el_btn8Bord hp_p3-5 hp_fs12">결재라인 불러오기</button>
+                    <button type="button" className="el_btnS el_btn8Bord hp_p3-5">결재라인 불러오기</button>
                 </div>
                 <div className="ly_flex">
                     <table className="bl_tb3 hp_alignC hp_w200px ly_fshirnk">
@@ -127,7 +127,7 @@ function ExceptionWork(){
                     <tbody>
                         <tr>
                             <th scope="row">기안양식</th>
-                            <td>예외근무신청서</td>
+                            <td>휴직신청서</td>
                         </tr>
                         <tr>
                             <th scope="row">첨부파일</th>
@@ -143,42 +143,23 @@ function ExceptionWork(){
                 <table className="bl_tb3 el_approvalTb3__th">
                     <tbody>
                         <tr>
-                            <th scope="col">근무형태</th>
-                            <td>
-                                <select className="hp_w120px">
-                                    <option>선택</option>
-                                    <option val="">외근</option>
-                                    <option val="">출장</option>
-                                    <option val="">교육</option>
-                                    <option val="">훈련</option>
-                                    <option val="">재택</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
                             <th scope="col">시작일</th>
-                            <td>
-                                <input type="date" className="hp_w120px"/>
-                                <input type="time" className="hp_w120px hp_ml5"/>
-                            </td>
+                            <td><input type="date" className="hp_w120px"/></td>
                         </tr>
                         <tr>
                             <th scope="col">종료일</th>
+                            <td><input type="date" className="hp_w120px"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="col">비상연락처</th>
                             <td>
-                                <input type="date" className="hp_w120px"/>
-                                <input type="time" className="hp_w120px hp_ml5"/>
+                                <input type="number" className="hp_w70px"/> -
+                                <input type="number" className="hp_w70px"/> -
+                                <input type="number" className="hp_w70px"/>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="col">기간</th>
-                            <td>0일</td>
-                        </tr>
-                        <tr>
-                            <th scope="col">예외근무지</th>
-                            <td><input type="text" className="hp_w100"/></td>
-                        </tr>
-                        <tr>
-                            <th scope="col">업무내용</th>
+                            <th scope="col">사유</th>
                             <td><textarea className="hp_w100"></textarea></td>
                         </tr>
                     </tbody>
@@ -192,5 +173,4 @@ function ExceptionWork(){
         </div>
     )
 }
-
-export default ExceptionWork;
+export default Leave;

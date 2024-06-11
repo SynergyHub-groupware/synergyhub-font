@@ -22,6 +22,12 @@ import Leave from './pages/approval/form/Leave';
 import Resign from './pages/approval/form/Resign';
 import Apology from './pages/approval/form/Apology';
 import Etc from './pages/approval/form/Etc';
+import ApprovalLayout from './pages/approval/ApprovalLayout';
+import AttendanceLayout from './pages/attendance/AttendanceLayout';
+import CalendarLayout from './pages/calendar/CalendarLayout';
+import EmployeeLayout from './pages/employee/EmployeeLayout';
+import MessageLayout from './pages/message/MessageLayout';
+import PostLayout from './pages/post/PostLayout';
 
 function App() {
   return (
@@ -29,7 +35,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Layout/>}>
           <Route index element={<Main/>}/>
-          <Route path="approval">
+          <Route path="approval" element={<ApprovalLayout/>}>
             <Route path="formList" element={<FormList/>} />
             <Route path="temporary" element={<Temporary/>} />
             <Route path="form">
@@ -59,6 +65,21 @@ function App() {
               <Route path="sign" element={<Sign/>} />
               <Route path="storage" element={<Storage/>} />
             </Route>
+          </Route>
+          <Route path="attendance" element={<AttendanceLayout/>}>
+            {/* 내용추가 */}
+          </Route>
+          <Route path="calendar" element={<CalendarLayout/>}>
+            {/* 내용추가 */}
+          </Route>
+          <Route path="employee" element={<EmployeeLayout/>}>
+            {/* 내용추가 */}
+          </Route>
+          <Route path="message" element={<MessageLayout/>}>
+            {/* 내용추가 */}
+          </Route>
+          <Route path="post" element={<PostLayout/>}>
+            {/* 내용추가 */}
           </Route>
         </Route>
       </Routes>

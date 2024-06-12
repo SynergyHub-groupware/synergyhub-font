@@ -147,6 +147,16 @@ function Overtime(){
                             <td><textarea className="hp_w100"></textarea></td>
                         </tr>
                         <tr>
+                            <th scope="col">구분</th>
+                            <td>
+                                <select className="hp_w120px">
+                                    <option>선택</option>
+                                    <option val="">연장근무</option>
+                                    <option val="">휴일근무</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
                             <th scope="col">시작일</th>
                             <td>
                                 <input type="date" className="hp_w120px"/>

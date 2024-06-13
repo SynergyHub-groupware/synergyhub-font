@@ -6,19 +6,17 @@ import { callFormListAPI } from "../../apis/ApprovalAPICalls";
 
 function FormDetail(){
     const dispatch = useDispatch();
-    const {forms = []} = useSelector(state => state.approvalReducer);
+    const {forms} = useSelector(state => state.approvalReducer);
+
+    console.log("forms", forms);
 
     useEffect(() => {
         dispatch(callFormListAPI());
     }, []);
 
-    const afNames = forms.map(form => form.afName);
-    console.log(afNames);
-
-
     return(
         <div className="ly_cont">
-            <h4 className="el_lv1Head hp_mb30">ㅇㅇ</h4>
+            {/* <h4 className="el_lv1Head hp_mb30">{selectedFormName}</h4> */}
             <section className="bl_sect hp_padding15">
                 <FormLine/>
                 <h5 className="hp_fw700 hp_fs18 hp_mb10 hp_mt30">결재정보</h5>
@@ -26,7 +24,7 @@ function FormDetail(){
                     <tbody>
                         <tr>
                             <th scope="row">기안양식</th>
-                            <td>ㅇㅇ</td>
+                            {/* <td>{selectedFormName}</td> */}
                         </tr>
                         <tr>
                             <th scope="row">첨부파일</th>

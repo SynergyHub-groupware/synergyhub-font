@@ -31,7 +31,7 @@ function ExceptionWork(){
                 </tr>
                 <tr>
                     <th scope="col">기간</th>
-                    <td>0일</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <th scope="col">예외근무지</th>

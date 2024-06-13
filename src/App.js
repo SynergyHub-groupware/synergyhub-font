@@ -28,6 +28,7 @@ import CalendarLayout from './pages/calendar/CalendarLayout';
 import EmployeeLayout from './pages/employee/EmployeeLayout';
 import MessageLayout from './pages/message/MessageLayout';
 import PostLayout from './pages/post/PostLayout';
+import FormDetail from './pages/approval/FormDetail';
 
 function App() {
   return (
@@ -38,15 +39,15 @@ function App() {
           <Route path="approval" element={<ApprovalLayout/>}>
             <Route path="formList" element={<FormList/>} />
             <Route path="temporary" element={<Temporary/>} />
-            <Route path="form">
-              <Route path="exceptionWork" element={<ExceptionWork/>} />
-              <Route path="overtime" element={<Overtime/>} />
-              <Route path="late" element={<Late/>} />
-              <Route path="vacation" element={<Vacation/>} />
-              <Route path="leave" element={<Leave/>} />
-              <Route path="resign" element={<Resign/>} />
-              <Route path="apology" element={<Apology/>} />
-              <Route path="etc" element={<Etc/>} />
+            <Route path="form" element={<FormDetail/>}>
+              <Route path="2" element={<ExceptionWork/>} />
+              <Route path="3" element={<Overtime/>} />
+              <Route path="4" element={<Late/>} />
+              <Route path="5" element={<Vacation/>} />
+              <Route path="7" element={<Leave/>} />
+              <Route path="8" element={<Resign/>} />
+              <Route path="9" element={<Apology/>} />
+              <Route path="12" element={<Etc/>} />
             </Route>
             <Route path="receive">
               <Route path="complete" element={<ReceiveComplete/>} />

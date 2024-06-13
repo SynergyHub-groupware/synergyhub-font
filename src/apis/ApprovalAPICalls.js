@@ -11,7 +11,7 @@ export const callFormListAPI = () => {
 
 export const callFormLineAPI = ({lsCode}) => {
     return async (dispatch, getState) => {
-        const result = await request('GET', `/approval/form/${lsCode}`);
+        const result = await request('GET', `/approval/formLine?lsCode=${lsCode}`);
         if(result && result.status === 200) dispatch(getLines(result));
     }
 }

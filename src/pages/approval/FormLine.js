@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 import { callFormLineAPI } from "../../apis/ApprovalAPICalls";
+import { useLocation, useNavigate } from "react-router-dom";
+import Line from "./Line";
 
 function FormLine(){
-
     return(
         <>
             <div className="ly_spaceBetween hp_mb10">
@@ -56,75 +56,7 @@ function FormLine(){
                         </tr>
                     </tbody>
                 </table>
-                <table className="bl_tb3 hp_alignC ly_fgrow1">
-                    <tbody>
-                        <tr>
-                            <th>결재자</th>
-                        </tr>
-                        <tr>
-                            <td>미결재</td>
-                        </tr>
-                        <tr>
-                            <td>시스템팀</td>
-                        </tr>
-                        <tr>
-                            <td>팀장</td>
-                        </tr>
-                        <tr>
-                            <td>김철수</td>
-                        </tr>
-                        <tr>
-                            <td className="el_approvalSign">
-                                <button type="button" className="el_btnS el_btnblueBack">승인</button>
-                                <button type="button" className="el_btnS el_btn8Back hp_ml5">반려</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table className="bl_tb3 hp_alignC ly_fgrow1">
-                    <tbody>
-                        <tr>
-                            <th>결재자</th>
-                        </tr>
-                        <tr>
-                            <td>미결재</td>
-                        </tr>
-                        <tr>
-                            <td>IT부</td>
-                        </tr>
-                        <tr>
-                            <td>부서장</td>
-                        </tr>
-                        <tr>
-                            <td>김영미</td>
-                        </tr>
-                        <tr>
-                            <td className="el_approvalSign"></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table className="bl_tb3 hp_alignC ly_fgrow1">
-                    <tbody>
-                        <tr>
-                            <th>결재자</th>
-                        </tr>
-                        <tr>
-                            <td>미결재</td>
-                        </tr>
-                        <tr>
-                            <td>임원</td>
-                        </tr>
-                        <tr>
-                            <td>대표</td>
-                        </tr>
-                        <tr>
-                            <td>이순신</td>
-                        </tr>
-                        <tr>
-                            <td className="el_approvalSign"></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <Line/>
             </div>
         </>
     )

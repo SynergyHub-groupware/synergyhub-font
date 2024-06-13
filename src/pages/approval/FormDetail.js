@@ -1,22 +1,36 @@
-import { Outlet, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import FormLine from "./FormLine";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { callFormListAPI } from "../../apis/ApprovalAPICalls";
+import ExceptionWork from "./form/ExceptionWork";
+import Overtime from "./form/Overtime";
+import Late from "./form/Late";
+import Vacation from "./form/Vacation";
+import Leave from "./form/Leave";
+import Resign from "./form/Resign";
+import Apology from "./form/Apology";
+import Etc from "./form/Etc";
 
 function FormDetail(){
-    const dispatch = useDispatch();
-    const {forms} = useSelector(state => state.approvalReducer);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const {afName} = {...location.state};
+    const {afCode} = useParams();
 
-    console.log("forms", forms);
-
-    useEffect(() => {
-        dispatch(callFormListAPI());
-    }, []);
+    const renderFormCont = () => {
+        switch(afCode){
+            case '2': return <ExceptionWork/>; break;
+            case '3': return <Overtime/>; break;
+            case '4': return <Late/>; break;
+            case '5': return <Vacation/>; break;
+            case '7': return <Leave/>; break;
+            case '8': return <Resign/>; break;
+            case '9': return <Apology/>; break;
+            case '12': return <Etc/>; break;
+        }
+    }
 
     return(
         <div className="ly_cont">
-            {/* <h4 className="el_lv1Head hp_mb30">{selectedFormName}</h4> */}
+            <h4 className="el_lv1Head hp_mb30">{afName}</h4>
             <section className="bl_sect hp_padding15">
                 <FormLine/>
                 <h5 className="hp_fw700 hp_fs18 hp_mb10 hp_mt30">결재정보</h5>
@@ -24,7 +38,7 @@ function FormDetail(){
                     <tbody>
                         <tr>
                             <th scope="row">기안양식</th>
-                            {/* <td>{selectedFormName}</td> */}
+                            <td>{afName}</td>
                         </tr>
                         <tr>
                             <th scope="row">첨부파일</th>
@@ -37,7 +51,7 @@ function FormDetail(){
                     </tbody>
                 </table>
                 <h5 className="hp_fw700 hp_fs18 hp_mb10 hp_mt30">결재내용</h5>
-                <Outlet/>
+                {renderFormCont()}
             </section>
             <div className="hp_mt10 hp_alignR">
                 <button type="button" className="el_btnS el_btnblueBord">임시저장</button>

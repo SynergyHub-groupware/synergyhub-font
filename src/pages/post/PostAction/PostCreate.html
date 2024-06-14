@@ -76,8 +76,8 @@
     <script type="text/babel">
         function App() {
             const [formData, setFormData] = React.useState({
-                title: '',
-                content: '',
+                postName: '',
+                postCon: '',
                 attachFile: null
             });
 
@@ -99,10 +99,10 @@
             const handleSubmit = async (event) => {
                 event.preventDefault();
 
-                const { title, content, attachFile } = formData;
+                const { postName, postCon, attachFile } = formData;
                 const formDataToSend = new FormData();
-                formDataToSend.append('title', title);
-                formDataToSend.append('content', content);
+                formDataToSend.append('postName', postName);
+                formDataToSend.append('postCon', postCon);
                 formDataToSend.append('attachFile', attachFile);
 
                 try {
@@ -186,15 +186,15 @@
                             <tr>
                                 <td>내용</td>
                                 <td colSpan="3">
-                                    <div id="editor">
+                                    <div id="editor" name="postCon">
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>설정</td>
                                 <td colSpan="3">
-                                    <label><input type="checkbox" value="allowComment" />댓글 허용</label>
-                                    <label><input type="checkbox" value="allowAnoComment" />익명 댓글 허용</label>
+                                    <label><input type="checkbox" value="ALLOW_NORMAL" name="postCommSet"/>댓글 허용</label>
+                                    <label><input type="checkbox" value="ALLOW_ANONYMOUS" name="postCommSet"/>익명 댓글 허용</label>
                                 </td>
                             </tr>
                             <tr>

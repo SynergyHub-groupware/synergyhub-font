@@ -28,6 +28,8 @@ import CalendarLayout from './pages/calendar/CalendarLayout';
 import EmployeeLayout from './pages/employee/EmployeeLayout';
 import MessageLayout from './pages/message/MessageLayout';
 import PostLayout from './pages/post/PostLayout';
+import PostListView from './pages/post/PostListView';
+import PostCreateView from './pages/post/PostCreateView';
 
 function App() {
   return (
@@ -79,7 +81,8 @@ function App() {
             {/* 내용추가 */}
           </Route>
           <Route path="post" element={<PostLayout/>}>
-            {/* 내용추가 */}
+          <Route path="PostListView" element={<PostListView/>} />
+          <Route path="PostCreateView" element={<PostCreateView/>} />
           </Route>
         </Route>
       </Routes>

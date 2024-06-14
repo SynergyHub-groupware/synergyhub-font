@@ -1,0 +1,58 @@
+table {
+    width: 100%;
+    /* 표를 화면 너비에 맞춤 */
+    border-collapse: collapse;
+    /* 테두리 겹치도록 설정 */
+}
+
+th,
+td {
+    border: 1px solid lightgray;
+    /* 테두리 추가 */
+    padding: 8px;
+    /* 셀 내부 여백 설정 */
+    text-align: center;
+    /* 셀 내용 가운데 정렬 */
+}
+
+h1 {
+    margin: 0;
+    /* 제목의 기본 마진 제거 */
+}
+
+tbody tr:last-child td {
+    border-bottom: 1px solid black;
+    /* 마지막 행의 셀에만 아래쪽 테두리 추가 */
+}
+
+.main {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+.button button {
+    margin: 0 5px;
+}
+
+.tableHead {
+    background-color: gray;
+}
+.searchZone {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.searchZone input {
+    margin-right: 10px;
+}

@@ -1,10 +1,19 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { callFormLineAPI } from "../../apis/ApprovalAPICalls";
-import { useLocation, useNavigate } from "react-router-dom";
 import Line from "./Line";
 
 function FormLine(){
+    const empCode = "2021048";
+    const empName = "박하늘";
+    const deptCode = "D15";
+    const deptTitle = "정보보안팀";
+    const titleCode = "T6";
+    const titleName = "팀원";
+    // const empCode = "2021091";
+    // const empName = "이서연";
+    // const deptCode = "D3";
+    // const deptTitle = "경영지원부";
+    // const titleCode = "T4";
+    // const titleName = "팀장";
+
     return(
         <>
             <div className="ly_spaceBetween hp_mb10">
@@ -43,20 +52,20 @@ function FormLine(){
                             <td>작성중</td>
                         </tr>
                         <tr>
-                            <td>시스템팀</td>
+                            <td>{deptTitle}</td>
                         </tr>
                         <tr>
-                            <td>팀원</td>
+                            <td>{titleName}</td>
                         </tr>
                         <tr>
-                            <td>홍길동</td>
+                            <td>{empName}</td>
                         </tr>
                         <tr>
                             <td className="el_approvalSign" style={{ backgroundImage: "url('')" }}></td>
                         </tr>
                     </tbody>
                 </table>
-                <Line/>
+                <Line deptCode={deptCode} titleCode={titleCode}/>
             </div>
         </>
     )

@@ -1,24 +1,34 @@
-import {createActions, handleActions} from "redux-actions";
+import { createActions, handleActions } from "redux-actions";
 
-const initialState = {};
+const initialState = {
+    forms: [],
+    lines: [],
+    lineemps: []
+};
 
-const GET_FORMS = 'form/GET_FORMS';
-const GET_FORM = 'form/GET_FORM';
-const GET_LINES = 'form/GET_LINES';
-const GET_LINE = 'form/GET_LINE';
+const GET_FORMS = 'approval/GET_FORMS';
+const GET_LINES = 'approval/GET_LINES';
+const GET_LINEEMPS = 'approval/GET_LINEEMPS';
 
-export const {form: {getForms, getForm, getLines, getLine}} = createActions({
-    [GET_FORMS]: result => ({forms: result.data}),
-    [GET_FORM]: result => ({form: result.data}),
-    [GET_LINES]: result => ({lines: result.data}),
-    [GET_LINE]: result => ({line: result.data})
-})
+export const { approval: { getForms, getLines, getLineemps } } = createActions({
+    [GET_FORMS]: result => ({ forms: result.data }),
+    [GET_LINES]: result => ({ lines: result.data }),
+    [GET_LINEEMPS]: result => ({ lineemps: result.data }),
+});
 
 const approvalReducer = handleActions({
-    [GET_FORMS]: (state, {payload}) => payload,
-    [GET_FORM]: (state, {payload}) => payload,
-    [GET_LINES]: (state, {payload}) => payload,
-    [GET_LINE]: (state, {payload}) => payload
+    [GET_FORMS]: (state, { payload }) => ({
+        ...state,
+        forms: payload.forms
+    }),
+    [GET_LINES]: (state, { payload }) => ({
+        ...state,
+        lines: payload.lines
+    }),
+    [GET_LINEEMPS]: (state, { payload }) => ({
+        ...state,
+        lineemps: payload.lineemps
+    })
 }, initialState);
 
 export default approvalReducer;

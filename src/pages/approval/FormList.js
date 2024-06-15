@@ -1,8 +1,8 @@
 import '../../css/approval.css';
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
-import {callFormListAPI} from "../../apis/ApprovalAPICalls";
-import Form from "./Form";
+import { callFormListAPI } from '../../apis/ApprovalAPICalls';
+import Form from './Form';
 
 function FormList(){
     const dispatch = useDispatch();

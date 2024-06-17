@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { getPostlist } from '../module/PostReducer';
+import { getPostlist, getAllLowBoard } from '../module/PostReducer';
+import {getAllBoard}  from '../module/PostReducer';
 
 const DOMAIN = 'http://localhost:8080'
 export const tunckMiddleware=({dispatch,getState})=>next=>action=>{
@@ -26,7 +27,7 @@ export const request = async (method, url, data) => {
   
   export function callGETPostList() {
     return async (dispatch, getState) => {
-      console.log("api call");
+      console.log("callGETPostList call");
       try {
         const result = await request('GET', "/post/list");
         dispatch(getPostlist(result)); // 액션 생성자 호출 시 result.data를 전달
@@ -36,6 +37,37 @@ export const request = async (method, url, data) => {
       }
     };
   }
+  export function callGETBoardList() {
+    return async (dispatch, getState) => {
+      console.log("callGETBoardList call");
+      try {
+        const result = await request('GET', "/post/getAllBoard");
+        console.log(result);
+        console.table(result);
+        console.table(typeof result);
+        console.table(result instanceof Array);
+
+        dispatch(getAllBoard("callGETBoardList"+result)); // 액션 생성자 호출 시 result.data를 전달
+        console.log(result);
+      } catch (error) {
+        console.error("Error fetching post list:", error);
+      }
+    };
+  }
+  export function callGETLowBoardList(BoardCode) {
+    return async (dispatch, getState) => {
+      console.log("callGETLowBoardList call");
+      try {
+        const result = await request('GET', `/getLowBoard/${BoardCode}`);
+        dispatch(getAllLowBoard(result)); // 액션 생성자 호출 시 result.data를 전달
+        console.log(result);
+      } catch (error) {
+        console.error("Error fetching post list:", error);
+      }
+    };
+  }
+
+
   export function callPOSTCreatePost(postData) {
     return async () => {
         try {

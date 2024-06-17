@@ -1,7 +1,10 @@
-// src/App.js
-import React, { useState, useEffect } from 'react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { callGETBoardList } from './postApi/PostAPI';
+import { callGETLowBoardList } from './postApi/PostAPI';
+
 import axios from 'axios';
 
 
@@ -11,6 +14,10 @@ function PostCreateView() {
         postCon: '',
         attachFile: null
     });
+    const dispatch = useDispatch();
+    const BoardState = useSelector(state => state.post.BoardState); // Redux store에서 BoardState 가져오기
+    const LowBoardState = useSelector(state => state.post.LowBoardState); // Redux store에서 LowBoardState 가져오기
+    
 
     const handleInputChange = (event) => {
         const { name, value, files } = event.target;
@@ -26,7 +33,19 @@ function PostCreateView() {
             }));
         }
     };
-    
+    console.log("postView");
+    useEffect(() => {
+        dispatch(callGETBoardList());
+    }, []);
+
+
+    const onChangeHandler = (event) => {
+        const BoardCode = event.target.value;
+        dispatch(callGETLowBoardList(BoardCode));
+
+    };
+    console.log("Current posts data:", BoardState)
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -62,22 +81,20 @@ function PostCreateView() {
                         <tr>
                             <td>대분류</td>
                             <td >
-                                <select>
-                                    <option value="">선택하세요</option>
-                                    <option value="1">암환자회복식단</option>
-                                    <option value="2">신장관리식단</option>
-                                    <option value="3">혈압관리식단</option>
-                                    <option value="4">혈당관리식단</option>
+                                <select onChange={onChangeHandler}>
+                                    <option>선택하세요</option>
+                                    {BoardState.map(item => (
+                                    <option key={item.BoardCode} value={item.BoardCode}>
+                                        {item.BoardName}
+                                    </option>
+                                ))}
+
                                 </select>
                             </td>
                             <td>소분류</td>
                             <td>
                                 <select>
-                                    <option value="">선택하세요</option>
-                                    <option value="1">암환자회복식단</option>
-                                    <option value="2">신장관리식단</option>
-                                    <option value="3">혈압관리식단</option>
-                                    <option value="4">혈당관리식단</option>
+                                    <option>선택하세요</option>
                                 </select>
                             </td>
                         </tr>

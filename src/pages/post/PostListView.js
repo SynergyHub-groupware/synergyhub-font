@@ -18,18 +18,29 @@ console.log("postView");
     if (!Array.isArray(Postdata) || Postdata.length === 0) {
       return <tr><td colSpan="6">로딩 중...</td></tr>;
     }
+    console.log("로딩 성공");
 
-    return Postdata.map(item => (
-      <tr key={item.PostCode}>
-          <td>{item.PostCode}</td>
-          <td>{item.LowBoardCode}</td>
-          <td>{item.PostName}</td>
-          <td>{item.EmpCode}</td>
-          <td>{item.PostDate}</td>
-          <td>{item.PostViewCnt}</td>
-      </tr>
-  ));
-    };
+    return Postdata.map(item => {
+      // item과 lowBoardCode의 구조를 로그로 출력
+      console.log("Item:", item);
+      console.log("LowBoardCode:", item.lowBoardCode);
+
+      // lowBoardCode 객체 내의 필드 접근
+      const lowBoardCode = item.lowBoardCode ? item.lowBoardCode.lowBoardCode : 'N/A';
+      const lowBoardName = item.lowBoardCode ? item.lowBoardCode.lowBoardName : 'N/A';
+
+      return (
+        <tr key={item.postCode}>
+          <td>{item.postCode}</td>
+          <td>{lowBoardName}</td> {/* lowBoardCode 및 lowBoardName 출력 */}
+          <td>{item.postName}</td>
+          <td>{item.empCode}</td>
+          <td>{item.postDate}</td>
+          <td>{item.postViewCnt}</td>
+        </tr>
+      );
+    });
+  };
 
   return (
     <>

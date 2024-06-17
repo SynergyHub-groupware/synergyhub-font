@@ -47,3 +47,11 @@ export const fetchImage = async (empCode) => {
         return null;
     }
 };
+
+// export const callApprovalDocRegistAPI = ({temporary}) => {
+//     return async (dispatch, getState) => {
+//         const result = await request.post(`/approval/regist?temporary=${temporary}`,
+//             JSON.stringify()
+//         )
+//     }
+// }

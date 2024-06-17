@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { callFormLineAPI, fetchImage } from "../../apis/ApprovalAPICalls";
 import LineApprover from "./LineApprover";
 
-function Line(){
+function Line({handleTrueLineList}){
     const empCode = "2021048";
     const empName = "박하늘";
     const deptCode = "D15";
@@ -88,7 +88,7 @@ function Line(){
                     </tr>
                 </tbody>
             </table>
-            <LineApprover lsCode={lsCode} lines={lines} empCode={empCode} deptCode={deptCode} titleCode={titleCode}/>
+            <LineApprover lsCode={lsCode} lines={lines} empCode={empCode} deptCode={deptCode} titleCode={titleCode} handleTrueLineList={handleTrueLineList}/>
         </>
     )
 }

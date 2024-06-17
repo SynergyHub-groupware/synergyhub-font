@@ -1,6 +1,7 @@
 import Line from "./Line";
 
-function FormLine(){
+function FormLine({handleTrueLineList}){
+
     return(
         <>
             <div className="ly_spaceBetween hp_mb10">
@@ -30,7 +31,7 @@ function FormLine(){
                         </tr>
                     </tbody>
                 </table>
-                <Line/>
+                <Line handleTrueLineList={handleTrueLineList}/>
             </div>
         </>
     )

@@ -18,7 +18,7 @@ function FormDetail(){
 
     const renderFormCont = () => {
         switch(afCode){
-            case '2': return <ExceptionWork/>; break;
+            case '2': return <ExceptionWork handleDetail={handleDetail}/>; break;
             case '3': return <Overtime/>; break;
             case '4': return <Late/>; break;
             case '5': return <Vacation/>; break;
@@ -30,11 +30,16 @@ function FormDetail(){
     }
 
     // 결재 상신
-    const [trueLineList, setTrueLineList] = useState([]);
     
     // 실결재라인 배열 전달
+    const [trueLineList, setTrueLineList] = useState([]);
     const handleTrueLineList = (data) => {setTrueLineList(data);}
     console.log("부모 trueLineList", trueLineList);
+
+    // 결재내용 객체 전달
+    const [detail, setDetail] = useState([]);
+    const handleDetail = (data) => {setDetail(data)};
+    console.log("부모 detail", detail);
 
     const onClickApprovalDocRegist = () => {
         console.log("trueLineList", trueLineList);

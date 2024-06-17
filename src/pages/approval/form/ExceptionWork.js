@@ -1,42 +1,34 @@
 import { useEffect, useState } from "react";
+import { calculateDuration } from "../../../apis/ApprovalHandler";
 
 function ExceptionWork({handleDetail}){
     const [exception, setException] = useState({});
 
-    const onChangeHandler = e => {
+    const onChangeHandler = (e) => {
         const { name, value } = e.target;
-
-        if (name === "aattStartDate" || name === "aattStartTime") {
-            const startDate = name === "aattStartDate" ? value : exception.aattStart?.aattStartDate;
-            const startTime = name === "aattStartTime" ? value : exception.aattStart?.aattStartTime;
-
-            const combinedDateTime = `${startDate}T${startTime}`;
-            setException(prevState => ({
-                ...prevState,
-                aattStart: {combinedDateTime}
-            }));
-        } else if (name === "aattEndDate" || name === "aattEndTime") {
-            // Combine end date and end time
-            const endDateTime = `${exception.aattEnd?.aattEndDate || ""}T${exception.aattEnd?.aattEndTime || ""}`;
-            setException(prevState => ({
-                ...prevState,
-                aattEnd: {
-                    ...prevState.aattEnd,
-                    [name]: value
-                }
-            }));
-        } else {
-            // For other fields like aattSort, aattPlace, aattCon
-            setException({
-                ...exception,
-                [name]: value
-            });
-        }
+        setException(prev => ({
+            ...prev,
+            [name]: value
+        }));
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         handleDetail(exception);
-    },[exception]);
+    }, [exception]);
+
+
+    // 기간 계산 + 추가 : 시작일과 종료일이 같을 경우 시간이 마이너스가 되면 기간에 알럿으로 과거선택 불가 라고 표시
+    const [duration, setDuration] = useState('');
+    useEffect(() => {
+        if (exception.aattStart && exception.aattEnd) {
+            const startDateTime = new Date(exception.aattStart);
+            const endDateTime = new Date(exception.aattEnd);
+            const durationText = calculateDuration(startDateTime, endDateTime);
+            setDuration(durationText);
+        } else {
+            setDuration('');
+        }
+    }, [exception.aattStart, exception.aattEnd]);
 
     return(
         <table className="bl_tb3 el_approvalTb3__th">
@@ -57,24 +49,24 @@ function ExceptionWork({handleDetail}){
                 <tr>
                     <th scope="col">시작일</th>
                     <td>
-                        <input type="date" className="hp_w120px" name="aattStartDate" onChange={onChangeHandler} />
-                        <input type="time" className="hp_w120px hp_ml5" name="aattStartTime" onChange={onChangeHandler} />
+                        <input type="datetime-local" name="aattStart" onChange={onChangeHandler}/>
                     </td>
                 </tr>
                 <tr>
                     <th scope="col">종료일</th>
                     <td>
-                        <input type="date" className="hp_w120px" name="aattEndDate" onChange={onChangeHandler} />
-                        <input type="time" className="hp_w120px hp_ml5" name="aattEndTime" onChange={onChangeHandler} />
+                        <input type="datetime-local" name="aattEnd" onChange={onChangeHandler} min={exception.aattStart}/>
                     </td>
                 </tr>
                 <tr>
                     <th scope="col">기간</th>
-                    <td></td>
+                    <td>
+                        {duration}
+                    </td>
                 </tr>
                 <tr>
                     <th scope="col">예외근무지</th>
-                    <td><input type="text" className="hp_w100" name="aattPlace" onKeyUp={onChangeHandler}/></td>
+                    <td><input type="text" className="hp_w100" name="aattPlace" onChange={onChangeHandler}/></td>
                 </tr>
                 <tr>
                     <th scope="col">업무내용</th>

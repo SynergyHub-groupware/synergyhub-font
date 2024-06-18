@@ -35,8 +35,7 @@ function Line({handleTrueLineList}){
     }, [dispatch, lsCode]);
 
 
-
-
+    // 서명 이미지 조회
     const [imageData, setImageData] = useState(null);
 
     useEffect(() => {
@@ -44,11 +43,8 @@ function Line({handleTrueLineList}){
             if (empCode) {
                 try {
                     const imageUrl = await fetchImage (empCode);
-                    if (imageUrl) {
-                        setImageData(imageUrl);
-                    } else {
-                        console.error('Failed to fetch image');
-                    }
+                    if (imageUrl) setImageData(imageUrl);
+                    else console.error('Failed to fetch image');
                 } catch (error) {
                     console.error('Error fetching image:', error);
                 }

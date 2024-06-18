@@ -12,3 +12,4 @@ export const request = async (method, url, headers, data) => {
         data
     }).catch(error => console.log(error));
 }
+

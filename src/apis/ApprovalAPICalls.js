@@ -1,4 +1,4 @@
-import {getForms, getLineemps, getLines, getSign} from "../modules/ApprovalModules";
+import {getForms, getLineemps, getLines, getSuccess} from "../modules/ApprovalModules";
 import { request } from "./api";
 
 export const callFormListAPI = () => {
@@ -22,14 +22,22 @@ export const callLineEmpListAPI = ({deptCode, titleCode, lsCode}) => {
     }
 }
 
-// export const callSignAPI = ({empCode}) => {
-//     return async (dispatch, getState) => {
-//         const result = await request('GET', `/approval/sign?empCode=${empCode}`);
-
-//         console.log("result : ", result);
-//         if(result && result.status === 200) dispatch(getSign(result));
+// export const fetchImage = async (empCode) => {
+//     try {
+//         const response = await request('GET', `/approval/sign?empCode=${empCode}`);
+//         if (response.ok) {
+//             const blob = await response.blob();
+//             const imageUrl = URL.createObjectURL(blob);
+//             return imageUrl;
+//         } else {
+//             console.error('Failed to fetch image');
+//             return null;
+//         }
+//     } catch (error) {
+//         console.error('Error fetching image:', error);
+//         return null;
 //     }
-// }
+// };
 
 export const fetchImage = async (empCode) => {
     try {
@@ -48,10 +56,19 @@ export const fetchImage = async (empCode) => {
     }
 };
 
-// export const callApprovalDocRegistAPI = ({temporary}) => {
-//     return async (dispatch, getState) => {
-//         const result = await request.post(`/approval/regist?temporary=${temporary}`,
-//             JSON.stringify()
-//         )
-//     }
-// }
+export const callApprovalDocRegistAPI = ({document, temporary}) => {
+    return async (dispatch, getState) => {
+        const response = await request('POST', `/approval/regist?temporary=${temporary}`,
+            {'Content-Type' : 'application/json'},
+            JSON.stringify(document)
+        );
+
+        console.log("response", response);
+
+        if (response && response.status === 201) {
+            dispatch(
+                temporary ? getSuccess("임시저장") : getSuccess("상신")
+            );
+        };
+    }
+}

@@ -2,59 +2,70 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { callGETBoardList } from './postApi/PostAPI';
-import { callGETLowBoardList } from './postApi/PostAPI';
-
-import axios from 'axios';
-
+import { callGETBoardList, callGETLowBoardList } from './postApi/PostAPI';
 
 function PostCreateView() {
     const [formData, setFormData] = useState({
         postName: '',
         postCon: '',
-        attachFile: null
+        attachFile: null,
+        postCommSet: 4,  // 기본값: 둘다 비활성화
     });
     const dispatch = useDispatch();
-    const BoardState = useSelector(state => state.post.BoardState); // Redux store에서 BoardState 가져오기
-    const LowBoardState = useSelector(state => state.post.LowBoardState); // Redux store에서 LowBoardState 가져오기
-    
+    const BoardState = useSelector(state => state.post.BoardState);
+    const LowBoardState = useSelector(state => state.post.LowBoardState);
+
+    useEffect(() => {
+        dispatch(callGETBoardList());
+    }, [dispatch]);
 
     const handleInputChange = (event) => {
         const { name, value, files } = event.target;
-        if (name === 'attachFile') {
-            setFormData(prevState => ({
-                ...prevState,
-                attachFile: files[0]
-            }));
-        } else {
-            setFormData(prevState => ({
-                ...prevState,
-                [name]: value
-            }));
-        }
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: files ? files[0] : value
+        }));
     };
-    console.log("postView");
-    useEffect(() => {
-        dispatch(callGETBoardList());
-    }, []);
-
 
     const onChangeHandler = (event) => {
-        const BoardCode = event.target.value;
-        dispatch(callGETLowBoardList(BoardCode));
-
+        const boardCode = event.target.value;
+        if (boardCode !== '선택하세요') {
+            console.log(boardCode);
+            dispatch(callGETLowBoardList(boardCode));
+        }
     };
-    console.log("Current posts data:", BoardState)
 
+    const calculatePostCommSetValue = (allowNormal, allowAnonymous) => {
+        if (allowNormal && allowAnonymous) return 3;
+        if (allowNormal) return 1;
+        if (allowAnonymous) return 2;
+        return 4;
+    };
+
+    const handleCheckboxChange = (event) => {
+        const { value, checked } = event.target;
+        setFormData(prevState => {
+            const newPostCommSet = calculatePostCommSetValue(
+                value === "ALLOW_NORMAL" ? checked : prevState.postCommSet === 1 || prevState.postCommSet === 3,
+                value === "ALLOW_ANONYMOUS" ? checked : prevState.postCommSet === 2 || prevState.postCommSet === 3
+            );
+            console.log("comment:",newPostCommSet);
+            return { ...prevState, postCommSet: newPostCommSet };
+        });
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const { postName, postCon, attachFile } = formData;
+        const { postName, postCon, attachFile, postCommSet,lowBoardCode } = formData;
+        
         const formDataToSend = new FormData();
         formDataToSend.append('postName', postName);
         formDataToSend.append('postCon', postCon);
         formDataToSend.append('attachFile', attachFile);
+        formDataToSend.append('postCommSet', postCommSet);
+        formDataToSend.append('lowBoardCode', lowBoardCode);
+
 
         try {
             const response = await fetch('http://localhost:8080/post/add', {
@@ -62,7 +73,7 @@ function PostCreateView() {
                 body: formDataToSend,
                 mode: "cors"
             });
-            console.log("PostTest")
+            console.log("post",formData)
             const data = await response.json();
             console.log(data);
         } catch (error) {
@@ -80,22 +91,41 @@ function PostCreateView() {
                         </tr>
                         <tr>
                             <td>대분류</td>
-                            <td >
+                            <td>
                                 <select onChange={onChangeHandler}>
                                     <option>선택하세요</option>
-                                    {BoardState.map(item => (
-                                    <option key={item.BoardCode} value={item.BoardCode}>
-                                        {item.BoardName}
-                                    </option>
-                                ))}
-
+                                    {Array.isArray(BoardState) && BoardState.length > 0 ? (
+                                        BoardState.map(item => (
+                                            <option key={item.boardCode} value={item.boardCode}>
+                                                {item.boardName}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option>데이터 로딩 중...</option>
+                                    )}
                                 </select>
                             </td>
                             <td>소분류</td>
                             <td>
                                 <select>
                                     <option>선택하세요</option>
+                                    {Array.isArray(LowBoardState) && LowBoardState.length > 0 ? (
+                                        LowBoardState.map(item => (
+                                            <option key={item.lowBoardCode} value={item.lowBoardCode}>
+                                                {item.lowBoardName}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option>데이터 로딩 중...</option>
+                                    )}
                                 </select>
+                            </td>
+                            <td>분류</td>
+                            <td>
+                                <section>
+                                    <option>선택하세요</option>
+                                    <option></option>
+                                </section>
                             </td>
                         </tr>
                         <tr>
@@ -138,8 +168,8 @@ function PostCreateView() {
                         <tr>
                             <td>설정</td>
                             <td colSpan="3">
-                                <label><input type="checkbox" value="ALLOW_NORMAL" name="postCommSet" />댓글 허용</label>
-                                <label><input type="checkbox" value="ALLOW_ANONYMOUS" name="postCommSet" />익명 댓글 허용</label>
+                                <label><input type="checkbox" value="ALLOW_NORMAL" name="postCommSet" onChange={handleCheckboxChange} />댓글 허용</label>
+                                <label><input type="checkbox" value="ALLOW_ANONYMOUS" name="postCommSet" onChange={handleCheckboxChange} />익명 댓글 허용</label>
                             </td>
                         </tr>
                         <tr>

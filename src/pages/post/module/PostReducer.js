@@ -11,7 +11,7 @@ const GET_ALLBOARD = 'post/GET_ALLBOARD';
 const GET_ALLLOWBOARD = 'post/GET_ALLLOWBOARD';
 
 // 액션 생성자 함수 생성
-export const { post: { getPostlist, getAllBoard, getAllLowBoard } } = createActions({
+export const { post: { getPostlist, getAllboard, getAlllowboard } } = createActions({
   [GET_POSTLIST]: postlist => ({ postlist }),
   [GET_ALLBOARD]: boardlist => ({ boardlist }),
   [GET_ALLLOWBOARD]: lowboardlist => ({ lowboardlist })
@@ -19,8 +19,8 @@ export const { post: { getPostlist, getAllBoard, getAllLowBoard } } = createActi
 
 // 확인용 로그
 console.log("getPostlist", getPostlist);
-console.log("getAllBoard", getAllBoard);
-console.log("getAllLowBoard", getAllLowBoard);
+console.log("getAllBoard", getAllboard);
+console.log("getAllLowBoard", getAlllowboard);
 
 // 초기 상태 및 리듀서 정의
 const postReducer = handleActions(

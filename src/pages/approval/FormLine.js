@@ -1,18 +1,6 @@
 import Line from "./Line";
 
-function FormLine(){
-    const empCode = "2021048";
-    const empName = "박하늘";
-    const deptCode = "D15";
-    const deptTitle = "정보보안팀";
-    const titleCode = "T6";
-    const titleName = "팀원";
-    // const empCode = "2021091";
-    // const empName = "이서연";
-    // const deptCode = "D3";
-    // const deptTitle = "경영지원부";
-    // const titleCode = "T4";
-    // const titleName = "팀장";
+function FormLine({handleTrueLineList}){
 
     return(
         <>
@@ -43,29 +31,7 @@ function FormLine(){
                         </tr>
                     </tbody>
                 </table>
-                <table className="bl_tb3 hp_alignC ly_fgrow1">
-                    <tbody>
-                        <tr>
-                            <th>작성자</th>
-                        </tr>
-                        <tr>
-                            <td>작성중</td>
-                        </tr>
-                        <tr>
-                            <td>{deptTitle}</td>
-                        </tr>
-                        <tr>
-                            <td>{titleName}</td>
-                        </tr>
-                        <tr>
-                            <td>{empName}</td>
-                        </tr>
-                        <tr>
-                            <td className="el_approvalSign" style={{ backgroundImage: "url('')" }}></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <Line deptCode={deptCode} titleCode={titleCode}/>
+                <Line handleTrueLineList={handleTrueLineList}/>
             </div>
         </>
     )

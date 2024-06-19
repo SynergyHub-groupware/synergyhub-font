@@ -11,8 +11,6 @@ function DirForm({ closeModal, onConfirm }) {
     const [selectEmp, setSelectEmp] = useState([]); // 체크박스로 회원 선택
     const [receiver, setReceiver] = useState('');
 
-
-
     useEffect(() => {
         // axios로 페이지 로딩 시 데이터 가져오기
         axios.get('http://localhost:8080/address/select')
@@ -100,7 +98,7 @@ function DirForm({ closeModal, onConfirm }) {
         }
 
             onConfirm(selectEmp);
-            console.log("dirForm : ", selectEmp);
+            // console.log("dirForm : ", selectEmp);
             receiverClear();
             setSelectEmp([]);
     };

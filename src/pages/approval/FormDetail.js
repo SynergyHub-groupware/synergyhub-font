@@ -10,7 +10,7 @@ import Apology from "./form/Apology";
 import Etc from "./form/Etc";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { callApprovalDocRegistAPI } from "../../apis/ApprovalAPICalls";
+import { callApprovalAttachRegistAPI, callApprovalDocRegistAPI } from "../../apis/ApprovalAPICalls";
 import { resetSuccess } from "../../modules/ApprovalModules";
 
 function FormDetail(){
@@ -91,7 +91,16 @@ function FormDetail(){
 
     const dispatch = useDispatch();
     const onClickApprovalDocRegist = async (temporary) => {
-        await dispatch(callApprovalDocRegistAPI({ document: document, temporary: temporary }));
+        // await dispatch(callApprovalDocRegistAPI({ document: document, temporary: temporary }));
+
+
+        const formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            formData.append("files", files[i]);
+            formData.append("attachOriginal", files[i].name);
+        }
+
+        await dispatch(callApprovalAttachRegistAPI({formData: formData}));
     }
 
     const success = useSelector(state => state.approvalReducer.success);
@@ -107,6 +116,20 @@ function FormDetail(){
         }
     }, [success]);
 
+
+    // 첨부파일 
+    const [files, setFiles] = useState([]);
+
+    const handleFileChange = (event) => {
+        setFiles(prevFiles => [...prevFiles, ...Array.from(event.target.files)]);
+    };
+
+    const handleRemoveFile = (index) => {
+        const newFiles = [...files];
+        newFiles.splice(index, 1);
+        setFiles(newFiles);
+    };
+
     return(
         <div className="ly_cont">
             <h4 className="el_lv1Head hp_mb30">{afName}</h4>
@@ -121,7 +144,21 @@ function FormDetail(){
                         </tr>
                         <tr>
                             <th scope="row">첨부파일</th>
-                            <td colSpan="3"></td>
+                            <td colSpan="3">
+                                <div className="ly_flex ly_fitemStart">
+                                    <ul className="hp_w100 hp_mr10">
+                                        {files.map((file, index) => (
+                                            <li key={index}>
+                                                <button type="button" className="hp_mr10 hp_fw700" onClick={() => handleRemoveFile(index)} title="삭제">X</button>
+                                                {file.name} 
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <label className="bl_attachBtn__label el_btnS el_btn8Back hp_p3-5">
+                                        <input type="file" className="bl_attachBtn__input" multiple onChange={handleFileChange} /> 파일선택
+                                    </label>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">제목</th>

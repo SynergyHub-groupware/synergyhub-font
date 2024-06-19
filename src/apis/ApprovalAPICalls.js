@@ -22,23 +22,6 @@ export const callLineEmpListAPI = ({deptCode, titleCode, lsCode}) => {
     }
 }
 
-// export const fetchImage = async (empCode) => {
-//     try {
-//         const response = await request('GET', `/approval/sign?empCode=${empCode}`);
-//         if (response.ok) {
-//             const blob = await response.blob();
-//             const imageUrl = URL.createObjectURL(blob);
-//             return imageUrl;
-//         } else {
-//             console.error('Failed to fetch image');
-//             return null;
-//         }
-//     } catch (error) {
-//         console.error('Error fetching image:', error);
-//         return null;
-//     }
-// };
-
 export const fetchImage = async (empCode) => {
     try {
         const response = await fetch(`http://localhost:8080/approval/sign?empCode=${empCode}`);
@@ -63,12 +46,22 @@ export const callApprovalDocRegistAPI = ({document, temporary}) => {
             JSON.stringify(document)
         );
 
-        console.log("response", response);
-
         if (response && response.status === 201) {
-            dispatch(
-                temporary ? getSuccess("임시저장") : getSuccess("상신")
-            );
+            dispatch(temporary ? getSuccess("임시저장") : getSuccess("상신"));
         };
+    }
+}
+
+export const callApprovalAttachRegistAPI = ({formData}) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await request('POST', '/approval/attachment/regist',
+                {"Content-Type": "multipart/form-data"},
+                formData
+            )            
+            console.log("File upload success:", response.data);
+        } catch (error) {
+            console.error("File upload error:", error);
+        }
     }
 }

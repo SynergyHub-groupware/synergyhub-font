@@ -8,7 +8,7 @@ function PostCreateView() {
     const [formData, setFormData] = useState({
         postName: '',
         postCon: '',
-        attachFile: null,
+        attachFile: '',
         postCommSet: 4,  // 기본값: 둘다 비활성화
         lowBoardCode: '',
         psCode:''
@@ -26,12 +26,20 @@ function PostCreateView() {
     }, [dispatch]);
 
     const handleInputChange = (event) => {
-        const { name, value, files } = event.target;
+        const {name,value, files } = event.target;
         setFormData(prevState => ({
             ...prevState,
-            [name]: files ? files[0] : value
+            [name]: files ? Array.from(files) : value
         }));
     };
+    const handleInputChangename = (event) => {
+        const {value} = event.target;
+        setFormData(prevState => ({
+            ...prevState,
+            postName:value
+        }));
+    };
+
 
     const onChangeHandler = (event) => {
         const boardCode = event.target.value;
@@ -81,7 +89,7 @@ function PostCreateView() {
         event.preventDefault();
 
         const { postName, postCon, attachFile, postCommSet,lowBoardCode,psCode } = formData;
-        
+    
         const formDataToSend = new FormData();
         formDataToSend.append('postName', postName);
         formDataToSend.append('postCon', postCon);
@@ -89,6 +97,12 @@ function PostCreateView() {
         formDataToSend.append('postCommSet', postCommSet);
         formDataToSend.append('lowBoardCode', lowBoardCode);
         formDataToSend.append("psCode",psCode);
+        
+        if (attachFile) {
+            for (let i = 0; i < attachFile.length; i++) {
+                formDataToSend.append('attachFile', attachFile[i]);
+            }
+        }
 
 
         try {
@@ -109,7 +123,7 @@ function PostCreateView() {
         <div className="main">
             <form onSubmit={handleSubmit}>
                 <table>
-                    <thead>
+                    <thead className='tableHead'>
                         <tr>
                             <th colSpan="4">게시판</th>
                         </tr>
@@ -175,11 +189,11 @@ function PostCreateView() {
                         </tr>
                         <tr>
                             <td>첨부파일</td>
-                            <td colSpan="3"><input name="attachFile" type="file" onChange={handleInputChange} /></td>
+                            <td colSpan="3"><input name="attachFile" type="file" multiple  onChange={handleInputChange} /></td>
                         </tr>
                         <tr>
                             <td>제목</td>
-                            <td colSpan="3"><input name="postName" type="text" placeholder="100자 이내 입력" value={formData.postName} onChange={handleInputChange} /></td>
+                            <td colSpan="3"><input name="postName" type="text" placeholder="100자 이내 입력" onChange={handleInputChangename} /></td>
                         </tr>
                         <tr>
                             <td>내용</td>

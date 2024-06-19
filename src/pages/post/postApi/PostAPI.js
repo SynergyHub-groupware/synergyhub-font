@@ -107,6 +107,7 @@ export const request = async (method, url, data) => {
 
             const result = await response.json();
             console.log('Created post:', result);
+            console("files:",postData.attachFile.Array)
 
             // 추가적인 작업이 필요하면 여기서 dispatch 등을 통해 처리할 수 있습니다
         } catch (error) {

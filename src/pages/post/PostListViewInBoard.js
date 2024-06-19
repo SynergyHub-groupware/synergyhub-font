@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { callGETPostList } from './postApi/PostAPI';
 import axios from 'axios';
 
-function PostListView() {
+function PostListViewInBoard() {
   const dispatch = useDispatch();
   const postState = useSelector(state => state.post); // Redux store에서 post 상태 가져오기
   const { Postdata } = postState; // Postdata 필드 추출
@@ -77,4 +77,4 @@ console.log("postView");
   );
 }
 
-export default PostListView;
+export default PostListViewInBoard;

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-function DirForm({ closeModal }) {
+function DirForm({ closeModal, onConfirm }) {
 
     const [originEmp, setOriginEmp] = useState([]);     // 원본 저장
     const [employees, setEmployees] = useState([]);        // 검색 결과 저장
@@ -81,13 +81,28 @@ function DirForm({ closeModal }) {
     const receiverAdd = () => {
         if (selectEmp.length > 0) {
             setReceiver(selectEmp.map(emp => `- ${emp.emp_name} <${emp.dept_title} ${emp.position_name}>`).join('\n'));
-            setSelectEmp([]);
+            setSelectEmp(selectEmp);
+            console.log(selectEmp);
         }
     };
 
     /* 받는 사람 영역 인원 삭제 */
     const receiverClear = () => {
         setReceiver('');
+    };
+
+    /* 확인 버튼으로 배열 보내기 */
+    const confirmHandle = () => {
+
+        if (receiver === '') {
+            alert('인원을 추가해주세요.');
+            return;
+        }
+
+            onConfirm(selectEmp);
+            console.log("dirForm : ", selectEmp);
+            receiverClear();
+            setSelectEmp([]);
     };
 
     return (
@@ -156,7 +171,7 @@ function DirForm({ closeModal }) {
                     </table>
                 </div>
                 <div className="hp_w95 ly_flexEnd hp_pb15" style={{ marginTop: '-20px' }}>
-                    <button type="submit" className="el_btnS el_btnblueBack hp_mr5">확인</button>
+                    <button type="submit" className="el_btnS el_btnblueBack hp_mr5" onClick={confirmHandle}>확인</button>
                     <button type="button" className="el_btnS el_btn8Back" id="closeButton" onClick={closeModal}>취소</button>
                 </div>
             </div>

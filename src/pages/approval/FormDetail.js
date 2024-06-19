@@ -11,7 +11,7 @@ import Etc from "./form/Etc";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callApprovalDocRegistAPI } from "../../apis/ApprovalAPICalls";
-import { success } from "../../modules/ApprovalModules";
+import { resetSuccess } from "../../modules/ApprovalModules";
 
 function FormDetail(){
     const empCode = "2021048";
@@ -96,10 +96,15 @@ function FormDetail(){
 
     const success = useSelector(state => state.approvalReducer.success);
     useEffect(() => {
-        success && alert("결재문서가 " + success + " 되었습니다.");
-
-        if(success === "임시저장") navigate("/approval/temporary");
-        else if(success === "상신") navigate("/approval/send/waiting");
+        if(success){
+            alert("결재문서가 " + success + " 되었습니다.");
+    
+            if(success === "임시저장") navigate("/approval/temporary");
+            else if(success === "상신") navigate("/approval/send/waiting");
+    
+            dispatch(resetSuccess());
+            setDocument({});
+        }
     }, [success]);
 
     return(

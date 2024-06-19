@@ -33,7 +33,7 @@ function LineApprover({lsCode, lines, myCode, deptCode, titleCode, handleTrueLin
             const matchingLine = lines.find(line => line.alSort.includes(emp.titleCode));
             const role = matchingLine ? matchingLine.alRole : "결재";
     
-            return {talOrder: index + 1, talRole: role, empCode: emp.empCode};
+            return {talOrder: index + 1, talRole: role, employee: {emp_code: emp.empCode}};
         });
 
         handleTrueLineList(trueLineList);

@@ -39,29 +39,48 @@ export const fetchImage = async (empCode) => {
     }
 };
 
-export const callApprovalDocRegistAPI = ({document, temporary}) => {
-    return async (dispatch, getState) => {
-        const response = await request('POST', `/approval/regist?temporary=${temporary}`,
-            {'Content-Type' : 'application/json'},
-            JSON.stringify(document)
-        );
+// export const callApprovalDocRegistAPI = ({document, temporary}) => {
+//     return async (dispatch, getState) => {
+//         const response = await request('POST', `/approval/regist?temporary=${temporary}`,
+//             {'Content-Type' : 'application/json'},
+//             JSON.stringify(document)
+//         );
 
-        if (response && response.status === 201) {
-            dispatch(temporary ? getSuccess("임시저장") : getSuccess("상신"));
-        };
-    }
-}
+//         if (response && response.status === 201) {
+//             dispatch(temporary ? getSuccess("임시저장") : getSuccess("상신"));
+//         };
+//     }
+// }
 
-export const callApprovalAttachRegistAPI = ({formData}) => {
+// export const callApprovalAttachRegistAPI = ({formData}) => {
+//     return async (dispatch, getState) => {
+//         try {
+//             const response = await request('POST', '/approval/attachment/regist',
+//                 {"Content-Type": "multipart/form-data"},
+//                 formData
+//             )            
+//             console.log("File upload success:", response.data);
+//         } catch (error) {
+//             console.error("File upload error:", error);
+//         }
+//     }
+// }
+
+
+export const callApprovalDocRegistAPI = ({formData, temporary}) => {
     return async (dispatch, getState) => {
         try {
-            const response = await request('POST', '/approval/attachment/regist',
+            const response = await request('POST', `/approval/regist?temporary=${temporary}`,
                 {"Content-Type": "multipart/form-data"},
                 formData
-            )            
-            console.log("File upload success:", response.data);
+            );
+
+            if (response && response.status === 201) {
+                dispatch(temporary ? getSuccess("임시저장") : getSuccess("상신"));
+            };
+            
         } catch (error) {
-            console.error("File upload error:", error);
+            console.error("Document and file upload error:", error);
         }
     }
 }

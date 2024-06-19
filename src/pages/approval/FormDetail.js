@@ -95,12 +95,17 @@ function FormDetail(){
 
 
         const formData = new FormData();
+        formData.append('document', JSON.stringify(document));
+
         for (let i = 0; i < files.length; i++) {
             formData.append("files", files[i]);
             formData.append("attachOriginal", files[i].name);
         }
 
-        await dispatch(callApprovalAttachRegistAPI({formData: formData}));
+        await dispatch(callApprovalDocRegistAPI({ formData: formData, temporary: temporary }));
+
+
+        // await dispatch(callApprovalAttachRegistAPI({formData: formData}));
     }
 
     const success = useSelector(state => state.approvalReducer.success);

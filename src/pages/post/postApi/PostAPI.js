@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getPostlist, getAlllowboard } from '../module/PostReducer';
+import { getPostlist, getAlllowboard,getSortlist } from '../module/PostReducer';
 import {getAllboard}  from '../module/PostReducer';
 
 const DOMAIN = 'http://localhost:8080'
@@ -24,6 +24,19 @@ export const request = async (method, url, data) => {
       throw error; // 오류를 다시 throw하여 호출자가 처리할 수 있도록 함
     }
   };
+  export function callGETSoftList(){
+    return async (dispatch,getState)=>{
+      console.log("callGETSortList call");
+      try{
+        const result=await request('GET',"/post/sortList");
+        console.log(result);
+        dispatch(getSortlist(result));
+      }catch(error){
+        console.log("error",error);
+        throw(error);
+      }
+    }
+  }
   
   export function callGETPostList() {
     return async (dispatch, getState) => {
@@ -77,6 +90,10 @@ export const request = async (method, url, data) => {
             formDataToSend.append('postName', postData.postName);
             formDataToSend.append('postCon', postData.postCon);
             formDataToSend.append('attachFile', postData.attachFile);
+            formDataToSend.append('postCommSet', postData.postCommSet);
+            formDataToSend.append('lowBoardCode', postData.lowBoardCode);
+            formDataToSend.append("psCode",postData.psCode);
+    
 
             const response = await fetch('http://localhost:8080/post/add', {
                 method: 'POST',

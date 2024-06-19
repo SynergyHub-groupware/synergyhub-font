@@ -2,7 +2,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { callGETBoardList, callGETLowBoardList } from './postApi/PostAPI';
+import { callGETBoardList, callGETLowBoardList,callGETSoftList } from './postApi/PostAPI';
 
 function PostCreateView() {
     const [formData, setFormData] = useState({
@@ -10,13 +10,19 @@ function PostCreateView() {
         postCon: '',
         attachFile: null,
         postCommSet: 4,  // 기본값: 둘다 비활성화
+        lowBoardCode: '',
+        psCode:''
     });
     const dispatch = useDispatch();
     const BoardState = useSelector(state => state.post.BoardState);
     const LowBoardState = useSelector(state => state.post.LowBoardState);
+    const SoftListState=useSelector(state => state.post.SoftListState);
 
     useEffect(() => {
         dispatch(callGETBoardList());
+    }, [dispatch]);
+    useEffect(() => {
+        dispatch(callGETSoftList());
     }, [dispatch]);
 
     const handleInputChange = (event) => {
@@ -53,11 +59,28 @@ function PostCreateView() {
             return { ...prevState, postCommSet: newPostCommSet };
         });
     };
+    const onChangeHandlerLow = (event) => {
+        const { value } = event.target;
+        console.log(value);
+        setFormData(prevState => ({
+            ...prevState,
+            lowBoardCode: value  // lowBoardCode 업데이트
+        }));
+    };
+    const onChangeHandlersoft = (event) => {
+        const { value } = event.target;
+        console.log(value);
+        setFormData(prevState => ({
+            ...prevState,
+            psCode: value 
+        }));
+    };
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const { postName, postCon, attachFile, postCommSet,lowBoardCode } = formData;
+        const { postName, postCon, attachFile, postCommSet,lowBoardCode,psCode } = formData;
         
         const formDataToSend = new FormData();
         formDataToSend.append('postName', postName);
@@ -65,6 +88,7 @@ function PostCreateView() {
         formDataToSend.append('attachFile', attachFile);
         formDataToSend.append('postCommSet', postCommSet);
         formDataToSend.append('lowBoardCode', lowBoardCode);
+        formDataToSend.append("psCode",psCode);
 
 
         try {
@@ -107,7 +131,7 @@ function PostCreateView() {
                             </td>
                             <td>소분류</td>
                             <td>
-                                <select>
+                                <select onChange={onChangeHandlerLow}>
                                     <option>선택하세요</option>
                                     {Array.isArray(LowBoardState) && LowBoardState.length > 0 ? (
                                         LowBoardState.map(item => (
@@ -116,16 +140,24 @@ function PostCreateView() {
                                             </option>
                                         ))
                                     ) : (
-                                        <option>데이터 로딩 중...</option>
+                                        <option>대분류를 선택해주세요</option>
                                     )}
                                 </select>
                             </td>
                             <td>분류</td>
                             <td>
-                                <section>
+                                <select onChange={onChangeHandlersoft}>
                                     <option>선택하세요</option>
-                                    <option></option>
-                                </section>
+                                    {Array.isArray(SoftListState) && SoftListState.length > 0 ? (
+                                        SoftListState.map(item => (
+                                            <option key={item.psCode} value={item.psCode}>
+                                                {item.psName}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option>데이터 로딩 중...</option>
+                                    )}                                
+                                    </select>
                             </td>
                         </tr>
                         <tr>

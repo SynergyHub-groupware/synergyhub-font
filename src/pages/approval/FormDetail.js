@@ -10,7 +10,7 @@ import Apology from "./form/Apology";
 import Etc from "./form/Etc";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { callApprovalAttachRegistAPI, callApprovalDocRegistAPI } from "../../apis/ApprovalAPICalls";
+import { callApprovalDocRegistAPI } from "../../apis/ApprovalAPICalls";
 import { resetSuccess } from "../../modules/ApprovalModules";
 
 function FormDetail(){
@@ -19,6 +19,7 @@ function FormDetail(){
 
     const navigate = useNavigate();
     const location = useLocation();
+    const dispatch = useDispatch();
     const {afName} = {...location.state};
     const {afCode} = useParams();
 
@@ -89,25 +90,6 @@ function FormDetail(){
         console.log("handleDetail", data);
     };
 
-    const dispatch = useDispatch();
-    const onClickApprovalDocRegist = async (temporary) => {
-        // await dispatch(callApprovalDocRegistAPI({ document: document, temporary: temporary }));
-
-
-        const formData = new FormData();
-        formData.append('document', JSON.stringify(document));
-
-        for (let i = 0; i < files.length; i++) {
-            formData.append("files", files[i]);
-            formData.append("attachOriginal", files[i].name);
-        }
-
-        await dispatch(callApprovalDocRegistAPI({ formData: formData, temporary: temporary }));
-
-
-        // await dispatch(callApprovalAttachRegistAPI({formData: formData}));
-    }
-
     const success = useSelector(state => state.approvalReducer.success);
     useEffect(() => {
         if(success){
@@ -134,6 +116,19 @@ function FormDetail(){
         newFiles.splice(index, 1);
         setFiles(newFiles);
     };
+
+    // 결재정보 한번에 전달
+    const onClickApprovalDocRegist = async (temporary) => {
+        const formData = new FormData();
+        formData.append('document', JSON.stringify(document));
+
+        for (let i = 0; i < files.length; i++) {
+            formData.append("files", files[i]);
+            formData.append("attachOriginal", files[i].name);
+        }
+
+        await dispatch(callApprovalDocRegistAPI({ formData: formData, temporary: temporary }));
+    }
 
     return(
         <div className="ly_cont">

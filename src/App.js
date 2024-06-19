@@ -23,6 +23,7 @@ import PostLayout from './pages/post/PostLayout';
 import PostListView from './pages/post/PostListView';
 import PostCreateView from './pages/post/PostCreateView';
 import FormDetail from './pages/approval/FormDetail';
+import PostListViewInBoard from './pages/post/PostListViewInBoard';
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
           </Route>
           <Route path="post" element={<PostLayout/>}>
           <Route path="PostListView" element={<PostListView/>} />
+          <Route path='PostListViewInBoard/:lowBoardCode' element={<PostListViewInBoard/>}/>
           <Route path="PostCreateView" element={<PostCreateView/>} />
           </Route>
         </Route>

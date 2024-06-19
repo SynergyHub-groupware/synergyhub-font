@@ -17,7 +17,7 @@ const GET_POSTDATAINBOARD='post/GET_POSTDATAINBOARD';
 const GET_POSTDATAINBOARDPIN='post/GET_POSTDATAINBOARDPIN';
 
 // 액션 생성자 함수 생성
-export const { post: { getPostlist, getAllboard, getAlllowboard,getSortlist,getPostdataInboard,getPostdataInboardPin } } = createActions({
+export const { post: { getPostlist, getAllboard, getAlllowboard,getSortlist,getPostdatainboard,getPostdatainboardpin } } = createActions({
   [GET_POSTLIST]: postlist => ({ postlist }),
   [GET_ALLBOARD]: boardlist => ({ boardlist }),
   [GET_ALLLOWBOARD]: lowboardlist => ({ lowboardlist }),
@@ -49,7 +49,7 @@ const postReducer = handleActions(
     }),
     [GET_SORTLIST]:(state,{payload})=>({
       ...state,
-      SoftListState:payload.sortlist
+      SortListState:payload.sortlist
     }),
     [GET_POSTDATAINBOARD]:(state,{payload})=>({
       ...state,

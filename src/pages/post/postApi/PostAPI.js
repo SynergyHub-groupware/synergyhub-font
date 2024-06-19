@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getPostlist, getAlllowboard,getSortlist } from '../module/PostReducer';
+import { getPostlist, getAlllowboard,getSortlist,getPostdatainboard,getPostdatainboardpin } from '../module/PostReducer';
 import {getAllboard}  from '../module/PostReducer';
 
 const DOMAIN = 'http://localhost:8080'
@@ -50,6 +50,31 @@ export const request = async (method, url, data) => {
       }
     };
   }
+  export function callGETInboardList(lowBoardCode) {
+    return async (dispatch, getState) => {
+      console.log("callGETPostList call");
+      try {
+        const result = await request('GET', `/post/callGETInboardList/${lowBoardCode}`);
+        dispatch(getPostdatainboard(result)); // 액션 생성자 호출 시 result.data를 전달
+        console.log(result);
+      } catch (error) {
+        console.error("Error fetching post list:", error);
+      }
+    };
+  }
+  export function callGETInboardPinList(lowBoardCode) {
+    return async (dispatch, getState) => {
+      console.log("callGETPostList call");
+      try { 
+        const result = await request('GET', `/post/callGETInboardPinList/${lowBoardCode}`);
+        dispatch(getPostdatainboardpin(result)); // 액션 생성자 호출 시 result.data를 전달
+        console.log(result);
+      } catch (error) {
+        console.error("Error fetching post list:", error);
+      }
+    };
+  }
+
   export function callGETBoardList() {
     return async (dispatch, getState) => {
       console.log("callGETBoardList call");

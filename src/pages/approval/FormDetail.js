@@ -32,7 +32,7 @@ function FormDetail(){
             case '7': return <Leave handleDetail={handleDetail} formRefs={formRefs}/>; break;
             case '8': return <Resign handleDetail={handleDetail} formRefs={formRefs}/>; break;
             case '9': return <Apology handleDetail={handleDetail} formRefs={formRefs}/>; break;
-            case '12': return <Etc handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            default: return <Etc handleDetail={handleDetail}/>; break;
         }
     }
 
@@ -118,15 +118,10 @@ function FormDetail(){
     };
 
     // 결재정보 한번에 전달
-    const formRefs = useRef({
-        // adTitle: null,
-        // aattSort: null,
-        // aattStart: null,
-        // aattEnd: null,
-        // aattPlace: null,
-        // aattCon: null
-    });
+    const formRefs = useRef({});
     const onClickApprovalDocRegist = async (temporary) => {
+
+        // 필수 정보 입력 확인
         const requiredFields = Object.values(formRefs.current);
         let agreeCheckbox = null;
     
@@ -144,6 +139,11 @@ function FormDetail(){
             }
         }
 
+        // etc 키가 존재하고, 그 내부의 aeCon 값이 공백이거나 null인지 확인
+        if (document.etc && (!document.etc.aeCon || document.etc.aeCon.trim() === '')) {
+            alert('내용을 입력해주세요.');
+            return;
+        }
 
         const formData = new FormData();
         formData.append('document', JSON.stringify(document));

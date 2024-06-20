@@ -23,13 +23,11 @@ import PostLayout from './pages/post/PostLayout';
 import FormDetail from './pages/approval/FormDetail';
 import Login from './pages/Login';
 import 'react-toastify/ReactToastify.css';
-import AddressDir from './components/commons/address/AddressDir';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='address' element={<AddressDir/>}/>
         <Route path='login' element={<Login/>}/>
         <Route path='/' element={<Layout/>}>
           <Route index element={<Main/>}/>

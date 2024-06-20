@@ -43,7 +43,7 @@ function Temporary(){
                             <td></td>
                         </tr>
                         <tr>
-                            <td colspan="5" className="hp_pt50 hp_pb50 hp_7Color">목록이 없습니다.</td>
+                            <td colSpan="5" className="hp_pt50 hp_pb50 hp_7Color">목록이 없습니다.</td>
                         </tr>
                     </tbody>
                 </table>

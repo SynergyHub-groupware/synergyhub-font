@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getPostlist, getAlllowboard,getSortlist,getPostdatainboard,getPostdatainboardpin } from '../module/PostReducer';
+import { getComment,getPostlist, getAlllowboard,getSortlist,getPostdatainboard,getPostdatainboardpin,getDetail,getFile } from '../module/PostReducer';
 import {getAllboard}  from '../module/PostReducer';
 
 const DOMAIN = 'http://localhost:8080'
@@ -29,7 +29,7 @@ export const request = async (method, url, data) => {
       console.log("callGETSortList call");
       try{
         const result=await request('GET',"/post/sortList");
-        console.log(result);
+        console.log("sortList",result);
         dispatch(getSortlist(result));
       }catch(error){
         console.log("error",error);
@@ -37,7 +37,39 @@ export const request = async (method, url, data) => {
       }
     }
   }
-  
+  export function callGETDetail(postCode){
+    return async (dispatch,getState)=>{
+      try{
+        const result=await request('GET',`/post/getDetail/${postCode}`);
+        dispatch(getDetail(result))
+      }catch(error){
+        console.log(error)
+      }
+    };
+  }
+  export function callGETFile(postCode){
+    return async (dispatch,getState)=>{
+      try{
+        const result=await request('GET',`/post/callGETFile/${postCode}`);
+        dispatch(getFile(result))
+        console.log(result)
+      }catch(error){
+        console.log(error)
+      }
+    };
+  }
+  export function callGETComment(postCode){
+    return async (dispatch,getState)=>{
+      try{
+        const result=await request('GET',`/post/commentList/${postCode}`);
+        dispatch(getComment(result))
+        console.log(result)
+      }catch(error){
+        console.log(error)
+      }
+    };
+  }
+
   export function callGETPostList() {
     return async (dispatch, getState) => {
       console.log("callGETPostList call");

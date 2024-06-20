@@ -9,14 +9,14 @@ function PostCreateView() {
         postName: '',
         postCon: '',
         attachFile: '',
-        postCommSet: 4,  // 기본값: 둘다 비활성화
+        postCommSet: 3,  // 기본값: 둘다 비활성화
         lowBoardCode: '',
         psCode:''
     });
     const dispatch = useDispatch();
     const BoardState = useSelector(state => state.post.BoardState);
     const LowBoardState = useSelector(state => state.post.LowBoardState);
-    const SoftListState=useSelector(state => state.post.SoftListState);
+    const SoftListState=useSelector(state => state.post.SortListState);
 
     useEffect(() => {
         dispatch(callGETBoardList());
@@ -39,6 +39,7 @@ function PostCreateView() {
             postName:value
         }));
     };
+    console.log("SoftListState",SoftListState);
 
 
     const onChangeHandler = (event) => {
@@ -60,8 +61,8 @@ function PostCreateView() {
         const { value, checked } = event.target;
         setFormData(prevState => {
             const newPostCommSet = calculatePostCommSetValue(
-                value === "ALLOW_NORMAL" ? checked : prevState.postCommSet === 1 || prevState.postCommSet === 3,
-                value === "ALLOW_ANONYMOUS" ? checked : prevState.postCommSet === 2 || prevState.postCommSet === 3
+                value === "ALLOW_NORMAL" ? checked : prevState.postCommSet === 0 || prevState.postCommSet === 2,
+                value === "ALLOW_ANONYMOUS" ? checked : prevState.postCommSet === 1 || prevState.postCommSet === 2
             );
             console.log("comment:",newPostCommSet);
             return { ...prevState, postCommSet: newPostCommSet };

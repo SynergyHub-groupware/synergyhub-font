@@ -7,9 +7,8 @@ function PostListViewInBoard() {
   const dispatch = useDispatch();
   const PostdataInBoardState = useSelector(state => state.post.PostdataInBoard); // Redux store에서 PostdataInBoard 상태 가져오기
   const PostdataInBoardPinState = useSelector(state => state.post.PostdataInBoardPin); // Redux store에서 PostdataInBoardPin 상태 가져오기
-
-  const { PostdataInBoard } = PostdataInBoardState; // PostdataInBoard 필드 추출
-  const { PostdataInBoardPin } = PostdataInBoardPinState; // PostdataInBoardPin 필드 추출
+  console.log(PostdataInBoardPinState);
+  console.log(PostdataInBoardState);
   const { lowBoardCode } = useParams(); // URL의 파라미터로부터 lowBoardCode 가져오기
 
   console.log(lowBoardCode);
@@ -21,14 +20,34 @@ function PostListViewInBoard() {
     dispatch(callGETInboardPinList(lowBoardCode));
   }, [dispatch, lowBoardCode]);
 
-  console.log("Current posts data:", PostdataInBoard);
+  console.log("Current posts data:", PostdataInBoardState);
 
-  const renderRows = (posts) => {
-    if (!Array.isArray(posts) || posts.length === 0) {
+  const pinBoard = () => {
+    if (!Array.isArray(PostdataInBoardPinState) || PostdataInBoardPinState.length === 0) {
       return <tr><td colSpan="6">로딩 중...</td></tr>;
     }
 
-    return posts.map(item => {
+    return PostdataInBoardPinState.map(item => {
+      const lowBoardName = item.lowBoardCode ? item.lowBoardCode.lowBoardName : 'N/A';
+
+      return (
+        <tr key={item.postCode}>
+          <td>{item.postCode}</td>
+          <td>{lowBoardName}</td>
+          <td>{item.postName}</td>
+          <td>{item.empCode}</td>
+          <td>{item.postDate}</td>
+          <td>{item.postViewCnt}</td>
+        </tr>
+      );
+    });
+  };
+  const board = () => {
+    if (!Array.isArray(PostdataInBoardState) || PostdataInBoardState.length === 0) {
+      return <tr><td colSpan="6">로딩 중...</td></tr>;
+    }
+
+    return PostdataInBoardState.map(item => {
       const lowBoardName = item.lowBoardCode ? item.lowBoardCode.lowBoardName : 'N/A';
 
       return (
@@ -65,8 +84,8 @@ function PostListViewInBoard() {
             </tr>
           </thead>
           <tbody>
-            {renderRows(PostdataInBoardPin)}
-            {renderRows(PostdataInBoard)}
+            {pinBoard()}
+            {board()}
           </tbody>
         </table>
         <div className="bl_paging" style={{ display: 'flex' }}>

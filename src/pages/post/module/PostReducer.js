@@ -6,7 +6,10 @@ const initialState = {
   LowBoardState: [], // 소분류 게시판 데이터
   SortListState:[],
   PostdataInBoard:[], //특정 게시판의 글
-  PostdataInBoardPin:[] //특정 게시판의 고정글
+  PostdataInBoardPin:[], //특정 게시판의 고정글
+  DetailState:[],
+  FileState:[],
+  CommentState:[]
 };
 
 const GET_POSTLIST = 'post/GET_POSTLIST';
@@ -15,15 +18,21 @@ const GET_ALLLOWBOARD = 'post/GET_ALLLOWBOARD';
 const GET_SORTLIST='post/GET_SORTLIST';
 const GET_POSTDATAINBOARD='post/GET_POSTDATAINBOARD';
 const GET_POSTDATAINBOARDPIN='post/GET_POSTDATAINBOARDPIN';
+const GET_DETAIL='post/GET_DETAIL'
+const GET_FILE='post/GET_FILE'
+const GET_COMMENT='post/GET_COMMENT'
 
 // 액션 생성자 함수 생성
-export const { post: { getPostlist, getAllboard, getAlllowboard,getSortlist,getPostdatainboard,getPostdatainboardpin } } = createActions({
+export const { post: { getComment,getFile,getPostlist, getAllboard, getAlllowboard,getSortlist,getPostdatainboard,getPostdatainboardpin,getDetail } } = createActions({
   [GET_POSTLIST]: postlist => ({ postlist }),
   [GET_ALLBOARD]: boardlist => ({ boardlist }),
   [GET_ALLLOWBOARD]: lowboardlist => ({ lowboardlist }),
   [GET_SORTLIST]:sortlist=>({sortlist}),
   [GET_POSTDATAINBOARD]: postdatainboardlist=>({postdatainboardlist}),
-  [GET_POSTDATAINBOARDPIN]: postdatainboardpin=>({postdatainboardpin})
+  [GET_POSTDATAINBOARDPIN]: postdatainboardpin=>({postdatainboardpin}),
+  [GET_DETAIL]:detaildata=>({detaildata}),
+  [GET_FILE]:filelist=>({filelist}),
+  [GET_COMMENT]:commentlist=>({commentlist})
 });
 
 // 확인용 로그
@@ -58,6 +67,18 @@ const postReducer = handleActions(
     [GET_POSTDATAINBOARDPIN]: (state, { payload }) => ({
       ...state,
       PostdataInBoardPin: payload.postdatainboardpin
+    }),
+    [GET_DETAIL]:(state,{payload})=>({
+      ...state,
+      DetailState:payload.detaildata
+    }),
+    [GET_FILE]:(state,{payload})=>({
+      ...state,
+      FileState:payload.filelist
+    }),
+    [GET_COMMENT]:(state,{payload})=>({
+      ...state,
+      CommentState:payload.commentlist
     })
 
   },
@@ -70,5 +91,8 @@ console.log("initialState.Postdata", initialState.Postdata);
 console.log("initialState.BoardState", initialState.BoardState);
 console.log("initialState.LowBoardState", initialState.LowBoardState);
 console.log("initialState.SoftListState",initialState.SortListState);
+console.log("initialState.PostdataInBoard",initialState.PostdataInBoard);
+console.log("initialState.PostdataInBoardPin",initialState.PostdataInBoardPin);
+
 
 export default postReducer;

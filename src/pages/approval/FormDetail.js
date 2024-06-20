@@ -8,7 +8,7 @@ import Leave from "./form/Leave";
 import Resign from "./form/Resign";
 import Apology from "./form/Apology";
 import Etc from "./form/Etc";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callApprovalDocRegistAPI } from "../../apis/ApprovalAPICalls";
 import { resetSuccess } from "../../modules/ApprovalModules";
@@ -25,14 +25,14 @@ function FormDetail(){
 
     const renderFormCont = () => {
         switch(afCode){
-            case '2': return <ExceptionWork handleDetail={handleDetail}/>; break;
-            case '3': return <Overtime/>; break;
-            case '4': return <Late/>; break;
-            case '5': return <Vacation/>; break;
-            case '7': return <Leave/>; break;
-            case '8': return <Resign/>; break;
-            case '9': return <Apology/>; break;
-            case '12': return <Etc/>; break;
+            case '2': return <ExceptionWork handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            case '3': return <Overtime handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            case '4': return <Late handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            case '5': return <Vacation handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            case '7': return <Leave handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            case '8': return <Resign handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            case '9': return <Apology handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            case '12': return <Etc handleDetail={handleDetail} formRefs={formRefs}/>; break;
         }
     }
 
@@ -118,7 +118,33 @@ function FormDetail(){
     };
 
     // 결재정보 한번에 전달
+    const formRefs = useRef({
+        // adTitle: null,
+        // aattSort: null,
+        // aattStart: null,
+        // aattEnd: null,
+        // aattPlace: null,
+        // aattCon: null
+    });
     const onClickApprovalDocRegist = async (temporary) => {
+        const requiredFields = Object.values(formRefs.current);
+        let agreeCheckbox = null;
+    
+        for (let field of requiredFields) {
+            if (field.type === 'checkbox' && field.name === 'agree') {
+                agreeCheckbox = field;
+                if (!agreeCheckbox.checked) {
+                    alert('서약서 동의는 필수입니다.');
+                    return;
+                }
+            } else if (field.hasAttribute('required') && !field.value) {
+                field.focus();
+                alert('필수 정보를 입력해주세요.');
+                return;
+            }
+        }
+
+
         const formData = new FormData();
         formData.append('document', JSON.stringify(document));
 
@@ -162,7 +188,7 @@ function FormDetail(){
                         </tr>
                         <tr>
                             <th scope="row">제목</th>
-                            <td colSpan="3"><input type="text" className="hp_w100" name="adTitle" onChange={onChangeHandler} placeholder="[팀명] MM/DD 기안양식명_이름"/></td>
+                            <td colSpan="3"><input type="text" className="hp_w100" name="adTitle" onChange={onChangeHandler} ref={(el) => (formRefs.current['field1'] = el)} placeholder="[팀명] MM/DD 기안양식명_이름" required /></td>
                         </tr>
                     </tbody>
                 </table>

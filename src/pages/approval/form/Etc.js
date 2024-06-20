@@ -3,34 +3,33 @@ import { useParams } from "react-router-dom";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/ko.js'; // 한국어 번역을 추가하려면 import
+import { useDispatch, useSelector } from "react-redux";
+import { callFormContentAPI } from "../../../apis/ApprovalAPICalls";
 
 function Etc({handleDetail}) {
-    const [editorData, setEditorData] = useState('');
-    const [exception, setException] = useState({});
 
-    // 양식내용 출력
-    const {afCode} = useParams();
+    // 양식내용 출력 
+    const dispatch = useDispatch();
+    const {afCode} = useParams();   
+    const content = useSelector(state => state.approvalReducer.content);
 
     useEffect(() => {
-        switch(afCode){
-            case '6': setEditorData(''); break;
-            case '10': setEditorData(''); break;
-            case '11': setEditorData(''); break;
-            default: setEditorData(''); break;
-        }
-    }, [afCode]);
+        afCode && dispatch(callFormContentAPI(afCode));
+    }, [afCode, dispatch]);
+
+    const [editorData, setEditorData] = useState('');
+    const [exception, setException] = useState({});
     
-
-
+    useEffect(() => {
+        if (content && content.afCon !== undefined) setEditorData(content.afCon || '');
+    }, [content]);
+    
     const handleChange = (event, editor) => {
         const data = editor.getData();
-        setEditorData(data);
-
-        console.log("data", data);
-
+        setEditorData(data);    // 입력받은 내용 에디터에 넣음
         setException(prev => ({
             ...prev,
-            aeCon: data
+            aeCon: data         // 입력받은 내용 exception에 넣음
         }));
     };
 
@@ -39,14 +38,7 @@ function Etc({handleDetail}) {
     }, [exception]);
 
     return (
-        <div>
-            <CKEditor
-                editor={ClassicEditor}
-                data={editorData}
-                onChange={handleChange}
-                config={{}}
-            />
-        </div>
+        <CKEditor editor={ClassicEditor} data={editorData} onChange={handleChange} />
     );
 }
 

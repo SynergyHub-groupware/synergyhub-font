@@ -15,8 +15,7 @@ import { resetSuccess } from "../../modules/ApprovalModules";
 
 function FormDetail(){
     const empCode = "2021048";
-
-
+    
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();

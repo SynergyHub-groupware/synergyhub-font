@@ -1,28 +1,35 @@
-import {getForms, getLineemps, getLines, getSuccess} from "../modules/ApprovalModules";
+import {getContent, getDocuments, getForms, getLineemps, getLines, getSuccess} from "../modules/ApprovalModules";
 import { request } from "./api";
 
-export const callFormListAPI = () => {
+export const callFormListAPI = () => {              // 결재양식리스트 조회
     return async (dispatch, getState) => {
         const result = await request('GET', '/approval/formList');
         if(result && result.status === 200) dispatch(getForms(result));
     }
 }
 
-export const callFormLineAPI = ({lsCode}) => {
+export const callFormContentAPI = (afCode) => {     // 결재양식기본내용 조회
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/formContent?afCode=${afCode}`);
+        if(result && result.status === 200) dispatch(getContent(result));
+    }
+}
+
+export const callFormLineAPI = ({lsCode}) => {      // 결재라인 특정 조회
     return async (dispatch, getState) => {
         const result = await request('GET', `/approval/formLine?lsCode=${lsCode}`);
         if(result && result.status === 200) dispatch(getLines(result));
     }
 }
 
-export const callLineEmpListAPI = ({deptCode, titleCode, lsCode}) => {
+export const callLineEmpListAPI = ({deptCode, titleCode, lsCode}) => {      // 결재라인 회원 조회(본인 기준)
     return async (dispatch, getState) => {
         const result = await request('GET', `/approval/formLineEmp?deptCode=${deptCode}&titleCode=${titleCode}&lsCode=${lsCode}`);
         if(result && result.status === 200) dispatch(getLineemps(result));
     }
 }
 
-export const fetchImage = async (empCode) => {
+export const fetchImage = async (empCode) => {      // 결재서명 이미지 조회(본인 기준)
     try {
         const response = await fetch(`http://localhost:8080/approval/sign?empCode=${empCode}`);
         if (response.ok) {
@@ -39,7 +46,7 @@ export const fetchImage = async (empCode) => {
     }
 };
 
-export const callApprovalDocRegistAPI = ({formData, temporary}) => {
+export const callApprovalDocRegistAPI = ({formData, temporary}) => {        // 결재 등록
     return async (dispatch, getState) => {
         try {
             const response = await request('POST', `/approval/regist?temporary=${temporary}`,
@@ -54,5 +61,12 @@ export const callApprovalDocRegistAPI = ({formData, temporary}) => {
         } catch (error) {
             console.error("Document and file upload error:", error);
         }
+    }
+}
+
+export const callsendDocListAPI = ({currentPage = 1, empCode, status}) => {
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/send/document?page=${currentPage}&empCode=${empCode}&status=${status}`);
+        if(result && result.status === 200) dispatch(getDocuments(result));
     }
 }

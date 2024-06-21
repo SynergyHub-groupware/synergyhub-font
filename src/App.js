@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/layouts/Layout';
 import Main from './pages/Main';
 import FormList from './pages/approval/FormList';
@@ -23,6 +23,9 @@ import PostLayout from './pages/post/PostLayout';
 import FormDetail from './pages/approval/FormDetail';
 import Login from './pages/Login';
 import 'react-toastify/ReactToastify.css';
+import ReceiveMsg from './pages/message/storage/ReceiveMsg';
+import SendMsg from './pages/message/storage/SendMsg';
+import TempMsg from './pages/message/storage/TempMsg';
 
 function App() {
   return (
@@ -63,7 +66,12 @@ function App() {
             {/* 내용추가 */}
           </Route>
           <Route path="message" element={<MessageLayout/>}>
-            {/* 내용추가 */}
+            <Route index element={<Navigate to="storage/receive" replace/>}/>
+            <Route path='storage'>
+              <Route path='receive' element={<ReceiveMsg/>}/>
+              <Route path='send' element={<SendMsg/>}/>
+              <Route path='temp' element={<TempMsg/>}/>
+            </Route>
           </Route>
           <Route path="post" element={<PostLayout/>}>
             {/* 내용추가 */}

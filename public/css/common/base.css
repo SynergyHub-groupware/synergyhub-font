@@ -62,7 +62,7 @@
 .el_btn8Bord{background:#fff;border:1px solid #888;color:#888;}
 .el_btn0Back{background:#000;border:1px solid #000;color:#fff;}
 .el_btn0Bord{border:1px solid #000;color:#000;}
-button:disabled{background:#fff;border:1px solid #888;color:#888;cursor:default;}
+button:disabled{background-color:#fff;border-color:#888;color:#888;cursor:default;}
 
 .bl_radioBxArea{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;display:inline-block;cursor:pointer;}
 .bl_radioBxArea__input{position:absolute;opacity:0;cursor:pointer;height:0;width:0;}

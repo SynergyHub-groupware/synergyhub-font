@@ -1,26 +1,57 @@
-function Resign(){
+import { useEffect, useState } from "react";
+
+function Resign({handleDetail, formRefs}){
+    const [exception, setException] = useState({});
+
+    const onChangeHandler = (e) => {
+        const { name, value } = e.target;
+        setException(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    // 연락처 따로 입력받아서 하나로 합쳐서 전달
+    const onContactChange = (e) => {
+        const { name, value } = e.target;
+        
+        const formattedContact = formRefs.current['apContact1'].value + '-' +
+                                 formRefs.current['apContact2'].value + '-' +
+                                 formRefs.current['apContact3'].value;
+
+        setException(prev => ({
+            ...prev,
+            apContact: formattedContact
+        }));
+    };
+
+    useEffect(() => {
+        handleDetail(exception);
+    }, [exception]);
+
+    // 숫자 입력 길이 제한
+    const maxLengthCheck = (e) => {
+        if (e.target.value.length > e.target.maxLength) e.target.value = e.target.value.slice(0, e.target.maxLength);
+    };
+
     return(
         <table className="bl_tb3 el_approvalTb3__th">
             <tbody>
                 <tr>
-                    <th scope="col">입사일</th>
-                    <td>2024.12.34</td>
-                </tr>
-                <tr>
                     <th scope="col">퇴사일</th>
-                    <td><input type="date" className="hp_w120px"/></td>
+                    <td><input type="date" className="hp_w120px" name="apEnd" onChange={onChangeHandler} required ref={(el) => (formRefs.current['apEnd'] = el)} /></td>
                 </tr>
                 <tr>
                     <th scope="col">퇴사후 연락처</th>
                     <td>
-                        <input type="number" className="hp_w70px"/> -
-                        <input type="number" className="hp_w70px"/> -
-                        <input type="number" className="hp_w70px"/>
+                        <input type="number" maxLength="3" onInput={maxLengthCheck} className="hp_w70px" name="apContact1" onChange={onContactChange} required ref={(el) => (formRefs.current['apContact1'] = el)} /> -
+                        <input type="number" maxLength="4" onInput={maxLengthCheck} className="hp_w70px" name="apContact2" onChange={onContactChange} required ref={(el) => (formRefs.current['apContact2'] = el)} /> -
+                        <input type="number" maxLength="4" onInput={maxLengthCheck} className="hp_w70px" name="apContact3" onChange={onContactChange} required ref={(el) => (formRefs.current['apContact3'] = el)} />
                     </td>
                 </tr>
                 <tr>
                     <th scope="col">사유</th>
-                    <td><textarea className="hp_w100"></textarea></td>
+                    <td><textarea rows="2" cols="20" wrap="hard" className="hp_w100" name="apReason" onChange={onChangeHandler} required ref={(el) => (formRefs.current['apReason'] = el)}></textarea></td>
                 </tr>
                 <tr>
                     <th scope="col">서약서</th>
@@ -34,7 +65,7 @@ function Resign(){
                                 <li className="hp_mb10">만일 본인이 상기 사항을 위반하였을 때에는 이유 여하를 막론하고 서약에 의거 민, 형사상의 책임을 지며, 회사에서 요구하는 손해배상의 의무를 지겠습니다.</li>
                             </ol>
                             <label className="hp_dpBlock hp_dBack hp_pl10 hp_mt50">
-                                <input type="checkbox"/> 이에 동의합니다.
+                                <input type="checkbox" name="agree" ref={(el) => (formRefs.current['agree'] = el)} /> 이에 동의합니다.
                             </label>
                         </div>
                     </td>

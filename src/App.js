@@ -6,10 +6,6 @@ import Temporary from './pages/approval/Temporary';
 import Form from './pages/approval/setting/Form';
 import Sign from './pages/approval/setting/Sign';
 import Storage from './pages/approval/setting/Storage';
-import SendComplete from './pages/approval/send/Complete';
-import Progress from './pages/approval/send/Progress';
-import SendWaiting from './pages/approval/send/Waiting';
-import SendReturn from './pages/approval/send/Return';
 import ReceiveComplete from './pages/approval/receive/Complete';
 import ReceiveWaiting from './pages/approval/receive/Waiting';
 import Reference from './pages/approval/receive/Reference';
@@ -26,28 +22,41 @@ import FormDetail from './pages/approval/FormDetail';
 import PostListViewInBoard from './pages/post/PostListViewInBoard';
 import PostDetailView from './pages/post/PostDetailView';
 import BoradCreateView from './pages/post/BoardCreateView';
+import DocumentMain from './pages/approval/send/DocumentMain'
+import Login from './pages/Login';
+import 'react-toastify/ReactToastify.css';
+import AddressDir from './components/commons/address/AddressDir';
+import Organization from './pages/employee/Organization';
+import PersonalList from './pages/employee/PersonalList';
+import PersonalRegist from './pages/employee/PersonalRegist';
+import PersonalView from './pages/employee/PersonalView';
+import EmployeeList from './pages/employee/EmployeeList';
+import AppointList from './pages/employee/AppointList';
+import AppointRegist from './pages/employee/AppointRegist';
+import AppointView from './pages/employee/AppointView';
+import DeptManagerMent from './pages/employee/DeptManagerMent';
+import MyInfo from './pages/myInfo/MyInfo';
+import MyInfoLayout from './pages/myInfo/MyInfoLayout';
+import MyPersonalRecordCard from './pages/myInfo/MyPersonalRecordCard';
+
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path='login' element={<Login/>}/>
         <Route path='/' element={<Layout/>}>
           <Route index element={<Main/>}/>
           <Route path="approval" element={<ApprovalLayout/>}>
             <Route path="formList" element={<FormList/>} />
             <Route path="temporary" element={<Temporary/>} />
             <Route path="form/:afCode" element={<FormDetail/>}/>
+            <Route path="send/:status" element={<DocumentMain/>}/>
             <Route path="receive">
               <Route path="complete" element={<ReceiveComplete/>} />
               <Route path="reference" element={<Reference/>} />
               <Route path="return" element={<ReceiveReturn/>} />
               <Route path="waiting" element={<ReceiveWaiting/>} />
-            </Route>
-            <Route path="send">
-              <Route path="complete" element={<SendComplete/>} />
-              <Route path="progress" element={<Progress/>} />
-              <Route path="return" element={<SendReturn/>} />
-              <Route path="waiting" element={<SendWaiting/>} />
             </Route>
             <Route path="setting">
               <Route path="form" element={<Form/>} />
@@ -62,7 +71,19 @@ function App() {
             {/* 내용추가 */}
           </Route>
           <Route path="employee" element={<EmployeeLayout/>}>
-            {/* 내용추가 */}
+            <Route path="organization" element={<Organization />} />
+            <Route path="personalList" element={<PersonalList />} />
+            <Route path="personalRegist" element={<PersonalRegist />} />
+            <Route path="personalView" element={<PersonalView />} />
+            <Route path='employeeList' element={<EmployeeList />} />
+            <Route path='appointList' element={<AppointList />} />
+            <Route path='appointRegist' element={<AppointRegist />} />
+            <Route path='appointView' element={<AppointView />} />
+            <Route path='deptManagerMent' element={<DeptManagerMent />} />
+          </Route> 
+          <Route path='myInfo' element={<MyInfoLayout />} >
+            <Route path="myInfo" element={<MyInfo />} />  
+            <Route path="myPersonalRecordCard" element={<MyPersonalRecordCard />} />  
           </Route>
           <Route path="message" element={<MessageLayout/>}>
             {/* 내용추가 */}

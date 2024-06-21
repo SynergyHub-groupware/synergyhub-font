@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-function DirForm({ closeModal, onConfirm }) {
+function DirForm({ closeModal, onConfirm, onClear }) {
 
     const [originEmp, setOriginEmp] = useState([]);     // 원본 저장
     const [employees, setEmployees] = useState([]);        // 검색 결과 저장
@@ -9,7 +9,9 @@ function DirForm({ closeModal, onConfirm }) {
     const [searchKeyword, setSearchKeyword] = useState(''); // 검색어
 
     const [selectEmp, setSelectEmp] = useState([]); // 체크박스로 회원 선택
-    const [receiver, setReceiver] = useState('');
+    const [receiver, setReceiver] = useState([]);   // 받는사람 인원 배열
+
+    const [selectAll, setSelectAll] = useState(false);
 
     useEffect(() => {
         // axios로 페이지 로딩 시 데이터 가져오기
@@ -40,54 +42,62 @@ function DirForm({ closeModal, onConfirm }) {
 
             // 전체 혹은 해당하는 부서, 이름, 직급 전부 가져오기
             case '전체':
-                employeeFilter = originEmp.filter(emp => emp.dept_title.includes(searchKeyword) || emp.emp_name.includes(searchKeyword) || emp.position_name.includes(searchKeyword));
+                employeeFilter = originEmp.filter(emp => (emp.dept_title.includes(searchKeyword) || emp.emp_name.includes(searchKeyword) || emp.position_name.includes(searchKeyword)) && !selectEmp.some(selected => selected.emp_code === emp.emp_code));
                 break;
 
             // 부서에 맞는 값 가져오기    
             case '부서':
-                employeeFilter = originEmp.filter(emp => emp.dept_title.includes(searchKeyword));
+                employeeFilter = originEmp.filter(emp => emp.dept_title.includes(searchKeyword) && !selectEmp.some(selected => selected.emp_code === emp.emp_code));
                 break;
 
             // 이름에 맞는 값 가져오기
             case '이름':
-                employeeFilter = originEmp.filter(emp => emp.emp_name.includes(searchKeyword));
+                employeeFilter = originEmp.filter(emp => emp.emp_name.includes(searchKeyword) && !selectEmp.some(selected => selected.emp_code === emp.emp_code));
                 break;
 
             // 직급에 맞는 값 가져오기    
             case '직급':
-                employeeFilter = originEmp.filter(emp => emp.position_name.includes(searchKeyword));
+                employeeFilter = originEmp.filter(emp => emp.position_name.includes(searchKeyword) && !selectEmp.some(selected => selected.emp_code === emp.emp_code));
                 break;
 
             // 페이지 로딩 시 기본 값
             default:
-                employeeFilter = originEmp;
+                employeeFilter = originEmp.filter(emp => !selectEmp.some(selected => selected.emp_code === emp.emp_code));
         }
         setEmployees(employeeFilter);
     }
 
     // 체크박스 핸들러
     const checkboxChange = (emp) => {
-        setSelectEmp(selected =>
-            selected.includes(emp) ?
-                selected.filter(e => e !== emp) :
-                [...selected, emp]
+        setSelectEmp(selected => 
+            selected.includes(emp) ? selected.filter( e => e !== emp) : [...selected, emp]
         );
-        console.log(emp);
     };
 
-    /* 받는 사람 영역에 유저 추가 */
+
+    // 받는 사람 영역에 유저 추가
     const receiverAdd = () => {
         if (selectEmp.length > 0) {
-            setReceiver(selectEmp.map(emp => `- ${emp.emp_name} <${emp.dept_title} ${emp.position_name}>`).join('\n'));
-            setSelectEmp(selectEmp);
-            console.log(selectEmp);
+            setReceiver(prevReceiver => {
+                const empIds = prevReceiver.map(emp => emp.emp_code);
+                const newReceivers = selectEmp.filter(emp => !empIds.includes(emp.emp_code));
+                return [...prevReceiver, ...newReceivers];
+            });
+
+            const updateEmp = employees.filter(emp => !selectEmp.includes(emp));
+            setEmployees(updateEmp);
+            setSelectEmp([]); // 선택된 직원 초기화
         }
     };
 
     /* 받는 사람 영역 인원 삭제 */
     const receiverClear = () => {
-        setReceiver('');
+
+        setReceiver([]);
+        setSelectEmp([]);
+        onClear(receiver);
     };
+
 
     /* 확인 버튼으로 배열 보내기 */
     const confirmHandle = () => {
@@ -97,11 +107,20 @@ function DirForm({ closeModal, onConfirm }) {
             return;
         }
 
-            onConfirm(selectEmp);
-            // console.log("dirForm : ", selectEmp);
-            receiverClear();
-            setSelectEmp([]);
+        onConfirm(receiver)
+        console.log("dirForm : ", receiver);
     };
+
+
+    const toggleAll = () => {
+        setSelectAll(!selectAll);
+        if(!selectAll) {
+            setSelectEmp([...employees]);
+        } else {
+            setSelectEmp([]);
+        }
+    };
+
 
     return (
         <>
@@ -125,7 +144,7 @@ function DirForm({ closeModal, onConfirm }) {
                     <table>
                         <thead>
                             <tr>
-                                <th><input type="checkbox" /></th>
+                                <th><input type="checkbox" checked={selectAll} onChange={toggleAll}/></th>
                                 <th style={{ width: '30px' }}>부서</th>
                                 <th>이름</th>
                                 <th>직급</th>
@@ -162,7 +181,15 @@ function DirForm({ closeModal, onConfirm }) {
                                     <div style={{ display: 'flex', justifyContent: 'flex-end', height: '12%' }}>
                                         <button type="button" className="el_btnS el_btn8Bord hp_mb10" onClick={receiverClear}>삭제</button>
                                     </div>
-                                    <textarea className="hp_w100" style={{ height: '88%' }} value={receiver} readOnly />
+                                    <div style={{width: '250px', height:'88%', overflowY:'auto', overflowX:'auto'}}>
+                                        <ul>
+                                            {receiver.map(emp => (
+                                                <li key={emp.emp_code}>
+                                                    - {emp.emp_name} {'<'}{emp.dept_title} {emp.position_name}{'>'}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

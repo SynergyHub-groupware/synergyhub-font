@@ -38,6 +38,12 @@ function LineApprover({lsCode, lines, myCode, deptCode, titleCode, handleTrueLin
 
         handleTrueLineList(trueLineList);
     }, [newLines]);
+    
+    const [role, setRole] = useState('결재');
+
+    const handleRoleChange = (event) => {
+        setRole(event.target.value);
+    };
 
     return(
         <>
@@ -49,7 +55,12 @@ function LineApprover({lsCode, lines, myCode, deptCode, titleCode, handleTrueLin
                     <table className="bl_tb3 hp_alignC ly_fgrow1" key={emp.empCode}>
                         <tbody>
                             <tr>
-                                <th>{role}자</th>
+                                <th className="hp_padding0">
+                                    <select className="hp_w100 el_approvalRole__select" value={role} onChange={handleRoleChange}>
+                                        <option value="결재">결재자</option>
+                                        <option value="전결">전결자</option>
+                                    </select>
+                                </th>
                             </tr>
                             <tr>
                                 <td>미결재</td>

@@ -56,3 +56,63 @@ tbody tr:last-child td {
 .searchZone input {
     margin-right: 10px;
 }
+
+
+
+
+
+
+/* BoradCreateView.css */
+.table-container {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-container th, .table-container td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center; /* 중앙 정렬 */
+}
+
+.table-container th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px; /* 버튼 간의 간격 조정 */
+}
+
+.button-group h1 {
+    margin: 0; /* 제목의 기본 마진 제거 */
+}
+
+.button {
+    margin: 0 5px; /* 버튼의 양쪽에 마진 추가 */
+}
+
+/* 열 너비 조정 */
+.tableHead {
+    width: 20%;
+}
+
+.tableBody {
+    width: 50%;
+}
+
+.tablePermission {
+    width: 30%;
+}

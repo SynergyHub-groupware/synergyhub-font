@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getComment,getPostlist, getAlllowboard,getSortlist,getPostdatainboard,getPostdatainboardpin,getDetail,getFile } from '../module/PostReducer';
+import { getAlllow,getComment,getPostlist, getAlllowboard,getSortlist,getPostdatainboard,getPostdatainboardpin,getDetail,getFile } from '../module/PostReducer';
 import {getAllboard}  from '../module/PostReducer';
 
 const DOMAIN = 'http://localhost:8080'
@@ -37,6 +37,18 @@ export const request = async (method, url, data) => {
       }
     }
   }
+  export function getAllLowBoard(){
+    return async (dispatch,getState)=>{
+      try{
+        const result=await request('GET',`/post/getAllLowBoard`);
+        console.log(result);
+        dispatch(getAlllow(result))
+      }catch(error){
+        console.log(error)
+      }
+    };
+  }
+
   export function callGETDetail(postCode){
     return async (dispatch,getState)=>{
       try{

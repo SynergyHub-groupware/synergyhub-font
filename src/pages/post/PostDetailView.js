@@ -1,7 +1,7 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { callGETDetail,callGETFile,callGETComment } from './postApi/PostAPI';
+import { callGETDetail, callGETFile, callGETComment } from './postApi/PostAPI';
 import axios from 'axios';
 
 function PostDetailView() {
@@ -9,6 +9,7 @@ function PostDetailView() {
     const { postCode } = useParams(); // URL의 파라미터로부터 postCode 가져오기
     const [newComment, setNewComment] = useState('');
     const [comments, setComments] = useState([]);
+    const [isAnonymous, setIsAnonymous] = useState(false);
 
     useEffect(() => {
         dispatch(callGETDetail(postCode));
@@ -16,15 +17,15 @@ function PostDetailView() {
     useEffect(() => {
         dispatch(callGETFile(postCode));
     }, [dispatch, postCode]);
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(callGETComment(postCode));
-    },[dispatch,postCode])
+    }, [dispatch, postCode])
 
     const DetailData = useSelector(state => state.post.DetailState);
     console.log(DetailData);
-    const FileData=useSelector(state=>state.post.FileState)
+    const FileData = useSelector(state => state.post.FileState)
     console.log(FileData);
-    const CommentState=useSelector(state=>state.post.CommentState);
+    const CommentState = useSelector(state => state.post.CommentState);
 
 
     const downloadAttachment = (attachmentUrl, filename) => {
@@ -44,13 +45,13 @@ function PostDetailView() {
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         const commentData = {
-            postId: DetailData.postCode,
+            postCode: DetailData.postCode,
             content: newComment,
-            author: 'Anonymous', // 현재 미구현, 댓글 익명화 설정 후 구현 필요
+            author: isAnonymous ? 'Anonymous' : 'User', // 익명 여부에 따라 작성자 설정
         };
 
         try {
-            const response = await axios.post('http://localhost:8080/comments/add', commentData);
+            const response = await axios.post('http://localhost:8080/post/commentAdd', commentData);
             setComments([...comments, response.data]);
             setNewComment('');
         } catch (error) {
@@ -84,13 +85,13 @@ function PostDetailView() {
                         <tr>
                             <td>첨부파일</td>
                             <td colSpan="3">
-                            {FileData && FileData.length > 0 ? (
+                                {FileData && FileData.length > 0 ? (
                                     FileData.map((file, index) => (
-                                        <a 
-                                          key={index} 
-                                          href={`http://localhost:8080/post/downloadFile/${file.attachSave}`} 
-                                          target="_blank" 
-                                          rel="noopener noreferrer"
+                                        <a
+                                            key={index}
+                                            href={`http://localhost:8080/post/downloadFile/${file.attachSave}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
                                         >
                                             {file.attachOriginal}
                                         </a>
@@ -113,68 +114,63 @@ function PostDetailView() {
                             <td colSpan="4">
                                 <h1>댓글 구현위치</h1>
                                 {DetailData.postCommSet === 'ALLOW_NORMAL' && (
-                <>
-                    <h2>댓글</h2>
-                    <ul>
-                        {comments.map((comment) => (
-                            <li key={comment.id}>
-                                <strong>{comment.author}:</strong> {comment.content}
-                            </li>
-                        ))}
-                    </ul>
-                    <form onSubmit={handleCommentSubmit}>
-                        <textarea value={newComment} onChange={handleCommentChange} />
-                        <button type="submit">댓글 작성</button>
-                    </form>
-                </>
-            )}
-            {DetailData.postCommSet === 'ALLOW_ANONYMOUS' && (
-                <>
-                    <h2>익명 댓글</h2>
-                    <ul>
-                        {comments.map((comment) => (
-                            <li key={comment.id}>
-                                {comment.content}
-                            </li>
-                        ))}
-                    </ul>
-                    <form onSubmit={handleCommentSubmit}>
-                        <textarea value={newComment} onChange={handleCommentChange} />
-                        <button type="submit">익명 댓글 작성</button>
-                    </form>
-                </>
-            )}
-            {DetailData.postCommSet === 'ALLOW_BOTH' && (
-                <>
-                    <h2>댓글</h2>
-                    <ul>
-                        {CommentState.map((comment) => (
-                            <li key={comment.commonCode}>
-                                <strong>{comment.empCode}:</strong> {comment.commCon}
-                            </li>
-                        ))}
-                    </ul>
-                    <form onSubmit={handleCommentSubmit}>
-                        <textarea value={newComment} onChange={handleCommentChange} />
-                        <button type="submit">댓글 작성</button>
-                    </form>
-                    <hr />
-                    <h2>익명 댓글</h2>
-                    <ul>
-                        {CommentState.map((comment) => (
-                            <li key={comment.commonCode}>
-                                {comment.commCon}
-                            </li>
-                        ))}
-                    </ul>
-                    <form onSubmit={handleCommentSubmit}>
-                        <textarea value={newComment} onChange={handleCommentChange} />
-                        <button type="submit">익명 댓글 작성</button>
-                    </form>
-                </>
-            )}
-            {DetailData.postCommSet === 'ALLOW_NONE' && <p>댓글이 비허용되었습니다.</p>}
-
+                                    <>
+                                        <h2>댓글</h2>
+                                        <ul>
+                                            {comments.map((comment) => (
+                                                <li key={comment.id}>
+                                                    <strong>{comment.author}:</strong> {comment.content}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        <form onSubmit={handleCommentSubmit}>
+                                            <textarea value={newComment} onChange={handleCommentChange} />
+                                            <button type="submit">댓글 작성</button>
+                                        </form>
+                                    </>
+                                )}
+                                {DetailData.postCommSet === 'ALLOW_ANONYMOUS' && (
+                                    <>
+                                        <h2>익명 댓글</h2>
+                                        <ul>
+                                            {comments.map((comment) => (
+                                                <li key={comment.id}>
+                                                    {comment.content}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        <form onSubmit={handleCommentSubmit}>
+                                            <textarea value={newComment} onChange={handleCommentChange} />
+                                            <button type="submit">익명 댓글 작성</button>
+                                        </form>
+                                    </>
+                                )}
+                                {DetailData.postCommSet === 'ALLOW_BOTH' && (
+                                    <>
+                                        <h2> 댓글</h2>
+                                        <ul>
+                                            {CommentState.map((comment) => (
+                                                <li key={comment.commonCode}>
+                                                    {comment.commCon}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        <form onSubmit={handleCommentSubmit}>
+                                            <textarea value={newComment} onChange={handleCommentChange} />
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={isAnonymous}
+                                                    onChange={() => setIsAnonymous(!isAnonymous)}
+                                                />{' '}
+                                                익명으로 작성
+                                            </label>
+                                            <br/>
+                                            <button type="submit">댓글 작성</button>
+                                        </form>
+                                    </>
+                                )}
+                                {DetailData.postCommSet === 'ALLOW_NONE' && <p>댓글이 비허용되었습니다.</p>}
                             </td>
                         </tr>
                     </thead>

@@ -8,30 +8,30 @@ import Leave from "./form/Leave";
 import Resign from "./form/Resign";
 import Apology from "./form/Apology";
 import Etc from "./form/Etc";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callApprovalDocRegistAPI } from "../../apis/ApprovalAPICalls";
 import { resetSuccess } from "../../modules/ApprovalModules";
 
 function FormDetail(){
     const empCode = "2021048";
-
-
+    
     const navigate = useNavigate();
     const location = useLocation();
+    const dispatch = useDispatch();
     const {afName} = {...location.state};
     const {afCode} = useParams();
 
     const renderFormCont = () => {
         switch(afCode){
-            case '2': return <ExceptionWork handleDetail={handleDetail}/>; break;
-            case '3': return <Overtime/>; break;
-            case '4': return <Late/>; break;
-            case '5': return <Vacation/>; break;
-            case '7': return <Leave/>; break;
-            case '8': return <Resign/>; break;
-            case '9': return <Apology/>; break;
-            case '12': return <Etc/>; break;
+            case '2': return <ExceptionWork handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            case '3': return <Overtime handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            case '4': return <Late handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            case '5': return <Vacation handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            case '7': return <Leave handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            case '8': return <Resign handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            case '9': return <Apology handleDetail={handleDetail} formRefs={formRefs}/>; break;
+            default: return <Etc handleDetail={handleDetail}/>; break;
         }
     }
 
@@ -89,11 +89,6 @@ function FormDetail(){
         console.log("handleDetail", data);
     };
 
-    const dispatch = useDispatch();
-    const onClickApprovalDocRegist = async (temporary) => {
-        await dispatch(callApprovalDocRegistAPI({ document: document, temporary: temporary }));
-    }
-
     const success = useSelector(state => state.approvalReducer.success);
     useEffect(() => {
         if(success){
@@ -106,6 +101,59 @@ function FormDetail(){
             setDocument({});
         }
     }, [success]);
+
+
+    // 첨부파일 
+    const [files, setFiles] = useState([]);
+
+    const handleFileChange = (event) => {
+        setFiles(prevFiles => [...prevFiles, ...Array.from(event.target.files)]);
+    };
+
+    const handleRemoveFile = (index) => {
+        const newFiles = [...files];
+        newFiles.splice(index, 1);
+        setFiles(newFiles);
+    };
+
+    // 결재정보 한번에 전달
+    const formRefs = useRef({});
+    const onClickApprovalDocRegist = async (temporary) => {
+
+        // 필수 정보 입력 확인
+        const requiredFields = Object.values(formRefs.current);
+        let agreeCheckbox = null;
+    
+        for (let field of requiredFields) {
+            if (field.type === 'checkbox' && field.name === 'agree') {
+                agreeCheckbox = field;
+                if (!agreeCheckbox.checked) {
+                    alert('서약서 동의는 필수입니다.');
+                    return;
+                }
+            } else if (field.hasAttribute('required') && !field.value) {
+                field.focus();
+                alert('필수 정보를 입력해주세요.');
+                return;
+            }
+        }
+
+        // etc 키가 존재하고, 그 내부의 aeCon 값이 공백이거나 null인지 확인
+        if (document.etc && (!document.etc.aeCon || document.etc.aeCon.trim() === '')) {
+            alert('내용을 입력해주세요.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('document', JSON.stringify(document));
+
+        for (let i = 0; i < files.length; i++) {
+            formData.append("files", files[i]);
+            formData.append("attachOriginal", files[i].name);
+        }
+
+        await dispatch(callApprovalDocRegistAPI({ formData: formData, temporary: temporary }));
+    }
 
     return(
         <div className="ly_cont">
@@ -121,11 +169,25 @@ function FormDetail(){
                         </tr>
                         <tr>
                             <th scope="row">첨부파일</th>
-                            <td colSpan="3"></td>
+                            <td colSpan="3">
+                                <div className="ly_flex ly_fitemStart">
+                                    <ul className="hp_w100 hp_mr10">
+                                        {files.map((file, index) => (
+                                            <li key={index}>
+                                                <button type="button" className="hp_mr10 hp_fw700" onClick={() => handleRemoveFile(index)} title="삭제">X</button>
+                                                {file.name} 
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <label className="bl_attachBtn__label el_btnS el_btn8Back hp_p3-5">
+                                        <input type="file" className="bl_attachBtn__input" multiple onChange={handleFileChange} /> 파일선택
+                                    </label>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">제목</th>
-                            <td colSpan="3"><input type="text" className="hp_w100" name="adTitle" onChange={onChangeHandler} placeholder="[팀명] MM/DD 기안양식명_이름"/></td>
+                            <td colSpan="3"><input type="text" className="hp_w100" name="adTitle" onChange={onChangeHandler} ref={(el) => (formRefs.current['field1'] = el)} placeholder="[팀명] MM/DD 기안양식명_이름" required /></td>
                         </tr>
                     </tbody>
                 </table>

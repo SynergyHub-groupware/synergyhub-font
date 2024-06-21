@@ -17,6 +17,7 @@ import EmployeeLayout from './pages/employee/EmployeeLayout';
 import MessageLayout from './pages/message/MessageLayout';
 import PostLayout from './pages/post/PostLayout';
 import FormDetail from './pages/approval/FormDetail';
+import DocumentMain from './pages/approval/send/DocumentMain'
 import Login from './pages/Login';
 import 'react-toastify/ReactToastify.css';
 import AddressDir from './components/commons/address/AddressDir';

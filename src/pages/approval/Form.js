@@ -1,8 +1,6 @@
 import FormItem from "../../components/items/FormItem";
 
 function Form({data}){
-    console.log("Form 컴포넌트", data);
-
     const formCategories = [
         {category: "근태/휴가", data: data.slice(1, 5)},
         {category: "인사", data: data.slice(5, 9)},

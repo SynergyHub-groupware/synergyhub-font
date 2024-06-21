@@ -6,10 +6,6 @@ import Temporary from './pages/approval/Temporary';
 import Form from './pages/approval/setting/Form';
 import Sign from './pages/approval/setting/Sign';
 import Storage from './pages/approval/setting/Storage';
-import SendComplete from './pages/approval/send/Complete';
-import Progress from './pages/approval/send/Progress';
-import SendWaiting from './pages/approval/send/Waiting';
-import SendReturn from './pages/approval/send/Return';
 import ReceiveComplete from './pages/approval/receive/Complete';
 import ReceiveWaiting from './pages/approval/receive/Waiting';
 import Reference from './pages/approval/receive/Reference';
@@ -42,7 +38,6 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='address' element={<AddressDir/>}/>
         <Route path='login' element={<Login/>}/>
         <Route path='/' element={<Layout/>}>
           <Route index element={<Main/>}/>
@@ -50,17 +45,12 @@ function App() {
             <Route path="formList" element={<FormList/>} />
             <Route path="temporary" element={<Temporary/>} />
             <Route path="form/:afCode" element={<FormDetail/>}/>
+            <Route path="send/:status" element={<DocumentMain/>}/>
             <Route path="receive">
               <Route path="complete" element={<ReceiveComplete/>} />
               <Route path="reference" element={<Reference/>} />
               <Route path="return" element={<ReceiveReturn/>} />
               <Route path="waiting" element={<ReceiveWaiting/>} />
-            </Route>
-            <Route path="send">
-              <Route path="complete" element={<SendComplete/>} />
-              <Route path="progress" element={<Progress/>} />
-              <Route path="return" element={<SendReturn/>} />
-              <Route path="waiting" element={<SendWaiting/>} />
             </Route>
             <Route path="setting">
               <Route path="form" element={<Form/>} />

@@ -39,7 +39,7 @@ function FormLine({handleTrueLineList}){
                             <th>소속</th>
                         </tr>
                         <tr>
-                            <th>직위</th>
+                            <th>직책</th>
                         </tr>
                         <tr>
                             <th>이름</th>

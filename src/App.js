@@ -24,6 +24,19 @@ import FormDetail from './pages/approval/FormDetail';
 import Login from './pages/Login';
 import 'react-toastify/ReactToastify.css';
 import AddressDir from './components/commons/address/AddressDir';
+import Organization from './pages/employee/Organization';
+import PersonalList from './pages/employee/PersonalList';
+import PersonalRegist from './pages/employee/PersonalRegist';
+import PersonalView from './pages/employee/PersonalView';
+import EmployeeList from './pages/employee/EmployeeList';
+import AppointList from './pages/employee/AppointList';
+import AppointRegist from './pages/employee/AppointRegist';
+import AppointView from './pages/employee/AppointView';
+import DeptManagerMent from './pages/employee/DeptManagerMent';
+import MyInfo from './pages/myInfo/MyInfo';
+import MyInfoLayout from './pages/myInfo/MyInfoLayout';
+import MyPersonalRecordCard from './pages/myInfo/MyPersonalRecordCard';
+
 
 function App() {
   return (
@@ -62,7 +75,19 @@ function App() {
             {/* 내용추가 */}
           </Route>
           <Route path="employee" element={<EmployeeLayout/>}>
-            {/* 내용추가 */}
+            <Route path="organization" element={<Organization />} />
+            <Route path="personalList" element={<PersonalList />} />
+            <Route path="personalRegist" element={<PersonalRegist />} />
+            <Route path="personalView" element={<PersonalView />} />
+            <Route path='employeeList' element={<EmployeeList />} />
+            <Route path='appointList' element={<AppointList />} />
+            <Route path='appointRegist' element={<AppointRegist />} />
+            <Route path='appointView' element={<AppointView />} />
+            <Route path='deptManagerMent' element={<DeptManagerMent />} />
+          </Route> 
+          <Route path='myInfo' element={<MyInfoLayout />} >
+            <Route path="myInfo" element={<MyInfo />} />  
+            <Route path="myPersonalRecordCard" element={<MyPersonalRecordCard />} />  
           </Route>
           <Route path="message" element={<MessageLayout/>}>
             {/* 내용추가 */}

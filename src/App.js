@@ -16,7 +16,12 @@ import CalendarLayout from './pages/calendar/CalendarLayout';
 import EmployeeLayout from './pages/employee/EmployeeLayout';
 import MessageLayout from './pages/message/MessageLayout';
 import PostLayout from './pages/post/PostLayout';
+import PostListView from './pages/post/PostListView';
+import PostCreateView from './pages/post/PostCreateView';
 import FormDetail from './pages/approval/FormDetail';
+import PostListViewInBoard from './pages/post/PostListViewInBoard';
+import PostDetailView from './pages/post/PostDetailView';
+import BoradCreateView from './pages/post/BoardCreateView';
 import DocumentMain from './pages/approval/send/DocumentMain'
 import Login from './pages/Login';
 import 'react-toastify/ReactToastify.css';
@@ -84,7 +89,11 @@ function App() {
             {/* 내용추가 */}
           </Route>
           <Route path="post" element={<PostLayout/>}>
-            {/* 내용추가 */}
+          <Route path="PostListView" element={<PostListView/>} />
+          <Route path='PostListViewInBoard/:lowBoardCode' element={<PostListViewInBoard/>}/>
+          <Route path='PostDetail/:postCode'element={<PostDetailView/>}/>
+          <Route path="PostCreateView" element={<PostCreateView/>} />
+          <Route path='BoradCreateView' element={<BoradCreateView/>}/>
           </Route>
         </Route>
       </Routes>

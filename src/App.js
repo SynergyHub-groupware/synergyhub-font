@@ -20,7 +20,6 @@ import FormDetail from './pages/approval/FormDetail';
 import Login from './pages/Login';
 import 'react-toastify/ReactToastify.css';
 import DocumentMain from './pages/approval/send/DocumentMain';
-import ViewMain from './pages/approval/view/ViewMain';
 
 function App() {
   return (
@@ -34,7 +33,6 @@ function App() {
             <Route path="temporary" element={<Temporary/>} />
             <Route path="form/:afCode" element={<FormDetail/>}/>
             <Route path="send/:status" element={<DocumentMain/>}/>
-            <Route path="view/:adCode" element={<ViewMain/>}/>
             <Route path="receive">
               <Route path="complete" element={<ReceiveComplete/>} />
               <Route path="reference" element={<Reference/>} />

@@ -9,6 +9,8 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.2",
     "cors": "^2.8.5",
+    "date-fns": "^3.6.0",
+    "eventsource-polyfill": "^0.9.6",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -46,5 +48,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/event-source-polyfill": "^1.0.5",
+    "event-source-polyfill": "^1.0.31",
+    "i": "^0.3.7",
+    "npm": "^10.8.1"
   }
 }

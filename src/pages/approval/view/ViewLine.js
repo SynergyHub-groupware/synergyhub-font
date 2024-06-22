@@ -1,7 +1,20 @@
 import { useParams } from "react-router";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {callviewLineListAPI} from "../../../apis/ApprovalAPICalls";
 
 function ViewLine({adReportDate}){
     const {adCode} = useParams();
+    const dispatch = useDispatch();
+    const lines = useSelector(state => state.approvalReducer.lines);
+
+    useEffect(() => {
+        adCode && dispatch(callviewLineListAPI(adCode));
+    }, [adCode, dispatch]);
+
+    console.log("lines", lines);
+
+    // const firstPendingIndex = lines.findIndex(emp => emp.talStatus === '미결재');
 
     return(
         <div className="ly_flex hp_relative">
@@ -56,7 +69,44 @@ function ViewLine({adReportDate}){
                     </tr>
                 </tbody>
             </table>
+            {lines.map((emp, index) => {
+                return (
+                    <table className="bl_tb3 hp_alignC ly_fgrow1" key={index}>
+                        <tbody>
+                            <tr>
+                                <th>{emp.talRole}자</th>
+                            </tr>
+                            <tr>
+                                <td>{emp.talStatus}</td>
+                            </tr>
+                            <tr>
+                                <td className="el_approvalSign">{emp.talDate}</td>
+                            </tr>
+                            <tr>
+                                <td>{emp.deptTitle}</td>
+                            </tr>
+                            <tr>
+                                <td>{emp.titleName}</td>
+                            </tr>
+                            <tr>
+                                <td>{emp.empName}</td>
+                            </tr>
+                            <tr>
+                                <td className="el_approvalSign">
+                                    {/*{index === firstPendingIndex ? (*/}
+                                    {/*    <>*/}
+                                    {/*        <button type="button" className="el_btnS el_btnblueBack">승인</button>*/}
+                                    {/*        <button type="button" className="el_btnS el_btn8Back hp_ml5">반려</button>*/}
+                                    {/*    </>*/}
+                                    {/*) : null}*/}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                )
+            })}
         </div>
     )
 }
+
 export default ViewLine;

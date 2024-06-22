@@ -1,10 +1,25 @@
-import { useLocation } from "react-router";
+import {useLocation, useNavigate} from "react-router";
 import ViewLine from "./ViewLine";
 import ViewDetail from "./ViewDetail";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {calldeleteDocumentAPI} from "../../../apis/ApprovalAPICalls";
+import {useParams} from "react-router-dom";
 
 function ViewMain(){
+    const navigate = useNavigate();
     const location = useLocation();
+    const {adCode} = useParams();
     const {document} = {...location.state};
+    const dispatch = useDispatch();
+
+    const handleCancel = () => {
+        if (window.confirm("해당 결재를 상신취소 및 삭제 하시겠습니까?")) {
+            dispatch(calldeleteDocumentAPI(adCode))
+            .then(() => {navigate("/approval/send/waiting");})
+            .catch((error) => {console.error("문서 삭제 실패:", error);});
+        }
+    };
 
     return(        
         <div className="ly_cont">
@@ -33,12 +48,12 @@ function ViewMain(){
                     </tbody>
                 </table>
                 <h5 className="hp_fw700 hp_fs18 hp_mb10 hp_mt30">결재내용</h5>
-                <ViewDetail adDetail={document.adDetail}/>
+                <ViewDetail afCode={document.afCode} adDetail={document.adDetail}/>
             </section>
             <div className="hp_mt10 hp_alignR">
-                <button type="button" className="el_btnS el_btn8Bord">목록</button>
+                <button type="button" className="el_btnS el_btn8Bord" onClick={() => navigate('/approval/send/waiting')}>목록</button>
                 <button type="button" className="el_btnS el_btnblueBord hp_ml5">수정</button>
-                <button type="button" className="el_btnS el_btn8Back hp_ml5">취소</button>
+                <button type="button" className="el_btnS el_btn8Back hp_ml5" onClick={handleCancel}>삭제</button>
             </div>
         </div>
     )

@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { calculateDuration } from "../../../apis/ApprovalHandler";
 
 function Vacation({handleDetail, formRefs}){
-    const [exception, setException] = useState({});
+    const [exception, setException] = useState({
+        aattSort: '',
+        aattStart: '',
+        aattEnd: ''
+    });
 
     const onChangeHandler = (e) => {
         const { name, value } = e.target;

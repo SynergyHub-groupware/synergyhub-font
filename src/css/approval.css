@@ -24,3 +24,5 @@
 .hp_tr__click{cursor:pointer;}
 .hp_tr__click:hover{background:rgb(232, 240, 254);}
 
+/* 결재내용 */
+.bl_tb3 td{word-break: initial;}

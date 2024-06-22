@@ -70,3 +70,23 @@ export const callsendDocListAPI = ({currentPage = 1, empCode, status}) => {
         if(result && result.status === 200) dispatch(getDocuments(result));
     }
 }
+
+export const callviewLineListAPI = (adCode) => {
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/viewLine?adCode=${adCode}`);
+        if(result && result.status === 200) dispatch(getLines(result));
+    }
+}
+
+export const callviewDetailAPI = (adDetail) => {
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/viewDetail?adDetail=${adDetail}`);
+        if(result && result.status === 200) dispatch(getContent(result));
+    }
+}
+
+export const calldeleteDocumentAPI = (adCode) => {
+    return async (dispatch, getState) => {
+        await request('DELETE', `/approval/document/delete?adCode=${adCode}`);
+    }
+}

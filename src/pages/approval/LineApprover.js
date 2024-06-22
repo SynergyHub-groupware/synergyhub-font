@@ -30,7 +30,7 @@ function LineApprover({lsCode, lines, myCode, deptCode, titleCode, handleTrueLin
     // 실결재라인 배열 전달
     useEffect(()=>{
         const trueLineList = newLines.map((emp, index) => {
-            const matchingLine = lines.find(line => line.alSort.includes(emp.titleCode));
+            const matchingLine = lines.find(line => line.alSort && line.alSort.includes(emp.titleCode));
             const role = matchingLine ? matchingLine.alRole : "결재";
     
             return {talOrder: index + 1, talRole: role, employee: {emp_code: emp.empCode}};
@@ -48,7 +48,7 @@ function LineApprover({lsCode, lines, myCode, deptCode, titleCode, handleTrueLin
     return(
         <>
             {newLines.map((emp, index) => {
-                const matchingLine = lines.find(line => line.alSort.includes(emp.titleCode));
+                const matchingLine = lines.find(line => line.alSort && line.alSort.includes(emp.titleCode));
                 const role = matchingLine ? matchingLine.alRole : "결재";
 
                 return(

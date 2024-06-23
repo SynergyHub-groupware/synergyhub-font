@@ -25,7 +25,7 @@ function Waiting({data}){
                 <tbody>
                     {data && data.length > 0 ? (
                         data.map((document, index) => 
-                            <tr onClick={() => navigate(`/approval/view/${document.adCode}`, {state: {document}})} key={document.adCode} className="hp_tr__click">
+                            <tr key={index} onClick={() => navigate(`/approval/view/${document.adCode}`, {state: {document}})} key={document.adCode} className="hp_tr__click">
                                 <th scope="row" className="hp_lh34px">{document.adCode}</th>
                                 <td>{document.adReportDate}</td>
                                 <td>{document.afName}</td>

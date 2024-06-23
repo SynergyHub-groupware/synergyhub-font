@@ -5,9 +5,6 @@ import {CKEditor} from "@ckeditor/ckeditor5-react";
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 function ViewDetail({afCode, adDetail}){
-    console.log("afCode", afCode);
-    console.log("adDetail", adDetail);
-
     const dispatch = useDispatch();
     const content = useSelector(state => state.approvalReducer.content);
 
@@ -15,7 +12,6 @@ function ViewDetail({afCode, adDetail}){
         adDetail && dispatch(callviewDetailAPI(adDetail));
     }, [adDetail, dispatch]);
 
-    console.log("content", content);
     const keys = content ? Object.keys(content) : [];
 
     return(

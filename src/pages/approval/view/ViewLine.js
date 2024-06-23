@@ -12,8 +12,6 @@ function ViewLine({adReportDate}){
         adCode && dispatch(callviewLineListAPI(adCode));
     }, [adCode, dispatch]);
 
-    console.log("lines", lines);
-
     // const firstPendingIndex = lines.findIndex(emp => emp.talStatus === '미결재');
 
     return(

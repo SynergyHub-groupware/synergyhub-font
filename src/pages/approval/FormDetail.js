@@ -63,7 +63,6 @@ function FormDetail(){
             [name]: value
         }));
     };
-    console.log("document", document);
     
     // 실결재라인 배열 전달, document에 추가
     const handleTrueLineList = (data) => {
@@ -86,7 +85,7 @@ function FormDetail(){
             [key]: data
         }));
 
-        console.log("handleDetail", data);
+        // console.log("handleDetail", data);
     };
 
     const success = useSelector(state => state.approvalReducer.success);
@@ -123,7 +122,7 @@ function FormDetail(){
         // 필수 정보 입력 확인
         const requiredFields = Object.values(formRefs.current);
         let agreeCheckbox = null;
-    
+
         for (let field of requiredFields) {
             if (field.type === 'checkbox' && field.name === 'agree') {
                 agreeCheckbox = field;

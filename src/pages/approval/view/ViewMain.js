@@ -3,7 +3,12 @@ import ViewLine from "./ViewLine";
 import ViewDetail from "./ViewDetail";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
-import {calldeleteDocumentAPI} from "../../../apis/ApprovalAPICalls";
+import {
+    calldeleteDocumentAPI,
+    calldownloadAttachAPI,
+    callmodifyStatusAPI,
+    callviewAttachAPI
+} from "../../../apis/ApprovalAPICalls";
 import {useParams} from "react-router-dom";
 
 function ViewMain(){
@@ -12,15 +17,33 @@ function ViewMain(){
     const {adCode} = useParams();
     const {document} = {...location.state};
     const dispatch = useDispatch();
+    const documents = useSelector(state => state.approvalReducer.documents);
 
     const handleCancel = () => {
         if (window.confirm("해당 결재를 상신취소 및 삭제 하시겠습니까?")) {
             dispatch(calldeleteDocumentAPI(adCode))
             .then(() => {navigate("/approval/send/waiting");})
-            .catch((error) => {console.error("문서 삭제 실패:", error);});
+            .catch((error) => {console.error("문서 삭제 실패: ", error);});
         }
     };
 
+    useEffect(() => {
+        adCode && dispatch(callviewAttachAPI (adCode));
+    }, [dispatch, adCode]);
+
+    const handleDownload = (attachSave, attachOriginal) => {
+        dispatch(calldownloadAttachAPI(attachOriginal, attachSave));
+    }
+
+    const handleModify = () => {
+        if (window.confirm("해당 결재를 상신취소 및 수정 하시겠습니까?")) {
+            dispatch(callmodifyStatusAPI(adCode))
+                .then(() => {navigate(`/approval/form/${document.afCode}`, {state: {adCode, afName: document.afName}});})
+                .catch((error) => {console.log("문서 수정 실패: ", error);});
+        }
+    }
+
+    console.log("document", document);
     return(        
         <div className="ly_cont">
             <h4 className="el_lv1Head hp_mb30">{document.afName}</h4>
@@ -39,6 +62,13 @@ function ViewMain(){
                         <tr>
                             <th scope="row">첨부파일</th>
                             <td colSpan="3">
+                                <ul>
+                                    {documents.map((doc, index) => (
+                                        <li key={index}>
+                                            <button onClick={() => handleDownload(doc.attachSave, doc.attachOriginal)}>{doc.attachOriginal}</button>
+                                        </li>
+                                    ))}
+                                </ul>
                             </td>
                         </tr>
                         <tr>
@@ -52,7 +82,7 @@ function ViewMain(){
             </section>
             <div className="hp_mt10 hp_alignR">
                 <button type="button" className="el_btnS el_btn8Bord" onClick={() => navigate('/approval/send/waiting')}>목록</button>
-                <button type="button" className="el_btnS el_btnblueBord hp_ml5">수정</button>
+                <button type="button" className="el_btnS el_btnblueBord hp_ml5" onClick={handleModify}>수정</button>
                 <button type="button" className="el_btnS el_btn8Back hp_ml5" onClick={handleCancel}>삭제</button>
             </div>
         </div>

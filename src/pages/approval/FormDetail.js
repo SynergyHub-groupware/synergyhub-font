@@ -117,8 +117,19 @@ function FormDetail(){
 
     // 결재정보 한번에 전달
     const formRefs = useRef({});
-    const onClickApprovalDocRegist = async (temporary) => {
+    const [triggerUpdate, setTriggerUpdate] = useState(false);
+    const [temporaryFlag, setTemporaryFlag] = useState(false);
 
+    const onClickApprovalDocRegist = async (temporary) => {
+        if (temporary) {
+            setTemporaryFlag(true);
+            setTriggerUpdate(true);
+        } else {
+            await performValidationAndSubmit(temporary);
+        }
+    }
+
+    const performValidationAndSubmit = async (temporary) => {
         // 필수 정보 입력 확인
         const requiredFields = Object.values(formRefs.current);
         let agreeCheckbox = null;
@@ -153,6 +164,23 @@ function FormDetail(){
 
         await dispatch(callApprovalDocRegistAPI({ formData: formData, temporary: temporary }));
     }
+
+    useEffect(() => {
+        if (triggerUpdate) {
+            setDocument(prevDocument => ({
+                ...prevDocument,
+                adStatus: '임시저장'
+            }));
+            setTriggerUpdate(false);
+        }
+    }, [triggerUpdate]);
+
+    useEffect(() => {
+        if (temporaryFlag) {
+            performValidationAndSubmit(true);
+            setTemporaryFlag(false);
+        }
+    }, [document.adStatus]);
 
     return(
         <div className="ly_cont">

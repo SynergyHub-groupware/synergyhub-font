@@ -32,13 +32,13 @@ function LineApprover({lsCode, lines, myCode, deptCode, titleCode, handleTrueLin
         const trueLineList = newLines.map((emp, index) => {
             const matchingLine = lines.find(line => line.alSort && line.alSort.includes(emp.titleCode));
             const role = matchingLine ? matchingLine.alRole : "결재";
-    
+
             return {talOrder: index + 1, talRole: role, employee: {emp_code: emp.empCode}};
         });
 
         handleTrueLineList(trueLineList);
     }, [newLines]);
-    
+
     const [role, setRole] = useState('결재');
 
     const handleRoleChange = (event) => {
@@ -54,29 +54,29 @@ function LineApprover({lsCode, lines, myCode, deptCode, titleCode, handleTrueLin
                 return(
                     <table className="bl_tb3 hp_alignC ly_fgrow1" key={emp.empCode}>
                         <tbody>
-                            <tr>
-                                <th className="hp_padding0">
-                                    <select className="hp_w100 el_approvalRole__select" value={role} onChange={handleRoleChange}>
-                                        <option value="결재">결재자</option>
-                                        <option value="전결">전결자</option>
-                                    </select>
-                                </th>
-                            </tr>
-                            <tr>
-                                <td>미결재</td>
-                            </tr>
-                            <tr>
-                                <td>{emp.deptTitle}</td>
-                            </tr>
-                            <tr>
-                                <td>{emp.titleName}</td>
-                            </tr>
-                            <tr>
-                                <td>{emp.empName}</td>
-                            </tr>
-                            <tr>
-                                <td className="el_approvalSign"></td>
-                            </tr>
+                        <tr>
+                            <th className="hp_padding0">
+                                <select className="hp_w100 el_approvalRole__select" value={role} onChange={handleRoleChange}>
+                                    <option value="결재">결재자</option>
+                                    <option value="전결">전결자</option>
+                                </select>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>미결재</td>
+                        </tr>
+                        <tr>
+                            <td>{emp.deptTitle}</td>
+                        </tr>
+                        <tr>
+                            <td>{emp.titleName}</td>
+                        </tr>
+                        <tr>
+                            <td>{emp.empName}</td>
+                        </tr>
+                        <tr>
+                            <td className="el_approvalSign"></td>
+                        </tr>
                         </tbody>
                     </table>
                 )

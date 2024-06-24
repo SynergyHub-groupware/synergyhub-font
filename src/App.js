@@ -25,7 +25,6 @@ import BoradCreateView from './pages/post/BoardCreateView';
 import DocumentMain from './pages/approval/send/DocumentMain'
 import Login from './pages/Login';
 import 'react-toastify/ReactToastify.css';
-import AddressDir from './components/commons/address/AddressDir';
 import Organization from './pages/employee/Organization';
 import PersonalList from './pages/employee/PersonalList';
 import PersonalRegist from './pages/employee/PersonalRegist';
@@ -38,6 +37,7 @@ import DeptManagerMent from './pages/employee/DeptManagerMent';
 import MyInfo from './pages/myInfo/MyInfo';
 import MyInfoLayout from './pages/myInfo/MyInfoLayout';
 import MyPersonalRecordCard from './pages/myInfo/MyPersonalRecordCard';
+import ViewMain from './pages/approval/view/ViewMain';
 
 
 function App() {
@@ -52,6 +52,7 @@ function App() {
             <Route path="temporary" element={<Temporary/>} />
             <Route path="form/:afCode" element={<FormDetail/>}/>
             <Route path="send/:status" element={<DocumentMain/>}/>
+            <Route path="view/:adCode" element={<ViewMain/>}/>
             <Route path="receive">
               <Route path="complete" element={<ReceiveComplete/>} />
               <Route path="reference" element={<Reference/>} />

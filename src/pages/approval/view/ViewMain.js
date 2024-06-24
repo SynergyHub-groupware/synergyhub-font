@@ -22,8 +22,8 @@ function ViewMain(){
     const handleCancel = () => {
         if (window.confirm("해당 결재를 상신취소 및 삭제 하시겠습니까?")) {
             dispatch(calldeleteDocumentAPI(adCode))
-            .then(() => {navigate("/approval/send/waiting");})
-            .catch((error) => {console.error("문서 삭제 실패: ", error);});
+                .then(() => {navigate("/approval/send/waiting");})
+                .catch((error) => {console.error("문서 삭제 실패: ", error);});
         }
     };
 
@@ -44,7 +44,7 @@ function ViewMain(){
     }
 
     console.log("document", document);
-    return(        
+    return(
         <div className="ly_cont">
             <h4 className="el_lv1Head hp_mb30">{document.afName}</h4>
             <section className="bl_sect hp_padding15">
@@ -55,26 +55,26 @@ function ViewMain(){
                 <h5 className="hp_fw700 hp_fs18 hp_mb10 hp_mt30">결재정보</h5>
                 <table className="bl_tb3 el_approvalTb3__th">
                     <tbody>
-                        <tr>
-                            <th scope="row">기안양식</th>
-                            <td>{document.afName}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">첨부파일</th>
-                            <td colSpan="3">
-                                <ul>
-                                    {documents.map((doc, index) => (
-                                        <li key={index}>
-                                            <button onClick={() => handleDownload(doc.attachSave, doc.attachOriginal)}>{doc.attachOriginal}</button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">제목</th>
-                            <td colSpan="3">{document.adTitle}</td>
-                        </tr>
+                    <tr>
+                        <th scope="row">기안양식</th>
+                        <td>{document.afName}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">첨부파일</th>
+                        <td colSpan="3">
+                            <ul>
+                                {documents.map((doc, index) => (
+                                    <li key={index}>
+                                        <button onClick={() => handleDownload(doc.attachSave, doc.attachOriginal)}>{doc.attachOriginal}</button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">제목</th>
+                        <td colSpan="3">{document.adTitle}</td>
+                    </tr>
                     </tbody>
                 </table>
                 <h5 className="hp_fw700 hp_fs18 hp_mb10 hp_mt30">결재내용</h5>

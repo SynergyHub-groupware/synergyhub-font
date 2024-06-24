@@ -35,8 +35,8 @@ export const callMyInfoAPI = () => {
                 'Authorization': `Bearer ${localStorage.getItem('access-token')}`,
                 'Content-Type': 'application/json'
             });
-
-            console.log('callMyInfoAPI result : ', result);
+            // 이다정: 주석처리
+            // console.log('callMyInfoAPI result : ', result);
 
             if(result && result.status === 200) {
 

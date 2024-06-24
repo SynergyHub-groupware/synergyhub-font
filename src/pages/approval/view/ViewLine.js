@@ -6,7 +6,7 @@ import {callviewLineListAPI} from "../../../apis/ApprovalAPICalls";
 function ViewLine({adReportDate}){
     const {adCode} = useParams();
     const dispatch = useDispatch();
-    const lines = useSelector(state => state.approvalReducer.lines);
+    const viewlines = useSelector(state => state.approvalReducer.viewlines);
 
     useEffect(() => {
         adCode && dispatch(callviewLineListAPI(adCode));
@@ -67,7 +67,7 @@ function ViewLine({adReportDate}){
                 </tr>
                 </tbody>
             </table>
-            {lines.map((emp, index) => {
+            {viewlines.map((emp, index) => {
                 return (
                     <table className="bl_tb3 hp_alignC ly_fgrow1" key={index}>
                         <tbody>

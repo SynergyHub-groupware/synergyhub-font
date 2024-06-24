@@ -25,14 +25,6 @@ function ViewMain(){
                 .then(() => {navigate("/approval/send/waiting");})
                 .catch((error) => {console.error("문서 삭제 실패: ", error);});
         }
-    };
-
-    useEffect(() => {
-        adCode && dispatch(callviewAttachAPI (adCode));
-    }, [dispatch, adCode]);
-
-    const handleDownload = (attachSave, attachOriginal) => {
-        dispatch(calldownloadAttachAPI(attachOriginal, attachSave));
     }
 
     const handleModify = () => {
@@ -43,7 +35,16 @@ function ViewMain(){
         }
     }
 
+    useEffect(() => {
+        adCode && dispatch(callviewAttachAPI (adCode));
+    }, [dispatch, adCode]);
+
+    const handleDownload = (attachSave, attachOriginal) => {
+        dispatch(calldownloadAttachAPI(attachOriginal, attachSave));
+    }
+
     console.log("document", document);
+
     return(
         <div className="ly_cont">
             <h4 className="el_lv1Head hp_mb30">{document.afName}</h4>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function Apology({handleDetail, formRefs}){
+function Apology({handleDetail, formRefs, writtenCont = {}}){
     const [exception, setException] = useState({});
 
     const onChangeHandler = (e) => {
@@ -15,12 +15,20 @@ function Apology({handleDetail, formRefs}){
         handleDetail(exception);
     }, [exception]);
 
+    // writtenCont 값이 있을 경우
+    useEffect(()=>{
+        writtenCont && setException(prev => ({
+            ...prev,
+            aeCon: writtenCont.aeCon,
+        }));
+    },[writtenCont])
+
     return(
         <table className="bl_tb3 el_approvalTb3__th">
             <tbody>
                 <tr>
                     <th scope="col">위반내용</th>
-                    <td><textarea rows="2" cols="20" wrap="hard" className="hp_w100" name="aeCon" onChange={onChangeHandler} required ref={(el) => (formRefs.current['aeCon'] = el)}></textarea></td>
+                    <td><textarea rows="2" cols="20" wrap="hard" className="hp_w100" name="aeCon" value={exception.aeCon || (writtenCont ? writtenCont.aeCon : '')} onChange={onChangeHandler} required ref={(el) => (formRefs.current['aeCon'] = el)}></textarea></td>
                 </tr>
                 <tr>
                     <th scope="col">서약서</th>

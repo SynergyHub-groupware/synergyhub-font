@@ -1,4 +1,4 @@
-import {getContent, getDocuments, getForms, getLineemps, getLines, getSuccess} from "../modules/ApprovalModules";
+import {getContent, getDocuments, getForms, getLineemps, getLines, getSuccess, getViewlines} from "../modules/ApprovalModules";
 import { request } from "./api";
 
 export const callFormListAPI = () => {              // 결재양식리스트 조회
@@ -74,7 +74,7 @@ export const callsendDocListAPI = ({currentPage = 1, empCode, status}) => {
 export const callviewLineListAPI = (adCode) => {
     return async (dispatch, getState) => {
         const result = await request('GET', `/approval/viewLine?adCode=${adCode}`);
-        if(result && result.status === 200) dispatch(getLines(result));
+        if(result && result.status === 200) dispatch(getViewlines(result));
     }
 }
 
@@ -122,3 +122,15 @@ export const callmodifyStatusAPI = (adCode) => {
         await request ('PATCH', `/approval/modifyStatus?adCode=${adCode}`);
     }
 }
+export const uploadImage = async (empCode, formData) => {
+    try {
+        const response = await request('PATCH', `/approval/uploadImage?empCode=${empCode}`,
+                {'Content-Type': 'multipart/form-data'},
+                formData
+            );
+        return response.data; // 업로드된 이미지의 URL 반환
+    } catch (error) {
+        console.error('이미지 업로드 실패:', error);
+        throw error; // 실패한 경우 예외 처리
+    }
+};

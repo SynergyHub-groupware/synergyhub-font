@@ -24,8 +24,8 @@ export const { employee : { getDeptEmployees, getMyInfo, getRecordcard, getDepar
 
     },
     [GET_MY_INFO] : result => {
-
-        console.log('Action payload', result);
+        // 이다정: 주석처리
+        // console.log('Action payload', result);
 
         return {employee: result};
     },
@@ -59,7 +59,8 @@ const employeeReducer = handleActions({
     },
     [GET_MY_INFO] : (state, { payload }) => {
 
-        console.log('Reducer GET_MY_INFO payload', payload);
+        // 이다정: 주석처리
+        // console.log('Reducer GET_MY_INFO payload', payload);
 
         return {
             ...state,

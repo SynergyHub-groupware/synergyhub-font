@@ -7,11 +7,22 @@ import Waiting from "./Waiting";
 import Progress from "./Progress";
 import Complete from "./Complete";
 import Return from "./Return";
+import {callMyInfoAPI} from "../../../apis/EmployeeAPICalls";
 
 function DocumentMain(){
-    const empCode = "2021048";
     const {status} = useParams();
     const [title, setTitle] = useState();
+    const dispatch = useDispatch();
+
+    const { employee, documents } = useSelector(state => ({
+        employee: state.employeeReducer.employee,
+        documents: state.approvalReducer.documents
+    }));
+    useEffect(() => {
+        dispatch(callMyInfoAPI());
+    }, [dispatch]);
+
+    console.log("employee", employee);
 
     // 접근 url에 따라 렌더링 변경
     useEffect(() => {
@@ -34,12 +45,10 @@ function DocumentMain(){
     }
 
     // 정보 받아오기
-    const dispatch = useDispatch();
-    const {documents} = useSelector(state => state.approvalReducer);
 
     useEffect(() => {
-        dispatch(callsendDocListAPI({empCode, status}));
-    }, [empCode, status]);
+        employee.emp_code && dispatch(callsendDocListAPI({empCode: employee.emp_code, status}));
+    }, [employee.emp_code, status]);
 
     console.log("documents", documents);
 

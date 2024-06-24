@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 import { calculateDuration } from "../../../apis/ApprovalHandler";
 
 function Overtime({handleDetail, formRefs}){
-    const [exception, setException] = useState({});
+    const [exception, setException] = useState({
+        aattReason: '',
+        aattSort: '',
+        aattStart: '',
+        aattEnd: '',
+        aattPlace: '',
+        aattCon: ''
+    });
 
     const onChangeHandler = (e) => {
         const { name, value } = e.target;

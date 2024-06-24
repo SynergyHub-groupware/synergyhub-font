@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { calculateDuration } from "../../../apis/ApprovalHandler";
 
 function ExceptionWork({handleDetail, formRefs}){
-    const [exception, setException] = useState({});
+    const [exception, setException] = useState({
+        aattSort: '',
+        aattStart: '',
+        aattEnd: '',
+        aattPlace: '',
+        aattCon: ''
+    });
 
     const onChangeHandler = (e) => {
         const { name, value } = e.target;
@@ -41,7 +47,7 @@ function ExceptionWork({handleDetail, formRefs}){
         <table className="bl_tb3 el_approvalTb3__th">
             <tbody>
                 <tr>
-                    <th scope="col">근무형태</th>
+                    <th scope="col">구분</th>
                     <td>
                         <select className="hp_w120px" name="aattSort" onChange={onChangeHandler} required ref={(el) => (formRefs.current['aattSort'] = el)}>
                             <option value=''>선택</option>
@@ -72,7 +78,7 @@ function ExceptionWork({handleDetail, formRefs}){
                     <td>{duration}</td>
                 </tr>
                 <tr>
-                    <th scope="col">예외근무지</th>
+                    <th scope="col">근무지</th>
                     <td><input type="text" className="hp_w100" name="aattPlace" onChange={onChangeHandler} required ref={(el) => (formRefs.current['aattPlace'] = el)}/></td>
                 </tr>
                 <tr>

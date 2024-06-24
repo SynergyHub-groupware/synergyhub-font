@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {callFormLineAPI, callLineEmpListAPI, callviewLineListAPI} from "../../apis/ApprovalAPICalls";
+import {callLineEmpListAPI, callviewLineListAPI} from "../../apis/ApprovalAPICalls";
 
 function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}}){
     const myCode = employee.emp_code;
@@ -19,36 +19,36 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
     }, [dispatch, deptCode, titleCode, lsCode]);
 
     useEffect(() => {
-        if (docInfo.adCode) dispatch(callviewLineListAPI(docInfo.adCode));
+        docInfo && dispatch(callviewLineListAPI(docInfo.adCode));
     }, [docInfo.adCode, dispatch]);
-
-    useEffect(() => {
-        if (viewlines.length > 0) setNewLines(viewlines);
-    }, [viewlines]);
 
     // 결재라인에 본인이 포함되어 있는 경우
     useEffect(() => {
-        const generateNewLines = (lineemps, myCode) => {
-            let found = false;
-            const updatedLineemps = lineemps.map(emp => {
-                const matchingLine = lines && lines.find(line => line.alSort === emp.titleCode);
-                return {
-                    ...emp,
-                    alRole: matchingLine ? matchingLine.alRole : "결재",
-                    alOrder: matchingLine ? matchingLine.alOrder : null
-                };
-            });
+        if (viewlines != null && viewlines.length > 0) {
+            setNewLines(viewlines);
+        }else{
+            const generateNewLines = (lineemps, myCode) => {
+                let found = false;
+                const updatedLineemps = lineemps.map(emp => {
+                    const matchingLine = lines && lines.find(line => line.alSort === emp.titleCode);
+                    return {
+                        ...emp,
+                        alRole: matchingLine ? matchingLine.alRole : "결재",
+                        alOrder: matchingLine ? matchingLine.alOrder : null
+                    };
+                });
 
-            for (let i = 0; i < updatedLineemps.length; i++) { // 결재라인 for문 돌면서 empCode가 동일한게 있는지 확인
-                if (updatedLineemps[i].empCode === myCode) {
-                    setNewLines(updatedLineemps.slice(i + 1)); // 동일한 코드가 있으면 해당 코드의 다음배열부터 잘라서 newLines에 넣음
-                    found = true;
-                    break;
+                for (let i = 0; i < updatedLineemps.length; i++) { // 결재라인 for문 돌면서 empCode가 동일한게 있는지 확인
+                    if (updatedLineemps[i].empCode === myCode) {
+                        setNewLines(updatedLineemps.slice(i + 1)); // 동일한 코드가 있으면 해당 코드의 다음배열부터 잘라서 newLines에 넣음
+                        found = true;
+                        break;
+                    }
                 }
-            }
-            if (!found) setNewLines([...updatedLineemps]);     // 동일한 코드가 없으면, lineemps 전체 복사
-        };
-        generateNewLines(lineemps, myCode);
+                if (!found) setNewLines([...updatedLineemps]);     // 동일한 코드가 없으면, lineemps 전체 복사
+            };
+            generateNewLines(lineemps, myCode);
+        }
     }, [lineemps, myCode, lines]);
 
     // 실결재라인 배열 전달

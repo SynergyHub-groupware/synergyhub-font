@@ -7,7 +7,7 @@ function Apology({handleDetail, formRefs, writtenCont = {}}){
         const { name, value } = e.target;
         setException(prev => ({
             ...prev,
-            [name]: value
+            [name]: value,
         }));
     };
 
@@ -17,10 +17,12 @@ function Apology({handleDetail, formRefs, writtenCont = {}}){
 
     // writtenCont 값이 있을 경우
     useEffect(()=>{
-        writtenCont && setException(prev => ({
-            ...prev,
-            aeCon: writtenCont.aeCon,
-        }));
+        if(writtenCont !== null && Object.keys(writtenCont).length > 0){
+            setException(prev => ({
+                ...prev,
+                aeCon: writtenCont.aeCon,
+            }));
+        }
     },[writtenCont])
 
     return(

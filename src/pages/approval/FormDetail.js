@@ -10,12 +10,7 @@ import Apology from "./form/Apology";
 import Etc from "./form/Etc";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    callApprovalDocRegistAPI,
-    calldownloadAttachAPI,
-    callviewAttachAPI,
-    callviewDetailAPI
-} from "../../apis/ApprovalAPICalls";
+import {callApprovalDocRegistAPI,callviewAttachAPI,callviewDetailAPI} from "../../apis/ApprovalAPICalls";
 import {resetContent, resetSuccess} from "../../modules/ApprovalModules";
 import {callMyInfoAPI} from "../../apis/EmployeeAPICalls";
 
@@ -61,7 +56,7 @@ function FormDetail(){
             case '5': return <Vacation handleDetail={handleDetail} formRefs={formRefs} writtenCont={content} />; break;
             case '7': return <Leave handleDetail={handleDetail} formRefs={formRefs} writtenCont={content} />; break;
             case '8': return <Resign handleDetail={handleDetail} formRefs={formRefs} writtenCont={content} />; break;
-            case '9': return <Apology handleDetail={handleDetail} formRefs={formRefs} writtenCont={content} />; break;
+            case '9': return <Apology handleDetail={handleDetail} formRefs={formRefs} writtenCont={content} docInfo={docInfo} />; break;
             default: return <Etc handleDetail={handleDetail} writtenCont={content}/>; break;
         }
     }
@@ -228,7 +223,7 @@ function FormDetail(){
     // console.log("documents", documents);
 
     useEffect(() => {
-        if (documents && documents.length > 0) {
+        if (docInfo && documents && documents.length > 0) {
             // documents 배열에서 각 문서의 attachOriginal 속성을 파일 이름으로 추출하여 파일 목록을 생성합니다.
             const filesList = documents.map(doc => ({
                 name: doc.attachOriginal,
@@ -241,6 +236,7 @@ function FormDetail(){
         }
     }, [documents]);
 
+    const handleCancelClick = () => {navigate(-1);};
     return(
         <div className="ly_cont">
             {docInfo && docInfo.afName ? <h4 className="el_lv1Head hp_mb30">{docInfo.afName}</h4> : <h4 className="el_lv1Head hp_mb30">{afName}</h4>}
@@ -283,9 +279,9 @@ function FormDetail(){
                 {renderFormCont()}
             </section>
             <div className="hp_mt10 hp_alignR">
-                <button type="button" className="el_btnS el_btnblueBord"onClick={() => onClickApprovalDocRegist(true)}>임시저장</button>
+                <button type="button" className="el_btnS el_btnblueBord" onClick={() => onClickApprovalDocRegist(true)}>임시저장</button>
                 <button type="button" className="el_btnS el_btnblueBack hp_ml5" onClick={() => onClickApprovalDocRegist(false)}>결재상신</button>
-                <button type="button" className="el_btnS el_btn8Back hp_ml5">취소</button>
+                <button type="button" className="el_btnS el_btn8Back hp_ml5" onClick={handleCancelClick}>취소</button>
             </div>
         </div>
     )

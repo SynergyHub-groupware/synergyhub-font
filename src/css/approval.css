@@ -27,3 +27,6 @@
 
 /* 결재내용 */
 .bl_tb3 td{word-break: initial;}
+
+/* 첨부파일 */
+.el_file__downBtn:hover{text-decoration:underline;}

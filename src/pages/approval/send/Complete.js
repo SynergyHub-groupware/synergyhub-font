@@ -27,10 +27,10 @@ function Complete({data}){
                     data.map((document, index) =>
                         <tr key={index} onClick={() => navigate(`/approval/view/${document.adCode}`, {state: {document}})} key={document.adCode} className="hp_tr__click">
                             <th scope="row"><input type="checkbox" value=""/></th>
-                            <td>{document.adReportDate}</td>
                             <td>{document.afName}</td>
                             <td className="hp_alignL">{document.adTitle}</td>
                             <td>{document.empName}</td>
+                            <td>{document.talDate}</td>
                         </tr>
                     )
                 ) : (

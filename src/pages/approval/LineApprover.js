@@ -53,20 +53,15 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
 
     // 실결재라인 배열 전달
     useEffect(()=>{
-        const trueLineList = newLines.map((emp, index) => {
-            const matchingLine = lines && lines.find(line => line.alSort && line.alSort.includes(emp.titleCode));
-            const role = matchingLine ? matchingLine.alRole : "결재";
-
-            return {talOrder: index + 1, talRole: role, employee: {emp_code: emp.empCode}};
-        });
+        const trueLineList = newLines.map(emp => ({
+            talOrder: emp.alOrder,
+            talRole: emp.alRole,
+            employee: { emp_code: emp.empCode }
+        }));
 
         handleTrueLineList(trueLineList);
 
-        // console.log("trueLineList", trueLineList);
-
     }, [newLines, lines]);
-
-    const [role, setRole] = useState('결재');
 
     const handleRoleChange = (event, empCode) => {
         const updatedRole = event.target.value;

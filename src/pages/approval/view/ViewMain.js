@@ -17,7 +17,7 @@ function ViewMain({}){
     const dispatch = useDispatch();
     const location = useLocation();
     const {adCode} = useParams();
-    const {document} = {...location.state};
+    const {document, showBtn} = {...location.state};
     const {documents, viewlines} = useSelector(state => ({
         viewlines: state.approvalReducer.viewlines,
         documents: state.approvalReducer.documents,
@@ -63,11 +63,26 @@ function ViewMain({}){
     return(
         <div className="ly_cont">
             <h4 className="el_lv1Head hp_mb30">{document.afName}</h4>
+            {document.talReason && 
+            <section className="bl_sect hp_padding15 hp_mb30">
+                <table className="bl_tb3">
+                    <colgroup>
+                        <col style={{width:'200px'}}/>
+                        <col style={{width:'*'}}/>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th scope="col" className="hp_dBack">반려사유</th>
+                            <td>{document.talReason}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>}
             <section className="bl_sect hp_padding15">
                 <div className="ly_spaceBetween hp_mb10">
                     <h5 className="hp_fw700 hp_fs18">결재라인</h5>
                 </div>
-                <ViewLine document={document} viewlines={viewlines}/>
+                <ViewLine document={document} viewlines={viewlines} showBtn={showBtn}/>
                 <h5 className="hp_fw700 hp_fs18 hp_mb10 hp_mt30">결재정보</h5>
                 <table className="bl_tb3 el_approvalTb3__th">
                     <tbody>
@@ -81,7 +96,7 @@ function ViewMain({}){
                             <ul>
                                 {documents.map((doc, index) => (
                                     <li key={index}>
-                                        <button onClick={() => handleDownload(doc.attachSave, doc.attachOriginal)}>{doc.attachOriginal}</button>
+                                        <button className="el_file__downBtn" onClick={() => handleDownload(doc.attachSave, doc.attachOriginal)} title="다운받기">{doc.attachOriginal}</button>
                                     </li>
                                 ))}
                             </ul>

@@ -1,9 +1,9 @@
-import { useNavigate, useParams } from "react-router";
-import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router";
+import {useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
 import {callacceptDocumentAPI, callreturnDocumentAPI, fetchImage} from "../../../apis/ApprovalAPICalls";
 
-function ViewLine({viewlines, document={}}){
+function ViewLine({viewlines, document={}, showBtn}){
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -15,9 +15,10 @@ function ViewLine({viewlines, document={}}){
                 try {
                     const imageUrl = await fetchImage(document.emp_code);
                     if (imageUrl) setImageData(imageUrl);
-                    else console.error('Failed to fetch image');
+                    else setImageData('이미지 없음');
                 } catch (error) {
                     console.error('Error fetching image:', error);
+                    setImageData('이미지 없음');
                 }
             }
         };
@@ -35,16 +36,18 @@ function ViewLine({viewlines, document={}}){
                 const imageUrls = await Promise.all(approvedAndRejectedLines.map(async (emp) => {
                     try {
                         const imageUrl = await fetchImage(emp.empCode);
-                        return imageUrl;
+                        return imageUrl || '이미지 없음';
                     } catch (error) {
                         console.error('Error fetching image for empCode', emp.empCode, ':', error);
-                        return null;
+                        return '이미지 없음';
                     }
                 }));
 
                 // 이미지 URL이 있는 것만 필터링하여 추가
-                const filteredImageUrls = imageUrls.filter(url => url !== null);
-                setImageArr(filteredImageUrls);
+                // const filteredImageUrls = imageUrls.filter(url => url !== null);
+                // setImageArr(filteredImageUrls);
+
+                setImageArr(imageUrls);
             } catch (error) {
                 console.error('Error fetching images:', error);
             }
@@ -70,9 +73,10 @@ function ViewLine({viewlines, document={}}){
     // console.log("document", document);
 
     // 승인
-    const acceptHandler = (index) => {
+    const acceptHandler = (index, emp) => {
         let status = "진행중";
-        if (index === viewlines.length - 1) status = "완료";
+        if(index === viewlines.length - 1) status = "완료";
+        if(emp.talRole == "전결") status = "전결";
 
         if (window.confirm("해당 결재를 승인 하시겠습니까?")) {
             document && dispatch(callacceptDocumentAPI({empCode: document.empCode, status, adCode: document.adCode}))
@@ -136,7 +140,7 @@ function ViewLine({viewlines, document={}}){
                     <th>작성자</th>
                 </tr>
                 <tr>
-                    <td>상신</td>
+                    <td><b className="hp_7Color">상신</b></td>
                 </tr>
                 <tr>
                     <td>{document.adReportDate}</td>
@@ -151,7 +155,9 @@ function ViewLine({viewlines, document={}}){
                     <td>{document.emp_name}</td>
                 </tr>
                 <tr>
-                    <td className="el_approvalSign" style={{backgroundImage: imageData ? `url(${imageData})` : 'none'}}></td>
+                    <td className="el_approvalSign" style={{ backgroundImage: imageData ? `url(${imageData})` : 'none' }}>
+                        <b className="hp_cColor">{imageData ? imageData : ""}</b>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -163,7 +169,9 @@ function ViewLine({viewlines, document={}}){
                             <th>{emp.talRole}자</th>
                         </tr>
                         <tr>
-                            <td>{emp.talStatus}</td>
+                            <td>{emp.talStatus === '승인' ? (<b className="hp_blueColor">{emp.talStatus}</b>) : 
+                            emp.talStatus === '반려' ? (<b className="hp_redColor">{emp.talStatus}</b>) : 
+                            (<b>{emp.talStatus}</b>)}</td>
                         </tr>
                         <tr>
                             <td className="el_approvalSign">{emp.talDate}</td>
@@ -179,11 +187,12 @@ function ViewLine({viewlines, document={}}){
                         </tr>
                         <tr>
                             <td className="el_approvalSign" style={{backgroundImage: emp.talStatus === '승인' || emp.talStatus === '반려' ? `url(${imageArr[index]})` : 'none'}}>
-                                {!(document.menu === 'send' || document.adStatus === '반려') && (
+                            <b className="hp_cColor">{imageArr[index] ? imageArr[index] : ""}</b>
+                                {showBtn && (
                                     <>
                                     {index === firstUnapprovedIndex && (
                                         <>
-                                            <button type="button" className="el_btnS el_btnblueBack" onClick={() => acceptHandler(index)}>승인</button>
+                                            <button type="button" className="el_btnS el_btnblueBack" onClick={() => acceptHandler(index, emp)}>승인</button>
                                             <button type="button" className="el_btnS el_btn8Back hp_ml5" onClick={showRejectPopupHandler}>반려</button>
                                         </>
                                     )}

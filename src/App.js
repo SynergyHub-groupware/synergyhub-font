@@ -16,7 +16,12 @@ import CalendarLayout from './pages/calendar/CalendarLayout';
 import EmployeeLayout from './pages/employee/EmployeeLayout';
 import MessageLayout from './pages/message/MessageLayout';
 import PostLayout from './pages/post/PostLayout';
+import PostListView from './pages/post/PostListView';
+import PostCreateView from './pages/post/PostCreateView';
 import FormDetail from './pages/approval/FormDetail';
+import PostListViewInBoard from './pages/post/PostListViewInBoard';
+import PostDetailView from './pages/post/PostDetailView';
+import BoradCreateView from './pages/post/BoardCreateView';
 import DocumentMain from './pages/approval/send/DocumentMain'
 import Login from './pages/Login';
 import 'react-toastify/ReactToastify.css';
@@ -35,6 +40,7 @@ import DeptManagerMent from './pages/employee/DeptManagerMent';
 import MyInfo from './pages/myInfo/MyInfo';
 import MyInfoLayout from './pages/myInfo/MyInfoLayout';
 import MyPersonalRecordCard from './pages/myInfo/MyPersonalRecordCard';
+import ViewMain from './pages/approval/view/ViewMain';
 
 function App() {
   return (
@@ -48,6 +54,7 @@ function App() {
             <Route path="temporary" element={<Temporary/>} />
             <Route path="form/:afCode" element={<FormDetail/>}/>
             <Route path="send/:status" element={<DocumentMain/>}/>
+            <Route path="view/:adCode" element={<ViewMain/>}/>
             <Route path="receive">
               <Route path="complete" element={<ReceiveComplete/>} />
               <Route path="reference" element={<Reference/>} />
@@ -90,7 +97,11 @@ function App() {
             </Route>
           </Route>
           <Route path="post" element={<PostLayout/>}>
-            {/* 내용추가 */}
+          <Route path="PostListView" element={<PostListView/>} />
+          <Route path='PostListViewInBoard/:lowBoardCode' element={<PostListViewInBoard/>}/>
+          <Route path='PostDetail/:postCode'element={<PostDetailView/>}/>
+          <Route path="PostCreateView" element={<PostCreateView/>} />
+          <Route path='BoradCreateView' element={<BoradCreateView/>}/>
           </Route>
         </Route>
       </Routes>

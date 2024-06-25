@@ -72,6 +72,7 @@ export const callBinMsgListAPI = () => {
     };
 };
 
+/* Push commit */
 export const callImpMsgListAPI = () => {
 
     return async (dispatch, getState) => {

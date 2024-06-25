@@ -1,18 +1,50 @@
-import { getRevMsg } from "../modules/MessageModules";
+import { getRevMsg, getSendMsg } from "../modules/MessageModules";
 import { request } from "./api";
 
 export const callRevMsgListAPI = () => {
-    console.log("api 들어감")
+    
     return async (dispatch, getState) => {
-            const result = await request('GET', '/emp/message/receive');
-            console.log("result : ", result);
 
-            if(result && result.status === 200) {
-                console.log("200");
+        try {
+            const result = await request('GET', '/emp/message/receive', {
+                'Authorization': `Bearer ${localStorage.getItem('access-token')}`,
+                'Content-Type': 'application/json'
+            });
+
+            console.log('callAPI result : ', result);
+
+            if (result && result.status === 200) {
+
                 dispatch(getRevMsg(result.data));
             } else {
-                console.log("에러났따");
-                console.log("error : " , result ? result.status : '응답x');
+                console.log('에러에옹 : ', result);
             }
+        } catch (error) {
+            console.log("또 에러에옹 : ", error);
+        }
+        
+    };
+};
+
+export const callSendMsgListAPI = () => {
+
+    return async (dispatch, getState) => {
+
+        try {
+            const result = await request('GET', '/emp/message/send', {
+                'Authorization': `Bearer ${localStorage.getItem('access-token')}`,
+                'Content-Type': 'application/json'
+            });
+
+            console.log('callAPI result : ' , result);
+
+            if (result && result.status === 200) {
+                dispatch(getSendMsg(result.data));
+            } else {
+                console.log('에러에옹 : ', result);
+            }
+        } catch (error) {
+            console.log('또 에러에옹 : ', error);
+        }
     };
 };

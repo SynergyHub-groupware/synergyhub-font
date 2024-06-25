@@ -23,7 +23,6 @@ import 'react-toastify/ReactToastify.css';
 import ReceiveMsg from './pages/message/storage/ReceiveMsg';
 import SendMsg from './pages/message/storage/SendMsg';
 import TempMsg from './pages/message/storage/TempMsg';
-import AddressDir from './components/commons/address/AddressDir';
 import Organization from './pages/employee/Organization';
 import PersonalList from './pages/employee/PersonalList';
 import PersonalRegist from './pages/employee/PersonalRegist';

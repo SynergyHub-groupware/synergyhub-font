@@ -41,6 +41,9 @@ import MyInfo from './pages/myInfo/MyInfo';
 import MyInfoLayout from './pages/myInfo/MyInfoLayout';
 import MyPersonalRecordCard from './pages/myInfo/MyPersonalRecordCard';
 import ViewMain from './pages/approval/view/ViewMain';
+import ImpMsg from './pages/message/storage/ImpMsg';
+import WorkMsg from './pages/message/storage/WorkMsg';
+import Bin from './pages/message/storage/Bin';
 
 function App() {
   return (
@@ -94,6 +97,9 @@ function App() {
               <Route path='receive' element={<ReceiveMsg/>}/>
               <Route path='send' element={<SendMsg/>}/>
               <Route path='temp' element={<TempMsg/>}/>
+              <Route path='important' element={<ImpMsg/>}/>
+              <Route path='work' element={<WorkMsg/>}/>
+              <Route path='bin' element={<Bin/>}/>
             </Route>
           </Route>
           <Route path="post" element={<PostLayout/>}>

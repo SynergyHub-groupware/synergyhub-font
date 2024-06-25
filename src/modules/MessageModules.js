@@ -8,10 +8,10 @@ const initialState = {
 /* 액션 타입 */
 const GET_REV_MSG = 'message/GET_REV_MSG';
 const GET_SEND_MSG = 'message/GET_SEND_MSG';
-
+const GET_BIN_MSG = 'message/GET_BIN_MSG';
 
 /* 액션 함수 */
-export const { message : { getRevMsg }, message : { getSendMsg }} = createActions({
+export const { message : { getRevMsg }, message : { getSendMsg }, message : { getBinMsg }} = createActions({
     [GET_REV_MSG] : result => {
         console.log('action : ', result);
 
@@ -19,6 +19,12 @@ export const { message : { getRevMsg }, message : { getSendMsg }} = createAction
     },
 
     [GET_SEND_MSG] : result => {
+        console.log('action : ', result);
+
+        return {message: result};
+    },
+
+    [GET_BIN_MSG] : result => {
         console.log('action : ', result);
 
         return {message: result};
@@ -45,6 +51,15 @@ const messageReducer = handleActions({
             ...state,
             messages: payload
         };
+    },
+
+    [GET_BIN_MSG] : (state, {payload}) => {
+        console.log("reducer : ", payload);
+
+        return {
+            ...state,
+            messages: payload
+        }
     }
 
 }, initialState);

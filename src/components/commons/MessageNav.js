@@ -17,11 +17,11 @@ function MessageNav() {
                 <li>
                     <h3 className="bl_nav__ttlSub">개인보관함</h3>
                     <ul className="bl_nav__menuSub">
-                        <li><NavLink to="">중요</NavLink></li>
-                        <li><NavLink to="">업무</NavLink></li>
+                        <li><NavLink to="/message/storage/important">중요</NavLink></li>
+                        <li><NavLink to="/message/storage/work">업무</NavLink></li>
                     </ul>
                 </li>
-                <li><NavLink className="bl_nav__ttlSub">휴지통</NavLink></li>
+                <li><NavLink className="bl_nav__ttlSub" to="/message/storage/bin">휴지통</NavLink></li>
                 <li>
                     <h3 className="bl_nav__ttlSub">환경설정</h3>
                     <ul className="bl_nav__menuSub">

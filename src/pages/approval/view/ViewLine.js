@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import {callacceptDocumentAPI, fetchImage} from "../../../apis/ApprovalAPICalls";
+import {callacceptDocumentAPI, callreturnDocumentAPI, fetchImage} from "../../../apis/ApprovalAPICalls";
 
 function ViewLine({viewlines, document={}}){
     const navigate = useNavigate();
@@ -30,9 +30,9 @@ function ViewLine({viewlines, document={}}){
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // 승인된 사람들의 이미지 조회
-                const approvedLines = viewlines.filter(emp => emp.talStatus === "승인");
-                const imageUrls = await Promise.all(approvedLines.map(async (emp) => {
+                // 승인, 반려한 사람들의 이미지 조회
+                const approvedAndRejectedLines = viewlines.filter(emp => emp.talStatus === "승인" || emp.talStatus === "반려");
+                const imageUrls = await Promise.all(approvedAndRejectedLines.map(async (emp) => {
                     try {
                         const imageUrl = await fetchImage(emp.empCode);
                         return imageUrl;
@@ -53,7 +53,7 @@ function ViewLine({viewlines, document={}}){
         fetchData();
     }, [viewlines]);
 
-    // console.log("imageArr", imageArr);
+    console.log("imageArr", imageArr);
 
     // 첫번째 미결재인 사람한테 버튼 노출
     const [firstUnapprovedIndex, setFirstUnapprovedIndex] = useState(-1);
@@ -80,6 +80,28 @@ function ViewLine({viewlines, document={}}){
             .catch((error) => {console.error("결재 승인 실패: ", error);});
         }
     }
+
+    // 팝업 표시 상태 관리
+    const [showRejectPopup, setShowRejectPopup] = useState(false);
+    const showRejectPopupHandler = () => {setShowRejectPopup(true);};
+    const closeRejectPopupHandler = () => {setShowRejectPopup(false);};
+
+    // 반려 API 호출 함수
+    const [rejectReason, setRejectReason] = useState("");
+
+    const handleRejectDocument = () => {
+        if (window.confirm("해당 결재를 반려 하시겠습니까?")) {
+            document && dispatch(callreturnDocumentAPI({
+                empCode: document.empCode,
+                adCode: document.adCode,
+                talReason: rejectReason // 반려 사유 전달
+            })).then(() => {
+                navigate("/approval/receive/return");
+            }).catch((error) => {
+                console.error("결재 반려 실패: ", error);
+            });
+        }
+    };
 
     return(
         <div className="ly_flex hp_relative">
@@ -156,13 +178,13 @@ function ViewLine({viewlines, document={}}){
                             <td>{emp.empName}</td>
                         </tr>
                         <tr>
-                            <td className="el_approvalSign" style={{backgroundImage: emp.talStatus === '승인' ? `url(${imageArr[index]})` : 'none'}}>
-                                {document.menu !== 'send' && (
+                            <td className="el_approvalSign" style={{backgroundImage: emp.talStatus === '승인' || emp.talStatus === '반려' ? `url(${imageArr[index]})` : 'none'}}>
+                                {!(document.menu === 'send' || document.adStatus === '반려') && (
                                     <>
                                     {index === firstUnapprovedIndex && (
                                         <>
                                             <button type="button" className="el_btnS el_btnblueBack" onClick={() => acceptHandler(index)}>승인</button>
-                                            <button type="button" className="el_btnS el_btn8Back hp_ml5">반려</button>
+                                            <button type="button" className="el_btnS el_btn8Back hp_ml5" onClick={showRejectPopupHandler}>반려</button>
                                         </>
                                     )}
                                     </>
@@ -173,20 +195,26 @@ function ViewLine({viewlines, document={}}){
                     </table>
                 )
             })}
-            <div className="bl_popBack bl_rejectPop">
-                <div className="bl_popup hp_w500px">
-                    <div className="bl_popWrap bl_profile">
-                        <div className="bl_popHead ly_spaceBetween ly_fitemC">
-                            <div className="hp_fs18">결재 반려</div>
-                            <button type="button" className="bl_popup__closeBtn"></button>
-                        </div>
-                        <div className="hp_padding15 hp_alignC">
-                            <textarea placeholder="결재 반려 사유를 입력해 주세요"></textarea>
-                            <button type="button" className="el_btnS el_btn8Back hp_mt10">반려하기</button>
+            {showRejectPopup && (
+                <div className="bl_popBack bl_rejectPop">
+                    <div className="bl_popup hp_w500px">
+                        <div className="bl_popWrap bl_profile">
+                            <div className="bl_popHead ly_spaceBetween ly_fitemC">
+                                <div className="hp_fs18">결재 반려</div>
+                                <button type="button" className="bl_popup__closeBtn" onClick={closeRejectPopupHandler}></button>
+                            </div>
+                            <div className="hp_padding15 hp_alignC">
+                                <textarea
+                                    placeholder="결재 반려 사유를 입력해 주세요"
+                                    value={rejectReason}
+                                    onChange={(e) => setRejectReason(e.target.value)}
+                                ></textarea>
+                                <button type="button" className="el_btnS el_btn8Back hp_mt10" onClick={handleRejectDocument}>반려하기</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
     )
 }

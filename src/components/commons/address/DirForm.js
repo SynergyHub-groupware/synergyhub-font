@@ -108,7 +108,7 @@ function DirForm({ closeModal, onConfirm, onClear }) {
         }
 
         onConfirm(receiver)
-        console.log("dirForm : ", receiver);
+        // console.log("dirForm : ", receiver);
     };
 
 

@@ -56,7 +56,9 @@ function ViewMain({}){
     console.log("document", document);
 
     // viewlines 배열에서 talStatus가 "승인" 여부 체크
-    const hasNoApproval = viewlines.every(line => line.talStatus !== "승인");
+    const hasNoApproval = viewlines.every(line => line.talStatus !== "승인" && line.talStatus !== "반려");
+
+    const handleCancelClick = () => {navigate(-1);};
 
     return(
         <div className="ly_cont">
@@ -95,7 +97,7 @@ function ViewMain({}){
                 <ViewDetail afCode={document.afCode} adDetail={document.adDetail}/>
             </section>
             <div className="hp_mt10 hp_alignR">
-                <button type="button" className="el_btnS el_btn8Bord" onClick={() => navigate('/approval/send/waiting')}>목록</button>
+                <button type="button" className="el_btnS el_btn8Bord" onClick={handleCancelClick}>목록</button>
                 {hasNoApproval && (
                     <>
                         <button type="button" className="el_btnS el_btnblueBord hp_ml5" onClick={handleModify}>수정</button>

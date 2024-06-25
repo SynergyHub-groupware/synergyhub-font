@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {callLineEmpListAPI, callviewLineListAPI} from "../../apis/ApprovalAPICalls";
 
-function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}}){
+function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}, selectEmps}){
     const myCode = employee.emp_code;
     const deptCode = employee.dept_code;
     const titleCode = employee.title_code;
@@ -88,7 +88,22 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
 
     // console.log("lines", lines);
     // console.log("lineemps", lineemps);
-    // console.log("newLines", newLines);
+    console.log("newLines", newLines);
+
+    // selectEmps가 있을 경우
+    useEffect(() => {
+        if (selectEmps && selectEmps.length > 0) {
+            const updatedLines = selectEmps.map((emp, index) => ({
+                alOrder: index + 1,
+                alRole: "결재",
+                deptTitle: emp.dept_title,
+                empCode: emp.emp_code,
+                empName: emp.emp_name,
+                titleName: emp.title_name,
+            }));
+            setNewLines(updatedLines);
+        }
+    }, [selectEmps]);
 
     return (
         <>

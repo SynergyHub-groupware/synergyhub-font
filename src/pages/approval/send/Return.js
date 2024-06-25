@@ -15,7 +15,7 @@ function Complete({data}){
                 </colgroup>
                 <thead>
                     <tr>
-                        <th scope="col"><input type="checkbox" value=""/></th>
+                        <th scope="col">No.</th>
                         <th scope="col">결재양식</th>
                         <th scope="col">제목</th>
                         <th scope="col">결재반려자</th>
@@ -26,7 +26,7 @@ function Complete({data}){
                 {data && data.length > 0 ? (
                     data.map((document, index) =>
                         <tr key={index} onClick={() => navigate(`/approval/view/${document.adCode}`, {state: {document}})} key={document.adCode} className="hp_tr__click">
-                            <th scope="row"><input type="checkbox" value=""/></th>
+                            <th scope="row">{document.adCode}</th>
                             <td>{document.adReportDate}</td>
                             <td>{document.afName}</td>
                             <td className="hp_alignL">{document.adTitle}</td>

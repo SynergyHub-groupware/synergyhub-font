@@ -27,6 +27,3 @@
 
 /* 결재내용 */
 .bl_tb3 td{word-break: initial;}
-
-/* 반려 모달 */
-.bl_rejectPop{display:none;}

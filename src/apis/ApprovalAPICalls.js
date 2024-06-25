@@ -151,8 +151,20 @@ export const callreceiveDocListAPI = ({empCode, status}) => {
 
 export const callacceptDocumentAPI = ({empCode, status, adCode}) => {
     return async (dispatch, getState) => {
-        console.log("status", status);
-
         await request ('PATCH', `/approval/accept?empCode=${empCode}&status=${status}&adCode=${adCode}`);
+    }
+}
+
+export const callreturnDocumentAPI = ({empCode, adCode, talReason}) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await request('PATCH', `/approval/return?empCode=${empCode}&adCode=${adCode}`, 
+                {'Content-Type': 'application/json'},
+                talReason,
+            );
+        } catch (error) {
+            console.error('요청 실패:', error);
+            throw error; // 실패한 경우 예외 처리
+        }
     }
 }

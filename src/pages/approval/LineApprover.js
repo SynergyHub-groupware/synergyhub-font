@@ -86,9 +86,9 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
         }
     };
 
-    console.log("lines", lines);
-    console.log("lineemps", lineemps);
-    console.log("newLines", newLines);
+    // console.log("lines", lines);
+    // console.log("lineemps", lineemps);
+    // console.log("newLines", newLines);
 
     return (
         <>

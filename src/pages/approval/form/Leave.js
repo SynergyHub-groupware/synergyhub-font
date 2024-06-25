@@ -2,12 +2,7 @@ import { useEffect, useState } from "react";
 import { calculateDuration } from "../../../apis/ApprovalHandler";
 
 function Leave({handleDetail, formRefs, writtenCont = {}}){
-    const [exception, setException] = useState({
-      apStart: '',
-      apEnd: '',
-      apContact: '',
-      apReason: ''
-    });
+    const [exception, setException] = useState({apStart: '',apEnd: '',apContact: '',apReason: ''});
 
     const onChangeHandler = (e) => {
         const { name, value } = e.target;
@@ -17,18 +12,40 @@ function Leave({handleDetail, formRefs, writtenCont = {}}){
         }));
     };
 
-    // 연락처 따로 입력받아서 하나로 합쳐서 전달
-    const onContactChange = (e) => {
-        const { name, value } = e.target;
+    const [apContact1, setApContact1] = useState('');
+    const [apContact2, setApContact2] = useState('');
+    const [apContact3, setApContact3] = useState('');
 
-        const formattedContact = formRefs.current['apContact1'].value + '-' +
-                                 formRefs.current['apContact2'].value + '-' +
-                                 formRefs.current['apContact3'].value;
+    useEffect(() => {
+        if(writtenCont && Object.keys(writtenCont).length > 0){
+            const [contact1 = '', contact2 = '', contact3 = ''] = writtenCont.apContact ? writtenCont.apContact.split('-') : ['', '', ''];
+            setApContact1(contact1);
+            setApContact2(contact2);
+            setApContact3(contact3);
 
+            setException({
+                apStart: writtenCont.apStart || '',
+                apEnd: writtenCont.apEnd || '',
+                apContact: writtenCont.apContact || '',
+                apReason: writtenCont.apReason || ''
+            });
+        }
+    }, [writtenCont]);
+
+    useEffect(() => {
+        const formattedContact = `${apContact1}-${apContact2}-${apContact3}`;
         setException(prev => ({
             ...prev,
             apContact: formattedContact
         }));
+    }, [apContact1, apContact2, apContact3]);
+
+    const onContactChange = (e) => {
+        const { name, value } = e.target;
+
+        if(name === 'apContact1') setApContact1(value);
+        if(name === 'apContact2') setApContact2(value);
+        if(name === 'apContact3') setApContact3(value);
     };
 
     useEffect(() => {
@@ -91,9 +108,9 @@ function Leave({handleDetail, formRefs, writtenCont = {}}){
                 <tr>
                     <th scope="col">비상연락처</th>
                     <td>
-                        <input type="number" maxLength="3" onInput={maxLengthCheck} className="hp_w70px" name="apContact1" onChange={onContactChange} required ref={(el) => (formRefs.current['apContact1'] = el)} /> -
-                        <input type="number" maxLength="4" onInput={maxLengthCheck} className="hp_w70px" name="apContact2" onChange={onContactChange} required ref={(el) => (formRefs.current['apContact2'] = el)} /> -
-                        <input type="number" maxLength="4" onInput={maxLengthCheck} className="hp_w70px" name="apContact3" onChange={onContactChange} required ref={(el) => (formRefs.current['apContact3'] = el)} />
+                        <input type="number" maxLength="3" onInput={maxLengthCheck} className="hp_w70px" name="apContact1" value={apContact1} onChange={onContactChange} required ref={(el) => (formRefs.current['apContact1'] = el)} /> -
+                        <input type="number" maxLength="4" onInput={maxLengthCheck} className="hp_w70px" name="apContact2" value={apContact2} onChange={onContactChange} required ref={(el) => (formRefs.current['apContact2'] = el)} /> -
+                        <input type="number" maxLength="4" onInput={maxLengthCheck} className="hp_w70px" name="apContact3" value={apContact3} onChange={onContactChange} required ref={(el) => (formRefs.current['apContact3'] = el)} />
                     </td>
                 </tr>
                 <tr>

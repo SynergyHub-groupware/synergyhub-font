@@ -67,7 +67,10 @@ export const callApprovalDocRegistAPI = ({formData, temporary}) => {        // �
 export const callsendDocListAPI = ({currentPage = 1, empCode, status}) => {
     return async (dispatch, getState) => {
         const result = await request('GET', `/approval/send/document?page=${currentPage}&empCode=${empCode}&status=${status}`);
-        if(result && result.status === 200) dispatch(getDocuments(result));
+        if(result && result.status === 200) {
+            const documentsWithMenu = result.data.map(doc => ({ ...doc, menu: 'send' }));
+            dispatch(getDocuments({ data: documentsWithMenu }));
+        }
     }
 }
 
@@ -134,3 +137,22 @@ export const uploadImage = async (empCode, formData) => {
         throw error; // 실패한 경우 예외 처리
     }
 };
+
+export const callreceiveDocListAPI = ({empCode, status}) => {
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/receive/document?empCode=${empCode}&status=${status}`);
+        // if(result && result.status === 200) dispatch(getDocuments(result));
+        if(result && result.status === 200) {
+            const documentsWithMenu = result.data.map(doc => ({ ...doc, menu: 'receive' }));
+            dispatch(getDocuments({ data: documentsWithMenu }));
+        }
+    }
+}
+
+export const callacceptDocumentAPI = ({empCode, status, adCode}) => {
+    return async (dispatch, getState) => {
+        console.log("status", status);
+
+        await request ('PATCH', `/approval/accept?empCode=${empCode}&status=${status}&adCode=${adCode}`);
+    }
+}

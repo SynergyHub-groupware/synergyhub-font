@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {callMyInfoAPI} from "../../apis/EmployeeAPICalls";
-import {callsendDocListAPI, callviewLineListAPI} from "../../apis/ApprovalAPICalls";
+import {callsendDocListAPI, calldeleteDocumentAPI} from "../../apis/ApprovalAPICalls";
 import {useNavigate} from "react-router";
 import PagingBar from "../../components/commons/PagingBar";
 
@@ -93,11 +93,45 @@ function Temporary(){
         setCurrentPage(pageNumber);
     };
 
+    // 체크박스 관련 상태 및 함수
+    const [selectAllChecked, setSelectAllChecked] = useState(false);
+    const [checkedRows, setCheckedRows] = useState({});
+
+    const toggleSelectAll = () => {
+        const newCheckedRows = {};
+        if (!selectAllChecked) {
+            currentResults.forEach((doc) => {
+                newCheckedRows[doc.adCode] = true;
+            });
+        }
+        setCheckedRows(newCheckedRows);
+        setSelectAllChecked(!selectAllChecked);
+    };
+
+    const toggleCheckbox = (adCode) => {
+        const newCheckedRows = { ...checkedRows };
+        newCheckedRows[adCode] = !newCheckedRows[adCode];
+        setCheckedRows(newCheckedRows);
+        setSelectAllChecked(false);
+    };
+
+    // 삭제
+    const deleteHandler = () => {
+        const selectedAdCodes = Object.keys(checkedRows).filter((adCode) => checkedRows[adCode]);
+        console.log("Selected adCodes:", selectedAdCodes);
+
+        selectedAdCodes.forEach(adCode => {
+            dispatch(calldeleteDocumentAPI(adCode));
+        });
+
+        window.location.reload();
+    }
+
     return(
         <div className="ly_cont">
             <h4 className="el_lv1Head hp_mb30">임시저장</h4>
             <div className="ly_spaceBetween">
-                <button type="button" className="el_btnS el_btn8Back">삭제</button>
+                <button type="button" className="el_btnS el_btn8Back" onClick={deleteHandler}>삭제</button>
                 <form onSubmit={handleSearch}>
                     <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
                            placeholder="검색어를 입력해주세요"/>
@@ -115,7 +149,7 @@ function Temporary(){
                     </colgroup>
                     <thead>
                     <tr>
-                        <th scope="col"><input type="checkbox" value=""/></th>
+                        <th scope="col"><input type="checkbox" checked={selectAllChecked} onChange={toggleSelectAll} /></th>
                         <th scope="col">작성일</th>
                         <th scope="col">결재양식</th>
                         <th scope="col">제목</th>
@@ -126,7 +160,7 @@ function Temporary(){
                         {currentResults && currentResults.length > 0 ? (
                             currentResults.map((document, index) =>
                                 <tr key={index} onClick={() => navigate(`/approval/form/${document.afCode}`, {state: {docInfo: document}})} key={document.adCode} className="hp_tr__click">
-                                    <th scope="row"><input type="checkbox" value=""/></th>
+                                    <td><input type="checkbox" checked={checkedRows[document.adCode]} onChange={() => toggleCheckbox(document.adCode)} onClick={(e) => e.stopPropagation()} /></td>
                                     <td>{document.adReportDate}</td>
                                     <td>{document.afName}</td>
                                     <td className="hp_alignL">{document.adTitle}</td>

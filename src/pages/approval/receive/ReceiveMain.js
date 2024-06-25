@@ -1,15 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import PagingBar from "../../../components/commons/PagingBar";
 import { useEffect, useState } from "react";
-import { callsendDocListAPI } from "../../../apis/ApprovalAPICalls";
 import { useParams } from "react-router";
 import Waiting from "./Waiting";
-import Progress from "./Progress";
 import Complete from "./Complete";
 import Return from "./Return";
+import Reference from './Reference';
 import {callMyInfoAPI} from "../../../apis/EmployeeAPICalls";
+import { callreceiveDocListAPI } from "../../../apis/ApprovalAPICalls";
 
-function DocumentMain(){
+function ReceiveMain(){
     const {status} = useParams();
     const [title, setTitle] = useState();
     const dispatch = useDispatch();
@@ -22,34 +22,33 @@ function DocumentMain(){
         dispatch(callMyInfoAPI());
     }, [dispatch]);
 
+    console.log("status", status);
     console.log("employee", employee);
 
     // 접근 url에 따라 렌더링 변경
     useEffect(() => {
         switch (status) {
             case 'waiting': setTitle('대기'); break;
-            case 'progress': setTitle('진행중'); break;
             case 'complete': setTitle('완료'); break;
             case 'return': setTitle('반려'); break;
+            case 'reference': setTitle('참조/열람'); break;
             default: setTitle('');
         }
     }, [status]);
-
-    console.log("status", status);
     
     const renderDocList = () => {
         switch(status){
             case 'waiting': return <Waiting data={currentResults} />; break;
-            case 'progress': return <Progress data={currentResults} />; break;
             case 'complete': return <Complete data={currentResults} />; break;
             case 'return': return <Return data={currentResults} />; break;
+            case 'reference': return <Reference data={currentResults} />; break;
         }
     }
 
     // 정보 받아오기
     useEffect(() => {
-        employee && dispatch(callsendDocListAPI({empCode: employee.emp_code, status}));
-    }, [employee, status]);
+        employee.emp_code && dispatch(callreceiveDocListAPI({empCode: employee.emp_code, status}));
+    }, [employee.emp_code, status]);
 
     console.log("documents", documents);
 
@@ -124,11 +123,9 @@ function DocumentMain(){
 
     return(        
         <div className="ly_cont">
-            <h4 className="el_lv1Head hp_mb30">보낸결재함 [{title}]</h4>
+            <h4 className="el_lv1Head hp_mb30">받은결재함 [{title}]</h4>
             <div className="ly_spaceBetween">
-                <div>
-                    {/* <button type="button" className="el_btnS el_btn8Back">삭제</button> */}
-                </div>
+                <div></div>
                 <form onSubmit={handleSearch}>
                     <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="검색어를 입력해주세요"/>
                     <input type="submit" className="el_btnS el_btnblueBord hp_ml5" value="검색"/>
@@ -148,4 +145,4 @@ function DocumentMain(){
         </div>
     )
 }
-export default DocumentMain;
+export default ReceiveMain;

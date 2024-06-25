@@ -27,18 +27,25 @@ function FormDetail(){
         content: state.approvalReducer.content,
         documents: state.approvalReducer.documents,
     }));
+    
+    useEffect(() => {
+        // 페이지에 접근할 때마다 document 상태 초기화
+        setDocument({});
+    }, []);
 
     useEffect(() => {
         dispatch(callMyInfoAPI());
     }, [dispatch]);
+
+    // console.log("employee", employee);
 
     useEffect(() => {
         if (docInfo) dispatch(callviewDetailAPI(docInfo.adDetail));
         else dispatch(resetContent());
     }, [docInfo, dispatch]);
 
-    console.log("docInfo", docInfo);
-    console.log("content", content);
+    // console.log("docInfo", docInfo);
+    // console.log("content", content);
 
     useEffect(()=>{
         docInfo && setDocument(prev => ({
@@ -62,24 +69,23 @@ function FormDetail(){
     }
 
     // 결재 상신
-    const [document, setDocument] = useState({});
-
+    const [document, setDocument] = useState({});    
     useEffect(() => {
         const today = new Date();
         const formattedDate = today.toISOString().split('T')[0];
 
-        setDocument(prev => ({
+        employee && setDocument(prev => ({
             ...prev,
             adReportDate: formattedDate,    // 오늘 날짜
             employee: {
-                emp_code: docInfo ? docInfo.emp_code : employee.emp_code             // 로그인한 사람의 empCode
+                emp_code: employee?.emp_code,
             },
             adStatus: "대기",
             form: {
                 afCode: Number(afCode)      // 양식코드
             }
         }));
-    }, [afCode]);
+    }, [afCode, employee]);
 
     useEffect(() => {
         if (docInfo) setDocument(prev => ({...prev, adTitle: docInfo.adTitle || ''}));

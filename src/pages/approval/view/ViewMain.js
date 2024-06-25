@@ -7,17 +7,27 @@ import {
     calldeleteDocumentAPI,
     calldownloadAttachAPI,
     callmodifyStatusAPI,
-    callviewAttachAPI
+    callviewAttachAPI,
+    callviewLineListAPI
 } from "../../../apis/ApprovalAPICalls";
 import {useParams} from "react-router-dom";
 
-function ViewMain(){
+function ViewMain({}){
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const location = useLocation();
     const {adCode} = useParams();
     const {document} = {...location.state};
-    const dispatch = useDispatch();
-    const documents = useSelector(state => state.approvalReducer.documents);
+    const {documents, viewlines} = useSelector(state => ({
+        viewlines: state.approvalReducer.viewlines,
+        documents: state.approvalReducer.documents,
+    }));
+
+    useEffect(() => {
+        adCode && dispatch(callviewLineListAPI(adCode));
+    }, [adCode, dispatch]);
+
+    console.log("viewlines", viewlines);
 
     const handleCancel = () => {
         if (window.confirm("해당 결재를 상신취소 및 삭제 하시겠습니까?")) {
@@ -45,6 +55,9 @@ function ViewMain(){
 
     console.log("document", document);
 
+    // viewlines 배열에서 talStatus가 "승인" 여부 체크
+    const hasNoApproval = viewlines.every(line => line.talStatus !== "승인");
+
     return(
         <div className="ly_cont">
             <h4 className="el_lv1Head hp_mb30">{document.afName}</h4>
@@ -52,7 +65,7 @@ function ViewMain(){
                 <div className="ly_spaceBetween hp_mb10">
                     <h5 className="hp_fw700 hp_fs18">결재라인</h5>
                 </div>
-                <ViewLine adReportDate={document.adReportDate}/>
+                <ViewLine document={document} viewlines={viewlines}/>
                 <h5 className="hp_fw700 hp_fs18 hp_mb10 hp_mt30">결재정보</h5>
                 <table className="bl_tb3 el_approvalTb3__th">
                     <tbody>
@@ -83,8 +96,12 @@ function ViewMain(){
             </section>
             <div className="hp_mt10 hp_alignR">
                 <button type="button" className="el_btnS el_btn8Bord" onClick={() => navigate('/approval/send/waiting')}>목록</button>
-                <button type="button" className="el_btnS el_btnblueBord hp_ml5" onClick={handleModify}>수정</button>
-                <button type="button" className="el_btnS el_btn8Back hp_ml5" onClick={handleCancel}>삭제</button>
+                {hasNoApproval && (
+                    <>
+                        <button type="button" className="el_btnS el_btnblueBord hp_ml5" onClick={handleModify}>수정</button>
+                        <button type="button" className="el_btnS el_btn8Back hp_ml5" onClick={handleCancel}>삭제</button>
+                    </>
+                )}
             </div>
         </div>
     )

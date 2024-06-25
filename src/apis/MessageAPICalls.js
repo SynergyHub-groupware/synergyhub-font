@@ -1,4 +1,4 @@
-import { getBinMsg, getImpMsg, getRevMsg, getSendMsg } from "../modules/MessageModules";
+import { getBinMsg, getImpMsg, getRevMsg, getSendMsg, getWorkMsg } from "../modules/MessageModules";
 import { request } from "./api";
 
 export const callRevMsgListAPI = () => {
@@ -72,7 +72,6 @@ export const callBinMsgListAPI = () => {
     };
 };
 
-/* Push commit */
 export const callImpMsgListAPI = () => {
 
     return async (dispatch, getState) => {
@@ -92,6 +91,29 @@ export const callImpMsgListAPI = () => {
             }  
         } catch (error) {
             console.log("또 에러 :", error);
+        }
+    };
+};
+
+export const callWorkMsgListAPI = () => {
+
+    return async (dispatch, getState) => {
+
+        try {
+            const result = await request('GET', '/emp/message/work', {
+                'Authorization': `Bearer ${localStorage.getItem('access-token')}`,
+                'Content-Type': 'application/json'
+            });
+
+            console.log('call API result : ', result);
+
+            if (result && result.status === 200) {
+                dispatch(getWorkMsg(result.data));
+            } else {
+                console.log("에러 : " ,result);
+            }
+        } catch (error) {
+            console.log("또 에러 : ", error);
         }
     };
 };

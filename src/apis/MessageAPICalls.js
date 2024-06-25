@@ -1,4 +1,4 @@
-import { getBinMsg, getRevMsg, getSendMsg } from "../modules/MessageModules";
+import { getBinMsg, getImpMsg, getRevMsg, getSendMsg } from "../modules/MessageModules";
 import { request } from "./api";
 
 export const callRevMsgListAPI = () => {
@@ -68,6 +68,29 @@ export const callBinMsgListAPI = () => {
             } 
         } catch (error) {
             console.log('또 에러 : ', error);
+        }
+    };
+};
+
+export const callImpMsgListAPI = () => {
+
+    return async (dispatch, getState) => {
+
+        try {
+            const result = await request('GET', '/emp/message/important', {
+                'Authorization': `Bearer ${localStorage.getItem('access-token')}`,
+                'Content-Type': 'application/json'
+            });
+
+            console.log('call API result : ', result);
+
+            if (result && result.status === 200) {
+                dispatch(getImpMsg(result.data));
+            } else {
+                console.log("에러 : ", result);
+            }  
+        } catch (error) {
+            console.log("또 에러 :", error);
         }
     };
 };

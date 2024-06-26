@@ -33,6 +33,9 @@ import DeptManagerMent from './pages/employee/DeptManagerMent';
 import MyInfo from './pages/myInfo/MyInfo';
 import MyInfoLayout from './pages/myInfo/MyInfoLayout';
 import MyPersonalRecordCard from './pages/myInfo/MyPersonalRecordCard';
+import Schedule from "./pages/attendance/Schedule";
+import Mypage from "./pages/attendance/Mypage";
+import DefaultSchedulesList from "./pages/attendance/DefaultSchedulesList";
 
 
 function App() {
@@ -59,8 +62,10 @@ function App() {
               <Route path="storage" element={<Storage/>} />
             </Route>
           </Route>
-          <Route path="attendance" element={<AttendanceLayout/>}>
-            {/* 내용추가 */}
+          <Route path="attendance" element={<AttendanceLayout />}>
+            <Route path="schedule" element={<Schedule />} />
+            <Route path="mypage" element={<Mypage />} />
+            <Route path="DefaultSchedulesList" element={<DefaultSchedulesList />} />
           </Route>
           <Route path="calendar" element={<CalendarLayout/>}>
             {/* 내용추가 */}

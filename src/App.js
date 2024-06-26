@@ -25,7 +25,6 @@ import BoradCreateView from './pages/post/BoardCreateView';
 import DocumentMain from './pages/approval/send/DocumentMain'
 import Login from './pages/Login';
 import 'react-toastify/ReactToastify.css';
-import DocumentMain from './pages/approval/send/DocumentMain';
 import MyCalendar from './pages/calendar/MyCalendar';
 import Organization from './pages/employee/Organization';
 import PersonalList from './pages/employee/PersonalList';

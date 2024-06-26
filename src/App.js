@@ -49,6 +49,7 @@ import RevDetail from './pages/message/storage/detail/RevDetail';
 import SendDetail from './pages/message/storage/detail/SendDetail';
 import ImpDetail from './pages/message/storage/detail/ImpDetail';
 import WorkDetail from './pages/message/storage/detail/WorkDetail';
+import BinDetail from './pages/message/storage/detail/BinDetail';
 
 function App() {
   return (
@@ -110,6 +111,7 @@ function App() {
               <Route path='work' element={<WorkMsg/>}/>
               <Route path='work/detail/:msgCode' element={<WorkDetail/>}/>
               <Route path='bin' element={<Bin/>}/>
+              <Route path='bin/detail/:msgCode' element={<BinDetail/>}/>
             </Route>
           </Route>
           <Route path="post" element={<PostLayout/>}>

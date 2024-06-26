@@ -43,21 +43,21 @@ function WorkDetail() {
                     <tbody>
                         <tr>
                             <th scope="col">받은사람</th>
-                            <td className="hp_alignL">{msgDetail.messageDetail.revName} {msgDetail.messageDetail.revPosition}</td>
+                            <td className="hp_alignL">{msgDetail.messageDetail && msgDetail.messageDetail.revName} {msgDetail.messageDetail && msgDetail.messageDetail.revPosition}</td>
                         </tr>
                         <tr>
                             <th scope="col">보낸날짜</th>
-                            <td className="hp_alignL">{msgDetail.messageDetail.sendDate}</td>
+                            <td className="hp_alignL">{msgDetail.messageDetail && msgDetail.messageDetail.sendDate}</td>
                         </tr>
                         <tr>
                             <th scope="col">첨부파일</th>
-                            <td className="hp_alignL">{msgDetail.messageDetail.storCode}</td>
+                            <td className="hp_alignL">{msgDetail.messageDetail && msgDetail.messageDetail.storCode}</td>
                         </tr>
                         <tr>
-                            <td colSpan="2" className="hp_alignL">{msgDetail.messageDetail.msgTitle}</td>
+                            <td colSpan="2" className="hp_alignL">{msgDetail.messageDetail && msgDetail.messageDetail.msgTitle}</td>
                         </tr>
                         <tr>
-                            <td colSpan="2" className="hp_alignL">{msgDetail.messageDetail.msgCon}</td>
+                            <td colSpan="2" className="hp_alignL">{msgDetail.messageDetail && msgDetail.messageDetail.msgCon}</td>
                         </tr>
                     </tbody>
                 </table>

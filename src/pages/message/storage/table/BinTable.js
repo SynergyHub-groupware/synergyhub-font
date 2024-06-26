@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callBinMsgListAPI } from "../../../../apis/MessageAPICalls";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function BinTable() {
 
@@ -68,7 +69,9 @@ function BinTable() {
                                 {/* <td>{msg.sendName ?  `${msg.sendName} ${msg.sendPosition}` : `${msg.revName} ${msg.revPosition}`}</td> */}
                                 <td>{msg.sendName} {msg.sendPosition}</td>
                                 <td>{msg.revName} {msg.revPosition}</td>
-                                <td className="hp_alighL">{msg.msgTitle}</td>
+                                <td className="hp_alighL">
+                                    <Link to={`/message/storage/bin/detail/${msg.msgCode}`}>{msg.msgTitle}</Link>
+                                </td>
                                 <td>{msg.emerStatus}</td>
                                 <td>{msg.storCode}</td>
                             </tr>

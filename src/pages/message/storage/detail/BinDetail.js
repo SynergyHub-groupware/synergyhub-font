@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { callSendDetailAPI } from "../../../../apis/MessageAPICalls";
 
-function ImpDetail() {
+function BinDetail() {
 
     const { msgCode } = useParams();    // URL에서 msgCode 추출
     const dispatch = useDispatch();     
@@ -33,7 +33,7 @@ function ImpDetail() {
 
     return (
         <div className="ly_cont">
-            <h4 className="el_lv1Head hp_mb30">중요 보관함</h4>
+            <h4 className="el_lv1Head hp_mb30">휴지통</h4>
             <section className="bl_sect hp_padding15">
                 <table className="bl_tb3">
                     <colgroup>
@@ -64,10 +64,8 @@ function ImpDetail() {
                 <div className="ly_spaceBetween hp_mt10">
                     <button type="button" className="el_btnS el_btn0Back">읽지않음 처리</button>
                     <div className="">
-                        <button type="button" className="el_btnS el_btn8Back">삭제</button>
-                        <button type="button" className="el_btnS el_btn8Bord hp_ml5">이동</button>
-                        <button type="button" className="el_btnS el_btnblueBord hp_ml5">전달</button>
-                        <button type="button" className="el_btnS el_btnblueBack hp_ml5">답장</button>
+                        <button type="button" className="el_btnS el_btn8Back">영구삭제</button>
+                        <button type="button" className="el_btnS el_btn8Bord hp_ml5">복원</button>
                     </div>
                 </div>
             </section>
@@ -75,4 +73,4 @@ function ImpDetail() {
     );
 }
 
-export default ImpDetail;
+export default BinDetail;

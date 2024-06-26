@@ -28,6 +28,7 @@ import 'react-toastify/ReactToastify.css';
 import ReceiveMsg from './pages/message/storage/ReceiveMsg';
 import SendMsg from './pages/message/storage/SendMsg';
 import TempMsg from './pages/message/storage/TempMsg';
+import MyCalendar from './pages/calendar/MyCalendar';
 import Organization from './pages/employee/Organization';
 import PersonalList from './pages/employee/PersonalList';
 import PersonalRegist from './pages/employee/PersonalRegist';
@@ -74,6 +75,7 @@ function App() {
             {/* 내용추가 */}
           </Route>
           <Route path="calendar" element={<CalendarLayout/>}>
+            <Route path="myCalendar" element={<MyCalendar/>} />
             {/* 내용추가 */}
           </Route>
           <Route path="employee" element={<EmployeeLayout/>}>

@@ -6,7 +6,7 @@ import { callDelMsgAPI } from "../../../apis/MessageAPICalls";
 function ReceiveMsg() {
 
     const dispatch = useDispatch();
-    const [selectMsgCode, setSelectMsgCode] = useState([]);
+    const [selectMsgCode, setSelectMsgCode] = useState([]); // 삭제 State
 
     const delMsgHandler = () => {
 
@@ -37,7 +37,7 @@ function ReceiveMsg() {
                     </div>
                     <div>
                         <input type="text" placeholder="검색어를 입력해주세요" />
-                        <input type="submit" className="el_btnS el_btnblueBord hp_ml5" value="검색" />
+                        <input type="submit" className="el_btnS el_btnblueBord hp_ml5" value="검색"/>
                     </div>
                 </div>
                 <RevTable selectMsgCode={selectMsgCode} setSelectMsgCode={setSelectMsgCode} />

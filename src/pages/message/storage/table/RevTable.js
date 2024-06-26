@@ -7,12 +7,35 @@ function RevTable({ selectMsgCode, setSelectMsgCode }) {
     const dispatch = useDispatch();
     const [allCheck, setAllCheck] = useState(false);
     const messages = useSelector(state => state.messageReducer.messages.message);
+    const [sort, setSort] = useState("");   // 쪽지 정렬 상태
 
     useEffect(() => {
         console.log('API 호출');
         dispatch(callRevMsgListAPI());
     }, [dispatch]);
 
+    /* 쪽지 배열 정렬 */
+    const sortMsg = (messages, sort) => {
+    
+        if(!messages) {
+            return [];
+        }
+
+        if(sort === "asc") {
+            return messages.slice().sort((a, b) => new Date(a.sendDate) - new Date(b.sendDate));
+        } else {
+            return messages.slice().sort((a, b) => new Date(b.sendDate) - new Date(a.sendDate));
+        }
+    };
+
+    
+    const sortChangeHandler = (e) => {
+        setSort(e.target.value);
+    }
+
+    const sortedMessages = sortMsg(messages, sort);
+
+    /* 체크박스 선택 */
     const checkboxChange = (msgCode) => {
         if (selectMsgCode.includes(msgCode)) {
             setSelectMsgCode(selectMsgCode.filter(code => code !== msgCode));
@@ -21,6 +44,7 @@ function RevTable({ selectMsgCode, setSelectMsgCode }) {
         }
     };
 
+    /* 전체 체크박스 선택 */
     const allCheckChange = () => {
         setAllCheck(prev => !prev);
 
@@ -30,7 +54,6 @@ function RevTable({ selectMsgCode, setSelectMsgCode }) {
             const allMsg = messages.map(msg => msg.msgCode);
             setSelectMsgCode(allMsg);
         }
-        
         setAllCheck(!allCheck);
     }
 
@@ -57,8 +80,8 @@ function RevTable({ selectMsgCode, setSelectMsgCode }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {messages && messages.length > 0 ? (
-                            messages.map(msg => (
+                        {sortedMessages && sortedMessages.length > 0 ? (
+                            sortedMessages.map(msg => (
                                 <tr key={msg.msgCode}>
                                     <td><input type="checkbox" onChange={() => checkboxChange(msg.msgCode)} checked={selectMsgCode.includes(msg.msgCode)}/></td>
                                     <td>{msg.sendDate}</td>
@@ -78,8 +101,9 @@ function RevTable({ selectMsgCode, setSelectMsgCode }) {
             </section>
             <div className="ly_spaceBetween ly_fitemC hp_mt10">
                 <div className="hp_ml10 hp_7Color">총 {messages ? messages.length : 0} / <b className="hp_0Color hp_fw700">1</b> 페이지</div>
-                <select>
+                <select value={sort} onChange={sortChangeHandler}>
                     <option value="">정렬방식</option>
+                    <option value="asc">날짜 오름차순</option>
                 </select>
             </div>
         </div>

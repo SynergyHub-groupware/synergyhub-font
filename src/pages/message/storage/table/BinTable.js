@@ -40,7 +40,7 @@ function BinTable() {
                             <tr key={msg.msgCode}>
                                 <td><input type="checkbox" /></td>
                                 <td>{msg.sendDate}</td>
-                                <td>{msg.revName ? `${msg.revName} ${msg.revPosition}` : `${msg.sendName} ${msg.sendPosition}`}</td>
+                                <td>{msg.sendName ?  `${msg.sendName} ${msg.sendPosition}` : `${msg.revName} ${msg.revPosition}`}</td>
                                 <td className="hp_alighL">{msg.msgTitle}</td>
                                 <td>{msg.emerStatus}</td>
                                 <td>{msg.storCode}</td>

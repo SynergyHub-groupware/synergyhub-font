@@ -1,4 +1,4 @@
-import { getBinMsg, getImpMsg, getRevMsg, getSendMsg, getWorkMsg } from "../modules/MessageModules";
+import { delMsg, getBinMsg, getImpMsg, getRevMsg, getSendMsg, getWorkMsg } from "../modules/MessageModules";
 import { request } from "./api";
 
 export const callRevMsgListAPI = () => {
@@ -114,6 +114,29 @@ export const callWorkMsgListAPI = () => {
             }
         } catch (error) {
             console.log("또 에러 : ", error);
+        }
+    };
+};
+
+export const callDelMsgAPI = (msgCode) => {
+    
+    return async (dispatch, getState) => {
+
+        try {
+            const result = await request('PUT', `/emp/message/receive/${msgCode}/bin`, {
+                'Authorization': `Bearer ${localStorage.getItem('access-token')}`,
+                'Content-Type': 'application/json'
+            }, {
+                storCode: 5
+            });
+
+            if (result && result.status === 200) {
+                dispatch(delMsg(msgCode));
+            } else {
+                console.log("에러 : ", result);
+            }
+        } catch (error) {
+            console.log("del 에러 : ", error);
         }
     };
 };

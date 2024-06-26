@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { callRevMsgListAPI } from "../../../../apis/MessageAPICalls";
 
-function RevTable() {
+function RevTable({ selectMsgCode, setSelectMsgCode }) {
     const dispatch = useDispatch();
     const messages = useSelector(state => state.messageReducer.messages.message);
 
@@ -10,6 +10,14 @@ function RevTable() {
         console.log('API 호출');
         dispatch(callRevMsgListAPI());
     }, [dispatch]);
+
+    const checkboxChange = (msgCode) => {
+        if (selectMsgCode.includes(msgCode)) {
+            setSelectMsgCode(selectMsgCode.filter(code => code !== msgCode));
+        } else {
+            setSelectMsgCode([...selectMsgCode, msgCode]);
+        }
+    };
 
     return (
         <div>
@@ -37,7 +45,7 @@ function RevTable() {
                         {messages && messages.length > 0 ? (
                             messages.map(msg => (
                                 <tr key={msg.msgCode}>
-                                    <td><input type="checkbox" /></td>
+                                    <td><input type="checkbox" onChange={() => checkboxChange(msg.msgCode)}/></td>
                                     <td>{msg.sendDate}</td>
                                     <td>{msg.sendName} {msg.sendPosition}</td>
                                     <td className="hp_alighL">{msg.msgTitle}</td>

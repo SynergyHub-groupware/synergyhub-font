@@ -15,7 +15,7 @@ import { resetSuccess } from "../../modules/ApprovalModules";
 
 function FormDetail(){
     const empCode = "2021048";
-    
+
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
@@ -46,7 +46,7 @@ function FormDetail(){
             ...prev,
             adReportDate: formattedDate,    // 오늘 날짜
             employee: {
-              emp_code: empCode             // 로그인한 사람의 empCode
+                emp_code: empCode             // 로그인한 사람의 empCode
             },
             adStatus: "대기",
             form: {
@@ -63,8 +63,7 @@ function FormDetail(){
             [name]: value
         }));
     };
-    console.log("document", document);
-    
+
     // 실결재라인 배열 전달, document에 추가
     const handleTrueLineList = (data) => {
         setDocument(prev => ({
@@ -86,17 +85,17 @@ function FormDetail(){
             [key]: data
         }));
 
-        console.log("handleDetail", data);
+        // console.log("handleDetail", data);
     };
 
     const success = useSelector(state => state.approvalReducer.success);
     useEffect(() => {
         if(success){
             alert("결재문서가 " + success + " 되었습니다.");
-    
+
             if(success === "임시저장") navigate("/approval/temporary");
             else if(success === "상신") navigate("/approval/send/waiting");
-    
+
             dispatch(resetSuccess());
             setDocument({});
         }
@@ -118,12 +117,23 @@ function FormDetail(){
 
     // 결재정보 한번에 전달
     const formRefs = useRef({});
-    const onClickApprovalDocRegist = async (temporary) => {
+    const [triggerUpdate, setTriggerUpdate] = useState(false);
+    const [temporaryFlag, setTemporaryFlag] = useState(false);
 
+    const onClickApprovalDocRegist = async (temporary) => {
+        if (temporary) {
+            setTemporaryFlag(true);
+            setTriggerUpdate(true);
+        } else {
+            await performValidationAndSubmit(temporary);
+        }
+    }
+
+    const performValidationAndSubmit = async (temporary) => {
         // 필수 정보 입력 확인
         const requiredFields = Object.values(formRefs.current);
         let agreeCheckbox = null;
-    
+
         for (let field of requiredFields) {
             if (field.type === 'checkbox' && field.name === 'agree') {
                 agreeCheckbox = field;
@@ -155,6 +165,23 @@ function FormDetail(){
         await dispatch(callApprovalDocRegistAPI({ formData: formData, temporary: temporary }));
     }
 
+    useEffect(() => {
+        if (triggerUpdate) {
+            setDocument(prevDocument => ({
+                ...prevDocument,
+                adStatus: '임시저장'
+            }));
+            setTriggerUpdate(false);
+        }
+    }, [triggerUpdate]);
+
+    useEffect(() => {
+        if (temporaryFlag) {
+            performValidationAndSubmit(true);
+            setTemporaryFlag(false);
+        }
+    }, [document.adStatus]);
+
     return(
         <div className="ly_cont">
             <h4 className="el_lv1Head hp_mb30">{afName}</h4>
@@ -163,32 +190,32 @@ function FormDetail(){
                 <h5 className="hp_fw700 hp_fs18 hp_mb10 hp_mt30">결재정보</h5>
                 <table className="bl_tb3 el_approvalTb3__th">
                     <tbody>
-                        <tr>
-                            <th scope="row">기안양식</th>
-                            <td>{afName}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">첨부파일</th>
-                            <td colSpan="3">
-                                <div className="ly_flex ly_fitemStart">
-                                    <ul className="hp_w100 hp_mr10">
-                                        {files.map((file, index) => (
-                                            <li key={index}>
-                                                <button type="button" className="hp_mr10 hp_fw700" onClick={() => handleRemoveFile(index)} title="삭제">X</button>
-                                                {file.name} 
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    <label className="bl_attachBtn__label el_btnS el_btn8Back hp_p3-5">
-                                        <input type="file" className="bl_attachBtn__input" multiple onChange={handleFileChange} /> 파일선택
-                                    </label>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">제목</th>
-                            <td colSpan="3"><input type="text" className="hp_w100" name="adTitle" onChange={onChangeHandler} ref={(el) => (formRefs.current['field1'] = el)} placeholder="[팀명] MM/DD 기안양식명_이름" required /></td>
-                        </tr>
+                    <tr>
+                        <th scope="row">기안양식</th>
+                        <td>{afName}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">첨부파일</th>
+                        <td colSpan="3">
+                            <div className="ly_flex ly_fitemStart">
+                                <ul className="hp_w100 hp_mr10">
+                                    {files.map((file, index) => (
+                                        <li key={index}>
+                                            <button type="button" className="hp_mr10 hp_fw700" onClick={() => handleRemoveFile(index)} title="삭제">X</button>
+                                            {file.name}
+                                        </li>
+                                    ))}
+                                </ul>
+                                <label className="bl_attachBtn__label el_btnS el_btn8Back hp_p3-5">
+                                    <input type="file" className="bl_attachBtn__input" multiple onChange={handleFileChange} /> 파일선택
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">제목</th>
+                        <td colSpan="3"><input type="text" className="hp_w100" name="adTitle" onChange={onChangeHandler} ref={(el) => (formRefs.current['field1'] = el)} placeholder="[팀명] MM/DD 기안양식명_이름" required /></td>
+                    </tr>
                     </tbody>
                 </table>
                 <h5 className="hp_fw700 hp_fs18 hp_mb10 hp_mt30">결재내용</h5>

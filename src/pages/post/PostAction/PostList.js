@@ -1,18 +1,40 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { callGETPostList } from "../postApi/PostAPI";
+import '../../css/poststyle.css';
+
+
+
 // script.js
-function renderRows(data) {
-    return data.map(item => `
-        <tr key=${item.id}>
-            <td>${item.id}</td>
-            <td>${item.category}</td>
-            <td>${item.title}</td>
-            <td>${item.author}</td>
-            <td>${item.date}</td>
-            <td>${item.views}</td>
-        </tr>
-    `).join('');
+
+function renderRows() {
+    const allPosts = useSelector(state => state.postReducer.Postdata);
+
+return allPosts.map(item => (
+    <tr key={item.PostCode}>
+        <td>{item.PostCode}</td>
+        <td>{item.LowBoardCode}</td>
+        <td>{item.PostName}</td>
+        <td>{item.EmpCode}</td>
+        <td>{item.PostDate}</td>
+        <td>{item.PostViewCnt}</td>
+    </tr>
+));
 }
 
-function App() {
+
+
+function Postlist() {
+
+
+const dispatch=useDispatch();
+useEffect(()=>{
+    dispatch(callGETPostList());
+}, [dispatch])
+
+console.log("Current posts state:", allPosts); // 상태 출력
+
+
     return (
         <>
         <h1>전체 게시판</h1>
@@ -46,17 +68,7 @@ function App() {
         </>
     );
 }
+export default Postlist;
 
-function renderApp(data) {
-    document.getElementById('root').innerHTML = App();
-    document.getElementById('table-body').innerHTML = renderRows(data);
-}
 
-// Sample data
-const data = [
-    { id: 1, category: 'aa', title: 'bb', author: 'cc', date: 'dd', views: 'ee' },
-    { id: 2, category: 'ff', title: 'gg', author: 'hh', date: 'ii', views: 'jj' }
-];
 
-// Render the application
-document.addEventListener('DOMContentLoaded', () => renderApp(data));

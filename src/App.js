@@ -16,11 +16,17 @@ import CalendarLayout from './pages/calendar/CalendarLayout';
 import EmployeeLayout from './pages/employee/EmployeeLayout';
 import MessageLayout from './pages/message/MessageLayout';
 import PostLayout from './pages/post/PostLayout';
+import PostListView from './pages/post/PostListView';
+import PostCreateView from './pages/post/PostCreateView';
 import FormDetail from './pages/approval/FormDetail';
+import PostListViewInBoard from './pages/post/PostListViewInBoard';
+import PostDetailView from './pages/post/PostDetailView';
+import BoradCreateView from './pages/post/BoardCreateView';
 import DocumentMain from './pages/approval/send/DocumentMain'
 import Login from './pages/Login';
 import 'react-toastify/ReactToastify.css';
-import AddressDir from './components/commons/address/AddressDir';
+import DocumentMain from './pages/approval/send/DocumentMain';
+import MyCalendar from './pages/calendar/MyCalendar';
 import Organization from './pages/employee/Organization';
 import PersonalList from './pages/employee/PersonalList';
 import PersonalRegist from './pages/employee/PersonalRegist';
@@ -33,9 +39,7 @@ import DeptManagerMent from './pages/employee/DeptManagerMent';
 import MyInfo from './pages/myInfo/MyInfo';
 import MyInfoLayout from './pages/myInfo/MyInfoLayout';
 import MyPersonalRecordCard from './pages/myInfo/MyPersonalRecordCard';
-import Schedule from "./pages/attendance/Schedule";
-import Mypage from "./pages/attendance/Mypage";
-import DefaultSchedulesList from "./pages/attendance/DefaultSchedulesList";
+import ViewMain from './pages/approval/view/ViewMain';
 
 
 function App() {
@@ -50,6 +54,7 @@ function App() {
             <Route path="temporary" element={<Temporary/>} />
             <Route path="form/:afCode" element={<FormDetail/>}/>
             <Route path="send/:status" element={<DocumentMain/>}/>
+            <Route path="view/:adCode" element={<ViewMain/>}/>
             <Route path="receive">
               <Route path="complete" element={<ReceiveComplete/>} />
               <Route path="reference" element={<Reference/>} />
@@ -62,12 +67,11 @@ function App() {
               <Route path="storage" element={<Storage/>} />
             </Route>
           </Route>
-          <Route path="attendance" element={<AttendanceLayout />}>
-            <Route path="schedule" element={<Schedule />} />
-            <Route path="mypage" element={<Mypage />} />
-            <Route path="DefaultSchedulesList" element={<DefaultSchedulesList />} />
+          <Route path="attendance" element={<AttendanceLayout/>}>
+            {/* 내용추가 */}
           </Route>
           <Route path="calendar" element={<CalendarLayout/>}>
+            <Route path="myCalendar" element={<MyCalendar/>} />
             {/* 내용추가 */}
           </Route>
           <Route path="employee" element={<EmployeeLayout/>}>
@@ -89,7 +93,11 @@ function App() {
             {/* 내용추가 */}
           </Route>
           <Route path="post" element={<PostLayout/>}>
-            {/* 내용추가 */}
+          <Route path="PostListView" element={<PostListView/>} />
+          <Route path='PostListViewInBoard/:lowBoardCode' element={<PostListViewInBoard/>}/>
+          <Route path='PostDetail/:postCode'element={<PostDetailView/>}/>
+          <Route path="PostCreateView" element={<PostCreateView/>} />
+          <Route path='BoradCreateView' element={<BoradCreateView/>}/>
           </Route>
         </Route>
       </Routes>

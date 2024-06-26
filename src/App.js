@@ -25,6 +25,8 @@ import BoradCreateView from './pages/post/BoardCreateView';
 import DocumentMain from './pages/approval/send/DocumentMain'
 import Login from './pages/Login';
 import 'react-toastify/ReactToastify.css';
+import DocumentMain from './pages/approval/send/DocumentMain';
+import MyCalendar from './pages/calendar/MyCalendar';
 import Organization from './pages/employee/Organization';
 import PersonalList from './pages/employee/PersonalList';
 import PersonalRegist from './pages/employee/PersonalRegist';
@@ -69,6 +71,7 @@ function App() {
             {/* 내용추가 */}
           </Route>
           <Route path="calendar" element={<CalendarLayout/>}>
+            <Route path="myCalendar" element={<MyCalendar/>} />
             {/* 내용추가 */}
           </Route>
           <Route path="employee" element={<EmployeeLayout/>}>

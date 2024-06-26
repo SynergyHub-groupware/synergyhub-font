@@ -7,7 +7,7 @@
 .el_scheLabel__detail:hover::after{content:"+ 더보기";display:inline-block;color:#666;font-size:12px;margin-left:15px;}
 
 .el_scheIcon{background:no-repeat center/contain;width:24px;height:24px;}
-.el_scheIcon__write{background-image:url('/img//icon/icon_edit.png');}
+/* .el_scheIcon__write{background-image:url('/img//icon/icon_edit.png');} */
 .bl_task{}
 .el_task__alarm{background:#000;border-radius:50%;display:inline-block;width:24px;height:24px;line-height:22px;color:#fff;text-align:center;vertical-align:middle;}
 

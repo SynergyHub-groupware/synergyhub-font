@@ -15,7 +15,7 @@ export const callFormContentAPI = (afCode) => {     // 결재양식기본내용 
     }
 }
 
-export const callFormLineAPI = ({lsCode}) => {      // 결재라인 특정 조회
+export const callFormLineAPI = ({lsCode = null}) => {      // 결재라인 특정 조회
     return async (dispatch, getState) => {
         const result = await request('GET', `/approval/formLine?lsCode=${lsCode}`);
         if(result && result.status === 200) dispatch(getLines(result));

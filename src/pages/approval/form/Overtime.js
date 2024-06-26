@@ -43,8 +43,8 @@ function Overtime({handleDetail, formRefs, writtenCont = {}}){
     
     useEffect(()=>{
         if(writtenCont !== null && Object.keys(writtenCont).length > 0){
-            const formattedStart = writtenCont.aattStart.replace(' ', 'T');
-            const formattedEnd = writtenCont.aattEnd.replace(' ', 'T');
+            const formattedStart = writtenCont.aattStart?.replace(' ', 'T');
+            const formattedEnd = writtenCont.aattEnd?.replace(' ', 'T');
 
             setException(prev => ({
                 ...prev,

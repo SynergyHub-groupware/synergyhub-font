@@ -36,10 +36,10 @@ function ViewLine({viewlines, document={}, showBtn}){
                 const imageUrls = await Promise.all(approvedAndRejectedLines.map(async (emp) => {
                     try {
                         const imageUrl = await fetchImage(emp.empCode);
-                        return imageUrl || '이미지 없음';
+                        return imageUrl || null;
                     } catch (error) {
                         console.error('Error fetching image for empCode', emp.empCode, ':', error);
-                        return '이미지 없음';
+                        return null;
                     }
                 }));
 
@@ -156,7 +156,7 @@ function ViewLine({viewlines, document={}, showBtn}){
                 </tr>
                 <tr>
                     <td className="el_approvalSign" style={{ backgroundImage: imageData ? `url(${imageData})` : 'none' }}>
-                        <b className="hp_cColor">{imageData ? imageData : ""}</b>
+                        <b className="hp_cColor">{(imageData == "이미지 없음") ? "이미지 없음" : ""}</b>
                     </td>
                 </tr>
                 </tbody>
@@ -187,7 +187,7 @@ function ViewLine({viewlines, document={}, showBtn}){
                         </tr>
                         <tr>
                             <td className="el_approvalSign" style={{backgroundImage: emp.talStatus === '승인' || emp.talStatus === '반려' ? `url(${imageArr[index]})` : 'none'}}>
-                            <b className="hp_cColor">{imageArr[index] ? imageArr[index] : ""}</b>
+                            <b className="hp_cColor">{(imageArr[index] === "이미지 없음") ? "이미지 없음" : (emp.talStatus === '전결' ? "전결" : "")}</b>
                                 {showBtn && (
                                     <>
                                     {index === firstUnapprovedIndex && (

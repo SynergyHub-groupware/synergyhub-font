@@ -27,7 +27,11 @@ function FormDetail(){
         content: state.approvalReducer.content,
         documents: state.approvalReducer.documents,
     }));
-    
+
+    useEffect(() => {
+        dispatch(resetContent());
+    }, [dispatch]);
+
     useEffect(() => {
         // 페이지에 접근할 때마다 document 상태 초기화
         setDocument({});
@@ -41,11 +45,11 @@ function FormDetail(){
 
     useEffect(() => {
         if (docInfo) dispatch(callviewDetailAPI(docInfo.adDetail));
-        else dispatch(resetContent());
+        // else dispatch(resetContent());
     }, [docInfo, dispatch]);
 
-    // console.log("docInfo", docInfo);
-    // console.log("content", content);
+    console.log("docInfo", docInfo);
+    console.log("content", content);
 
     useEffect(()=>{
         docInfo && setDocument(prev => ({
@@ -243,6 +247,7 @@ function FormDetail(){
     }, [documents]);
 
     const handleCancelClick = () => {navigate(-1);};
+
     return(
         <div className="ly_cont">
             {docInfo && docInfo.afName ? <h4 className="el_lv1Head hp_mb30">{docInfo.afName}</h4> : <h4 className="el_lv1Head hp_mb30">{afName}</h4>}

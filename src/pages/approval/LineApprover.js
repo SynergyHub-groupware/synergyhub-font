@@ -7,6 +7,7 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
     const deptCode = employee.dept_code;
     const titleCode = employee.title_code;
 
+    const [trueLineList, setTrueLineList] = useState([]);
     const [newLines, setNewLines] = useState([]);
     const dispatch = useDispatch();
     const { lineemps, viewlines } = useSelector(state => ({
@@ -53,11 +54,11 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
 
     // 실결재라인 배열 전달
     useEffect(()=>{
-        const trueLineList = newLines.map(emp => ({
-            talOrder: emp.alOrder,
-            talRole: emp.alRole,
-            employee: { emp_code: emp.empCode }
-        }));
+        const trueLineList = newLines.map((emp, index) => {
+            // const matchingLine = lines && lines.find(line => line.alSort && line.alSort.includes(emp.titleCode));
+            // const role = matchingLine ? matchingLine.alRole : "결재";
+            return {talOrder: index + 1, talRole: emp.alRole, employee: {emp_code: emp.empCode}};
+        });
 
         handleTrueLineList(trueLineList);
 
@@ -83,7 +84,7 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
 
     // console.log("lines", lines);
     // console.log("lineemps", lineemps);
-    console.log("newLines", newLines);
+    // console.log("newLines", newLines);
 
     // selectEmps가 있을 경우
     useEffect(() => {
@@ -107,11 +108,8 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
                     <tbody>
                     <tr>
                         <th className="hp_padding0">
-                            <select
-                                className="hp_w100 el_approvalRole__select"
-                                value={emp.alRole}
-                                onChange={(event) => handleRoleChange(event, emp.empCode)}
-                            >
+                            <select className="hp_w100 el_approvalRole__select" value={emp.alRole}
+                                onChange={(event) => handleRoleChange(event, emp.empCode)}>
                                 <option value="결재">결재자</option>
                                 <option value="전결">전결자</option>
                             </select>

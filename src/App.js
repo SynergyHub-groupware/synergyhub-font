@@ -20,6 +20,7 @@ import FormDetail from './pages/approval/FormDetail';
 import Login from './pages/Login';
 import 'react-toastify/ReactToastify.css';
 import DocumentMain from './pages/approval/send/DocumentMain';
+import MyCalendar from './pages/calendar/MyCalendar';
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
             {/* 내용추가 */}
           </Route>
           <Route path="calendar" element={<CalendarLayout/>}>
+            <Route path="myCalendar" element={<MyCalendar/>} />
             {/* 내용추가 */}
           </Route>
           <Route path="employee" element={<EmployeeLayout/>}>

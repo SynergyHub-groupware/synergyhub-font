@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { callSendMsgListAPI } from "../../../../apis/MessageAPICalls";
 import { useState } from "react";
 
-function SendTable({ selectMsgCode, setSelectMsgCode }) {
+function SendTable({ selectMsgCode, setSelectMsgCode, search }) {
 
     const dispatch = useDispatch();
     const [allCheck, setAllCheck] = useState(false);
@@ -13,10 +13,6 @@ function SendTable({ selectMsgCode, setSelectMsgCode }) {
      /* 쪽지 배열 정렬 */
      const sortMsg = (messages, sort) => {
     
-        if(!messages) {
-            return [];
-        }
-
         if(sort === "asc") {
             return messages.slice().sort((a, b) => new Date(a.sendDate) - new Date(b.sendDate));
         } else {
@@ -29,13 +25,33 @@ function SendTable({ selectMsgCode, setSelectMsgCode }) {
         setSort(e.target.value);
     }
 
-    const sortedMessages = sortMsg(messages, sort);
+    /* 검색어 필터링 */
+    const filterMsg = (messages, search) => {
+        
+        if(!messages) {
+            return [];
+        }
+
+        if (!search) {
+            return messages;
+        }
+
+        const lowerfilter = search.toLowerCase();
+        return messages.filter(msg =>
+            msg.msgTitle.toLowerCase().includes(lowerfilter) ||
+            msg.revName.toLowerCase().includes(lowerfilter) ||
+            msg.revPosition.toLowerCase().includes(lowerfilter)
+        );
+    };
+
+    const sortedMessages = sortMsg(filterMsg(messages, search), sort);
 
     useEffect(() => {
         console.log("api 작동");
         dispatch(callSendMsgListAPI());
     }, [dispatch]);
 
+    /* 체크박스 선택 */
     const checkboxChange = (msgCode) => {
         if (selectMsgCode.includes(msgCode)) {
             setSelectMsgCode(selectMsgCode.filter(code => code !== msgCode));
@@ -44,6 +60,7 @@ function SendTable({ selectMsgCode, setSelectMsgCode }) {
         }
     };
 
+    /* 전체 체크박스 선택 */
     const allCheckChange = () => {
         setAllCheck(prev => !prev);
 

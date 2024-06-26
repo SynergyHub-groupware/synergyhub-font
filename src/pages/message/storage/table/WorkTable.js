@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { callWorkMsgListAPI } from "../../../../apis/MessageAPICalls";
 import { useState } from "react";
 
-function WorkTable({ selectMsgCode, setSelectMsgCode }) {
+function WorkTable({ selectMsgCode, setSelectMsgCode, search }) {
 
     const dispatch = useDispatch();
     const [allCheck, setAllCheck] = useState(false);
@@ -29,14 +29,29 @@ function WorkTable({ selectMsgCode, setSelectMsgCode }) {
         setSort(e.target.value);
     }
 
-    const sortedMessages = sortMsg(messages, sort);
+    /* 검색어 필터링 */
+    const filterMsg = (messages, search) => {
+        
+        if (!search) {
+            return messages;
+        }
 
+        const lowerfilter = search.toLowerCase();
+        return messages.filter(msg =>
+            msg.msgTitle.toLowerCase().includes(lowerfilter) ||
+            msg.sendName.toLowerCase().includes(lowerfilter) ||
+            msg.sendPosition.toLowerCase().includes(lowerfilter)
+        );
+    };
+
+    const sortedMessages = sortMsg(filterMsg(messages, search), sort);
 
     useEffect(() => {
         console.log("API 호출");
         dispatch(callWorkMsgListAPI());
     }, [dispatch])
 
+    /* 체크박스 선택 */
     const checkboxChange = (msgCode) => {
         if (selectMsgCode.includes(msgCode)) {
             setSelectMsgCode(selectMsgCode.filter(code => code !== msgCode));
@@ -45,6 +60,7 @@ function WorkTable({ selectMsgCode, setSelectMsgCode }) {
         }
     };
 
+    /* 전체 체크박스 선택 */
     const allCheckChange = () => {
         setAllCheck(prev => !prev);
 

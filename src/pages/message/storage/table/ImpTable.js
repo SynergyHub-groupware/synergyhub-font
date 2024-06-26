@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { callImpMsgListAPI } from "../../../../apis/MessageAPICalls";
 
-function ImpTable({ selectMsgCode, setSelectMsgCode }) {
+function ImpTable({ selectMsgCode, setSelectMsgCode, search }) {
 
     const dispatch = useDispatch();
     const [allCheck, setAllCheck] = useState(false);
@@ -32,8 +32,24 @@ function ImpTable({ selectMsgCode, setSelectMsgCode }) {
         setSort(e.target.value);
     }
 
-    const sortedMessages = sortMsg(messages, sort);
+    /* 검색어 필터링 */
+    const filterMsg = (messages, search) => {
+        
+        if (!search) {
+            return messages;
+        }
 
+        const lowerfilter = search.toLowerCase();
+        return messages.filter(msg =>
+            msg.msgTitle.toLowerCase().includes(lowerfilter) ||
+            msg.sendName.toLowerCase().includes(lowerfilter) ||
+            msg.sendPosition.toLowerCase().includes(lowerfilter)
+        );
+    };
+
+    const sortedMessages = sortMsg(filterMsg(messages, search), sort);
+
+    /* 체크박스 선택 */
     const checkboxChange = (msgCode) => {
         if (selectMsgCode.includes(msgCode)) {
             setSelectMsgCode(selectMsgCode.filter(code => code !== msgCode));
@@ -42,6 +58,7 @@ function ImpTable({ selectMsgCode, setSelectMsgCode }) {
         }
     };
 
+    /* 전체 체크박스 선택 */
     const allCheckChange = () => {
         setAllCheck(prev => !prev);
 

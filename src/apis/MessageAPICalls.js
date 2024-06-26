@@ -17,10 +17,10 @@ export const callRevMsgListAPI = () => {
 
                 dispatch(getRevMsg(result.data));
             } else {
-                console.log('에러에옹 : ', result);
+                console.log('error : ', result);
             }
         } catch (error) {
-            console.log("또 에러에옹 : ", error);
+            console.log("error : ", error);
         }
         
     };
@@ -41,10 +41,10 @@ export const callSendMsgListAPI = () => {
             if (result && result.status === 200) {
                 dispatch(getSendMsg(result.data));
             } else {
-                console.log('에러에옹 : ', result);
+                console.log('error : ', result);
             }
         } catch (error) {
-            console.log('또 에러에옹 : ', error);
+            console.log('error : ', error);
         }
     };
 };
@@ -64,10 +64,10 @@ export const callBinMsgListAPI = () => {
             if (result && result.status === 200) {
                 dispatch(getBinMsg(result.data));
             } else {
-                console.log("에러에옹 : ", result);
+                console.log("error : ", result);
             } 
         } catch (error) {
-            console.log('또 에러 : ', error);
+            console.log('error : ', error);
         }
     };
 };
@@ -87,10 +87,10 @@ export const callImpMsgListAPI = () => {
             if (result && result.status === 200) {
                 dispatch(getImpMsg(result.data));
             } else {
-                console.log("에러 : ", result);
+                console.log("error : ", result);
             }  
         } catch (error) {
-            console.log("또 에러 :", error);
+            console.log("error :", error);
         }
     };
 };
@@ -110,10 +110,10 @@ export const callWorkMsgListAPI = () => {
             if (result && result.status === 200) {
                 dispatch(getWorkMsg(result.data));
             } else {
-                console.log("에러 : " ,result);
+                console.log("error : " ,result);
             }
         } catch (error) {
-            console.log("또 에러 : ", error);
+            console.log("error : ", error);
         }
     };
 };
@@ -133,10 +133,10 @@ export const callDelMsgAPI = (msgCode) => {
             if (result && result.status === 200) {
                 dispatch(delMsg(msgCode));
             } else {
-                console.log("에러 : ", result);
+                console.log("error : ", result);
             }
         } catch (error) {
-            console.log("del 에러 : ", error);
+            console.log("del error : ", error);
         }
     };
 };

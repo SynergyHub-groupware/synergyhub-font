@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callSendMsgListAPI } from "../../../../apis/MessageAPICalls";
+import { useState } from "react";
 
-function SendTable() {
+function SendTable({ selectMsgCode, setSelectMsgCode }) {
 
     const dispatch = useDispatch();
+    const [allCheck, setAllCheck] = useState(false);
     const messages = useSelector(state => state.messageReducer.messages.message);
 
     useEffect(() => {
@@ -12,13 +14,33 @@ function SendTable() {
         dispatch(callSendMsgListAPI());
     }, [dispatch]);
 
+    const checkboxChange = (msgCode) => {
+        if (selectMsgCode.includes(msgCode)) {
+            setSelectMsgCode(selectMsgCode.filter(code => code !== msgCode));
+        } else {
+            setSelectMsgCode([...selectMsgCode, msgCode]);
+        }
+    };
+
+    const allCheckChange = () => {
+        setAllCheck(prev => !prev);
+
+        if (allCheck) {
+            setSelectMsgCode([]);
+        } else {
+            const allMsg = messages.map(msg => msg.msgCode);
+            setSelectMsgCode(allMsg);
+        }
+        
+        setAllCheck(!allCheck);
+    }
 
     return (
         <div>
             <section className="bl_sect hp_mt10">
                 <table className="bl_tb1">
                     <colgroup>
-                        <col style={{ width: "50px" }} />
+                        <col style={{ width: "90px" }} />
                         <col style={{ width: "120px" }} />
                         <col style={{ width: "120px" }} />
                         <col style={{ width: "*" }} />
@@ -27,7 +49,7 @@ function SendTable() {
                     </colgroup>
                     <thead>
                         <tr>
-                            <th scope="col"><input type="checkbox" value="checkAll" /></th>
+                            <th scope="col"><input type="checkbox" value="checkAll" checked={allCheck} onChange={allCheckChange} /></th>
                             <th scope="col">작성일</th>
                             <th scope="col">보낸사람</th>
                             <th scope="col">제목</th>
@@ -38,7 +60,7 @@ function SendTable() {
                     <tbody>
                         {messages && messages.length > 0 ? (messages.map(msg => (
                             <tr key={msg.msgCode}>
-                                <td><input type="checkbox" /></td>
+                                <td><input type="checkbox" onChange={() => checkboxChange(msg.msgCode)} checked={selectMsgCode.includes(msg.msgCode)}/></td>
                                 <td>{msg.sendDate}</td>
                                 <td>{msg.revName} {msg.revPosition}</td>
                                 <td className="hp_alighL">{msg.msgTitle}</td>

@@ -19,9 +19,10 @@ function ReceiveMsg() {
 
             selectMsgCode.forEach(msgCode => {
                 dispatch(callDelMsgAPI(msgCode));
-                window.location.reload();   
-                alert("쪽지를 삭제하였습니다.");
             });
+            
+            alert("쪽지를 삭제하였습니다.");
+            window.location.reload();   
         }
     };
 

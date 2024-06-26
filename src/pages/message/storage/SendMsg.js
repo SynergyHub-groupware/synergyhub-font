@@ -1,6 +1,30 @@
 import SendTable from "./table/SendTable";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { callDelMsgAPI } from "../../../apis/MessageAPICalls";
 
 function SendMsg() {
+
+    const dispatch = useDispatch();
+    const [selectMsgCode, setSelectMsgCode] = useState([]);
+
+    const delMsgHandler = () => {
+
+        if (selectMsgCode.length === 0) {
+            alert("삭제하실 쪽지를 선택해주세요.");
+            return;
+        }
+        
+        if ( window.confirm("메세지를 삭제하시겠습니까?")) {
+
+            selectMsgCode.forEach(msgCode => {
+                dispatch(callDelMsgAPI(msgCode));
+            });
+            
+            alert("쪽지를 삭제하였습니다.");
+            window.location.reload();   
+        }
+    };
 
     return(
         <div className="ly_body" style={{ width: "100%" }}>
@@ -8,7 +32,7 @@ function SendMsg() {
                     <h4 className="el_lv1Head hp_mb30">보낸 쪽지</h4>
                     <div className="ly_spaceBetween">
                         <div className="">
-                            <button type="button" className="el_btnS el_btn8Back">삭제</button>
+                            <button type="button" className="el_btnS el_btn8Back" onClick={delMsgHandler}>삭제</button>
                             <button type="button" className="el_btnS el_btn8Bord">이동</button>
                         </div>
                         <div>
@@ -16,7 +40,7 @@ function SendMsg() {
                             <input type="submit" className="el_btnS el_btnblueBord hp_ml5" value="검색" />
                         </div>
                     </div>
-                    <SendTable/>
+                    <SendTable selectMsgCode={selectMsgCode} setSelectMsgCode={setSelectMsgCode} />
                     <section className="bl_sect hp_mt10 hp_padding5 hp_alignC">
                         <div className="bl_paging">
                             {/* <a href="#" className="bl_paging__btn bl_paging__first" title="첫 페이지로 이동"></a> */}

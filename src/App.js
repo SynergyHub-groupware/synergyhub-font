@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/layouts/Layout';
 import Main from './pages/Main';
 import FormList from './pages/approval/FormList';
@@ -25,6 +25,9 @@ import BoradCreateView from './pages/post/BoardCreateView';
 import DocumentMain from './pages/approval/send/DocumentMain'
 import Login from './pages/Login';
 import 'react-toastify/ReactToastify.css';
+import ReceiveMsg from './pages/message/storage/ReceiveMsg';
+import SendMsg from './pages/message/storage/SendMsg';
+import TempMsg from './pages/message/storage/TempMsg';
 import MyCalendar from './pages/calendar/MyCalendar';
 import Organization from './pages/employee/Organization';
 import PersonalList from './pages/employee/PersonalList';
@@ -39,7 +42,9 @@ import MyInfo from './pages/myInfo/MyInfo';
 import MyInfoLayout from './pages/myInfo/MyInfoLayout';
 import MyPersonalRecordCard from './pages/myInfo/MyPersonalRecordCard';
 import ViewMain from './pages/approval/view/ViewMain';
-
+import ImpMsg from './pages/message/storage/ImpMsg';
+import WorkMsg from './pages/message/storage/WorkMsg';
+import Bin from './pages/message/storage/Bin';
 
 function App() {
   return (
@@ -89,7 +94,15 @@ function App() {
             <Route path="myPersonalRecordCard" element={<MyPersonalRecordCard />} />  
           </Route>
           <Route path="message" element={<MessageLayout/>}>
-            {/* 내용추가 */}
+            <Route index element={<Navigate to="storage/receive" replace/>}/>
+            <Route path='storage'>
+              <Route path='receive' element={<ReceiveMsg/>}/>
+              <Route path='send' element={<SendMsg/>}/>
+              <Route path='temp' element={<TempMsg/>}/>
+              <Route path='important' element={<ImpMsg/>}/>
+              <Route path='work' element={<WorkMsg/>}/>
+              <Route path='bin' element={<Bin/>}/>
+            </Route>
           </Route>
           <Route path="post" element={<PostLayout/>}>
           <Route path="PostListView" element={<PostListView/>} />

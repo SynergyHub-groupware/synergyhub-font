@@ -7,5 +7,5 @@
 .bl_profile__icon{display:block;color:#363636;}
 .bl_profile__icon:hover{text-decoration:underline;}
 .bl_profile__icon::before{content:"";background:no-repeat center/contain;display:inline-block;width:20px;height:20px;margin-right:10px;vertical-align:middle;}
-.bl_profile__iconEmail::before{background-image:url("/img/icon/icon_email.png");}
-.bl_profile__iconContact::before{background-image:url("/img/icon/icon_telephone.png");}
+.bl_profile__iconEmail::before{background-image:url("../../public/images/icon/icon_email.png");}
+.bl_profile__iconContact::before{background-image:url("../../public/images/icon/icon_telephone.png");}

@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { callImpMsgListAPI } from "../../../../apis/MessageAPICalls";
+import { Link } from "react-router-dom";
 
 function ImpTable({ selectMsgCode, setSelectMsgCode, search }) {
 
@@ -16,15 +17,17 @@ function ImpTable({ selectMsgCode, setSelectMsgCode, search }) {
 
     /* 쪽지 배열 정렬 */
     const sortMsg = (messages, sort) => {
-
-        if (!messages) {
+    
+        if(!messages) {
             return [];
         }
 
         if(sort === "asc") {
             return messages.slice().sort((a, b) => new Date(a.sendDate) - new Date(b.sendDate));
-        } else {
+        } else if(sort === "desc") {
             return messages.slice().sort((a, b) => new Date(b.sendDate) - new Date(a.sendDate));
+        } else {
+            return messages;
         }
     };
 
@@ -101,7 +104,9 @@ function ImpTable({ selectMsgCode, setSelectMsgCode, search }) {
                                     <td><input type="checkbox" onChange={() => checkboxChange(msg.msgCode)} checked={selectMsgCode.includes(msg.msgCode)}/></td>
                                     <td>{msg.sendDate}</td>
                                     <td>{msg.sendName} {msg.sendPosition}</td>
-                                    <td className="hp_alighL">{msg.msgTitle}</td>
+                                    <td className="hp_alighL">
+                                        <Link to={`/message/storage/imp/detail/${msg.msgCode}`}>{msg.msgTitle}</Link>
+                                    </td>
                                     <td>{msg.emerStatus}</td>
                                     <td>{msg.storCode}</td>
                                 </tr>
@@ -119,6 +124,7 @@ function ImpTable({ selectMsgCode, setSelectMsgCode, search }) {
                 <select value={sort} onChange={sortChangeHandler}>
                     <option value="">정렬방식</option>
                     <option value="asc">날짜 오름차순</option>
+                    <option value="desc">날짜 내림차순</option>
                 </select>
             </div>
         </div>

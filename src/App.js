@@ -45,6 +45,10 @@ import ViewMain from './pages/approval/view/ViewMain';
 import ImpMsg from './pages/message/storage/ImpMsg';
 import WorkMsg from './pages/message/storage/WorkMsg';
 import Bin from './pages/message/storage/Bin';
+import RevDetail from './pages/message/storage/detail/RevDetail';
+import SendDetail from './pages/message/storage/detail/SendDetail';
+import ImpDetail from './pages/message/storage/detail/ImpDetail';
+import WorkDetail from './pages/message/storage/detail/WorkDetail';
 
 function App() {
   return (
@@ -97,10 +101,14 @@ function App() {
             <Route index element={<Navigate to="storage/receive" replace/>}/>
             <Route path='storage'>
               <Route path='receive' element={<ReceiveMsg/>}/>
+              <Route path='receive/detail/:msgCode' element={<RevDetail/>}/>
               <Route path='send' element={<SendMsg/>}/>
+              <Route path='send/detail/:msgCode' element={<SendDetail/>}/>
               <Route path='temp' element={<TempMsg/>}/>
               <Route path='important' element={<ImpMsg/>}/>
+              <Route path='imp/detail/:msgCode' element={<ImpDetail/>}/>
               <Route path='work' element={<WorkMsg/>}/>
+              <Route path='work/detail/:msgCode' element={<WorkDetail/>}/>
               <Route path='bin' element={<Bin/>}/>
             </Route>
           </Route>

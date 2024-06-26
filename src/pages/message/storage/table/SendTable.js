@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callSendMsgListAPI } from "../../../../apis/MessageAPICalls";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function SendTable({ selectMsgCode, setSelectMsgCode, search }) {
 
@@ -10,13 +11,19 @@ function SendTable({ selectMsgCode, setSelectMsgCode, search }) {
     const messages = useSelector(state => state.messageReducer.messages.message);
     const [sort, setSort] = useState("");   // 쪽지 정렬 상태
 
-     /* 쪽지 배열 정렬 */
-     const sortMsg = (messages, sort) => {
+    /* 쪽지 배열 정렬 */
+    const sortMsg = (messages, sort) => {
     
+        if(!messages) {
+            return [];
+        }
+
         if(sort === "asc") {
             return messages.slice().sort((a, b) => new Date(a.sendDate) - new Date(b.sendDate));
-        } else {
+        } else if(sort === "desc") {
             return messages.slice().sort((a, b) => new Date(b.sendDate) - new Date(a.sendDate));
+        } else {
+            return messages;
         }
     };
 
@@ -90,7 +97,7 @@ function SendTable({ selectMsgCode, setSelectMsgCode, search }) {
                         <tr>
                             <th scope="col"><input type="checkbox" value="checkAll" checked={allCheck} onChange={allCheckChange} /></th>
                             <th scope="col">작성일</th>
-                            <th scope="col">보낸사람</th>
+                            <th scope="col">받은사람</th>
                             <th scope="col">제목</th>
                             <th scope="col">긴급</th>
                             <th scope="col">첨부파일</th>
@@ -102,7 +109,9 @@ function SendTable({ selectMsgCode, setSelectMsgCode, search }) {
                                 <td><input type="checkbox" onChange={() => checkboxChange(msg.msgCode)} checked={selectMsgCode.includes(msg.msgCode)}/></td>
                                 <td>{msg.sendDate}</td>
                                 <td>{msg.revName} {msg.revPosition}</td>
-                                <td className="hp_alighL">{msg.msgTitle}</td>
+                                <td className="hp_alighL">
+                                    <Link to={`/message/storage/send/detail/${msg.msgCode}`}>{msg.msgTitle}</Link>
+                                </td>
                                 <td>{msg.emerStatus}</td>
                                 <td>{msg.storCode}</td>
                             </tr>
@@ -120,6 +129,7 @@ function SendTable({ selectMsgCode, setSelectMsgCode, search }) {
                 <select value={sort} onChange={sortChangeHandler}>
                     <option value="">정렬방식</option>
                     <option value="asc">날짜 오름차순</option>
+                    <option value="desc">날짜 내림차순</option>
                 </select>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import { delMsg, getBinMsg, getImpMsg, getRevMsg, getSendMsg, getWorkMsg } from "../modules/MessageModules";
+import { delMsg, getBinMsg, getImpMsg, getRevDetail, getRevMsg, getSendMsg, getWorkMsg } from "../modules/MessageModules";
 import { request } from "./api";
 
 export const callRevMsgListAPI = () => {
@@ -137,6 +137,52 @@ export const callDelMsgAPI = (msgCode) => {
             }
         } catch (error) {
             console.log("del error : ", error);
+        }
+    };
+};
+
+export const callRevDetailAPI = (msgCode) => {
+
+    return async (dispatch, getState) => {
+
+        try {
+            const result = await request('GET', `/emp/message/receive/${msgCode}`, {
+                'Authorization': `Bearer ${localStorage.getItem('access-token')}`,
+                'Content-Type': 'application/json'
+            });
+
+            console.log('call API result : ', result);
+
+            if (result && result.status === 200) {
+                dispatch(getRevDetail(result.data));
+            } else {
+                console.log("error : " ,result);
+            }
+        } catch(error) {
+            console.log("error :: ", error);
+        }
+    };
+};
+
+export const callSendDetailAPI = (msgCode) => {
+
+    return async (dispatch, getState) => {
+
+        try {
+            const result = await request('GET', `/emp/message/send/${msgCode}`, {
+                'Authorization': `Bearer ${localStorage.getItem('access-token')}`,
+                'Content-Type': 'application/json'
+            });
+
+            console.log('call API result : ', result);
+
+            if (result && result.status === 200) {
+                dispatch(getRevDetail(result.data));
+            } else {
+                console.log("error : " ,result);
+            }
+        } catch (error) {
+            console.log("error :: ", error);
         }
     };
 };

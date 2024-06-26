@@ -12,7 +12,7 @@ const initialState = {
 const GET_DEPT_EMPLOYEES = 'employee/GET_DEPT_EMPLOYEES';
 const GET_MY_INFO = 'employee/GET_MY_INFO';
 const GET_RECORDCARD = 'employee/GET_RECORDCARD';
-const GET_DEPARTMENS = 'employee/GET_DEPARTMENS'
+const GET_DEPARTMENTS = 'employee/GET_DEPARTMENTS'
 
 /* 액션 함수 */
 export const { employee : { getDeptEmployees, getMyInfo, getRecordcard, getDepartments } } = createActions ({
@@ -35,7 +35,7 @@ export const { employee : { getDeptEmployees, getMyInfo, getRecordcard, getDepar
 
         return {recordCard: result};
     },
-    [GET_DEPARTMENS] : result => {
+    [GET_DEPARTMENTS] : result => {
 
         console.log('Action payload:', result);
 
@@ -76,7 +76,7 @@ const employeeReducer = handleActions({
             recordCard: payload.recordCard,
         };
     },
-    [GET_DEPARTMENS] : ( state, { payload }) => {
+    [GET_DEPARTMENTS] : ( state, { payload }) => {
 
         console.log('Reducer GET_DEPARTMENS payload:', payload);
 

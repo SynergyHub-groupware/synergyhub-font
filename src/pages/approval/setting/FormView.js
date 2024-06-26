@@ -1,6 +1,15 @@
 import FormLine from "./FormLine";
+import {CKEditor} from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import {useState} from "react";
 
 function FormView(){
+
+    const [editorData, setEditorData] = useState('');
+    const handleChange = (event, editor) => {
+        const data = editor.getData();
+        setEditorData(data);    // 입력받은 내용 에디터에 넣음
+    };
 
     return (
         <div className="ly_cont">
@@ -25,7 +34,7 @@ function FormView(){
                     </tbody>
                 </table>
                 <h5 className="hp_fw700 hp_fs18 hp_mb10 hp_mt30">결재내용</h5>
-                <div></div>
+                <CKEditor editor={ClassicEditor} onChange={handleChange} />
             </section>
             <div className="hp_mt10 hp_alignR">
                 <button type="button" className="el_btnS el_btnblueBack">저장</button>

@@ -22,6 +22,13 @@ export const callFormLineAPI = ({lsCode = null}) => {      // 결재라인 특�
     }
 }
 
+export const callAllLineAPI = () => {      // 모든 결재라인 조회
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/allLine`);
+        if(result && result.status === 200) dispatch(getLines(result));
+    }
+}
+
 export const callLineEmpListAPI = ({deptCode, titleCode, lsCode}) => {      // 결재라인 회원 조회(본인 기준)
     return async (dispatch, getState) => {
         const result = await request('GET', `/approval/formLineEmp?deptCode=${deptCode}&titleCode=${titleCode}&lsCode=${lsCode}`);

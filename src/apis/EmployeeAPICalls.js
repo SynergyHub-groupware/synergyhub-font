@@ -86,7 +86,7 @@ export const callDepartmentsAPI = () => {
     return async (dispatch, getState) => {
 
         try {
-            const result = await request('GET', '/employee/departments');
+            const result = await request('GET', '/employee/departments',);
 
             console.log('callDepartmentsAPI result: ', result);
 

@@ -1,19 +1,25 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
-import {callFormLineAPI, callviewLineListAPI} from "../../../apis/ApprovalAPICalls";
-import line from "../Line";
+import {callAllLineAPI} from "../../../apis/ApprovalAPICalls";
+import {callDepartmentsAPI} from "../../../apis/EmployeeAPICalls";
 
 function FormLine(){
     const dispatch = useDispatch();
-    const { lines } = useSelector(state => ({
+    const { lines, departments } = useSelector(state => ({
         lines: state.approvalReducer.lines,
+        departments: state.employeeReducer.departments,
     }));
 
     useEffect(() => {
-        dispatch(callFormLineAPI({}));
+        dispatch(callAllLineAPI());
+    }, [dispatch]);
+
+    useEffect(() => {
+        dispatch(callDepartmentsAPI());
     }, [dispatch]);
 
     console.log("lines", lines);
+    console.log("departments", departments);
 
     return (
         <>

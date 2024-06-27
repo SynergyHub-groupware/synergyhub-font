@@ -175,3 +175,37 @@ export const callreturnDocumentAPI = ({empCode, adCode, talReason}) => {
         }
     }
 }
+
+export const callregistFormAPI = (newForm) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await request('POST', `/approval/registForm`,
+                {'Content-Type': 'application/json'},
+                newForm,
+            );
+        } catch (error) {
+            console.error('요청 실패:', error);
+            throw error; // 실패한 경우 예외 처리
+        }
+    }
+}
+
+export const calldeleteFormAPI = (afCode) => {
+    return async (dispatch, getState) => {
+        await request('DELETE', `/approval/deleteForm?afCode=${afCode}`);
+    }
+}
+
+export const callmodifyFormAPI = ({afCode, newForm}) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await request('POST', `/approval/modifyForm?afCode=${afCode}`,
+                {'Content-Type': 'application/json'},
+                newForm,
+            );
+        } catch (error) {
+            console.error('요청 실패:', error);
+            throw error; // 실패한 경우 예외 처리
+        }
+    }
+}

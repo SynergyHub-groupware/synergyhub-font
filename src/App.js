@@ -46,6 +46,7 @@ import ViewMain from './pages/approval/view/ViewMain';
 import ImpMsg from './pages/message/storage/ImpMsg';
 import WorkMsg from './pages/message/storage/WorkMsg';
 import Bin from './pages/message/storage/Bin';
+import PostReadyList from './pages/post/PostReadyList';
 
 function App() {
   return (
@@ -112,6 +113,8 @@ function App() {
           <Route path="PostCreateView" element={<PostCreateView/>} />
           <Route path='BoradCreateView' element={<BoradCreateView/>}/>
           <Route path='PostEditView/:postCode' element={<PostEditView/>}/>
+          <Route path='PostReadyList/:empcode' element={<PostReadyList/>}/>
+          <Route path='BoradCreateView' element={<BoradCreateView/>}/>
           </Route>
         </Route>
       </Routes>

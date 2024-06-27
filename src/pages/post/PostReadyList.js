@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { callGETReadyPost } from './postApi/PostAPI';
+import { callDepartmentEmployeesAPI } from '../../apis/EmployeeAPICalls';
 
 function PostReadyList() {
   const dispatch = useDispatch();
@@ -9,21 +10,23 @@ function PostReadyList() {
 
   const [postsearch, setpostSearch] = useState('');
   const [displayData, setDisplayData] = useState([]);
-
-  const [currentPage, setCurrentPage] = useState(0);
-  const pageSize = 10; // 페이지당 데이터 개수
-
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
-};
-
-const prevPage = () => {
-    setCurrentPage(currentPage - 1);
-};
-
+  const [empCode,setEmpCode]=useState('')
 
   useEffect(() => {
-    dispatch(callGETReadyPost()); // 첫 번째 페이지, 페이지당 10개의 데이터 요청
+    dispatch(callDepartmentEmployeesAPI());
+}, [dispatch]);
+const employees = useSelector(state => state.employeeReducer.employees?.employees || []);
+
+useEffect(() => {
+    setEmpCode(employees.map(employee => (
+      {
+        emp_code: employee.emp_code,
+      }
+    )));
+  }, [employees]);
+  
+  useEffect(() => {
+    dispatch(callGETReadyPost(empCode.emp_code)); // 첫 번째 페이지, 페이지당 10개의 데이터 요청
   }, [dispatch]);
 
   useEffect(() => {
@@ -42,6 +45,8 @@ const prevPage = () => {
     if (!Array.isArray(displayData) || displayData.length === 0) {
       return <tr><td colSpan="6">로딩 중...</td></tr>;
     }
+
+
 
     return displayData.map(item => {
       const lowBoardCode = item.lowBoardCode ? item.lowBoardCode.lowBoardCode : 'N/A';

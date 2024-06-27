@@ -52,8 +52,8 @@ function MyAttendance() {
                             <div className="ly_spaceBetween ly_fitemC hp_mt5">
                                 <div className="hp_fw700 hp_fs28"><TimeComponent/></div>
                                 <ul className="hp_alignR">
-                                    <li className=""><b className="hp_fw700 hp_mr15">출근 시간</b> {attendancesToday.startTime}</li>
-                                    <li className=""><b className="hp_fw700 hp_mr15">퇴근 시간</b> {attendancesToday.endTime}</li>
+                                    <li className=""><b className="hp_fw700 hp_mr5">출근 시간</b> {attendancesToday?.startTime || '-'} </li>
+                                    <li className=""><b className="hp_fw700 hp_mr5">퇴근 시간</b> {attendancesToday?.endTime || '-'}</li>
                                 </ul>
                             </div>
                             <AttendanceButton />
@@ -63,8 +63,8 @@ function MyAttendance() {
                             <div className="ly_spaceBetween ly_fitemC hp_mt5">
                                 <div className="hp_fw700 hp_fs28">{employee.dept_title}</div>
                                 <ul className="hp_alignR">
-                                    <li className=""><b className="hp_fw700 hp_mr15">출근 가능 시간</b> 00:00:00</li>
-                                    <li className=""><b className="hp_fw700 hp_mr15">퇴근 가능 시간</b> 00:00:00</li>
+                                    <li className=""><b className="hp_fw700 hp_mr5">출근 가능 시간</b> 00:00:00</li>
+                                    <li className=""><b className="hp_fw700 hp_mr5">퇴근 가능 시간</b> 00:00:00</li>
                                 </ul>
                             </div>
                             <button type="button" className="el_btn8Back el_btnF hp_mt20 hp_fs16">변경하기</button>

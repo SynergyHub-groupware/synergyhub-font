@@ -1,12 +1,11 @@
 import { Outlet } from "react-router-dom";
 import AttendanceNav from "../../components/commons/AttendanceNav";
 
-function EmployeeLayout(){
+function Preferences(){
     return(
         <>
-            <AttendanceNav/>
-            <Outlet/>
+            환경설정 페이지
         </>
     )
 }
-export default EmployeeLayout;
+export default Preferences;

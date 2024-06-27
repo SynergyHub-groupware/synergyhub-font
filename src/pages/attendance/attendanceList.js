@@ -1,12 +1,11 @@
 import { Outlet } from "react-router-dom";
 import AttendanceNav from "../../components/commons/AttendanceNav";
 
-function EmployeeLayout(){
+function MyAttendance(){
     return(
         <>
-            <AttendanceNav/>
-            <Outlet/>
+            상세 근태 페이지
         </>
     )
 }
-export default EmployeeLayout;
+export default MyAttendance;

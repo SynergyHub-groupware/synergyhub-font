@@ -53,7 +53,7 @@ function Form(){
                     <tbody>
                     {formCategories.map((category, catIndex) => (
                         category.data.map((form, formIndex) => (
-                            <tr key={form.afCode}>
+                            <tr key={`${category.category}-${formIndex}`}>
                                 {formIndex === 0 && (
                                     <th scope="row" rowSpan={category.data.length}>{category.category}</th>
                                 )}
@@ -63,8 +63,12 @@ function Form(){
                                 <td className="hp_alignC">
                                     {form.afCode > 12 ? (
                                         <>
-                                            <button type="button" className="el_btnS el_btnblueBord hp_ml5" onClick={() => navigate(`/approval/setting/formView/${form.afCode}`)}>수정</button>
-                                            <button type="button" className="el_btnS el_btn8Bord hp_ml5" onClick={() => handleCancelForm(form.afCode)}>삭제</button>
+                                            <button type="button" className="el_btnS el_btnblueBord hp_ml5"
+                                                    onClick={() => navigate(`/approval/setting/formView/${form.afCode}`)}>수정
+                                            </button>
+                                            <button type="button" className="el_btnS el_btn8Bord hp_ml5"
+                                                    onClick={() => handleCancelForm(form.afCode)}>삭제
+                                            </button>
                                         </>
                                     ) : ""}
                                 </td>

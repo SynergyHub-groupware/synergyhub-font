@@ -209,3 +209,45 @@ export const callmodifyFormAPI = ({afCode, newForm}) => {
         }
     }
 }
+
+export const callregistBoxAPI = (newBox) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await request('POST', `/approval/registBox`,
+                {'Content-Type': 'application/json'},
+                newBox,
+            );
+        } catch (error) {
+            console.error('요청 실패:', error);
+            throw error; // 실패한 경우 예외 처리
+        }
+    }
+}
+
+export const callboxListAPI = (empCode) => {
+    return async (dispatch, getState) => {
+        console.log("empCode", empCode);
+        const result = await request('GET', `/approval/boxList?empCode=${empCode}`);
+        if(result && result.status === 200) dispatch(getForms(result));
+    }
+}
+
+export const calldeleteBoxAPI = (abCode) => {
+    return async (dispatch, getState) => {
+        await request('DELETE', `/approval/deleteBox?abCode=${abCode}`);
+    }
+}
+
+export const callmodifyBoxAPI = ({abCode, modifyname}) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await request('PATCH', `/approval/modifybox?abCode=${abCode}`,
+                {'Content-Type': 'application/json'},
+                modifyname,
+            );
+        } catch (error) {
+            console.error('요청 실패:', error);
+            throw error; // 실패한 경우 예외 처리
+        }
+    }
+}

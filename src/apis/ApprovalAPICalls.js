@@ -70,3 +70,55 @@ export const callsendDocListAPI = ({currentPage = 1, empCode, status}) => {
         if(result && result.status === 200) dispatch(getDocuments(result));
     }
 }
+
+export const callviewLineListAPI = (adCode) => {
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/viewLine?adCode=${adCode}`);
+        if(result && result.status === 200) dispatch(getLines(result));
+    }
+}
+
+export const callviewDetailAPI = (adDetail) => {
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/viewDetail?adDetail=${adDetail}`);
+        if(result && result.status === 200) dispatch(getContent(result));
+    }
+}
+
+export const callviewAttachAPI = (adCode) => {
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/viewAttach?adCode=${adCode}`);
+        if(result && result.status === 200) dispatch(getDocuments(result));
+    }
+}
+
+export const calldownloadAttachAPI = (attachOriginal, attachSave) => {
+    const encodedAttachOriginal = encodeURIComponent(attachOriginal);
+    const encodedAttachSave = encodeURIComponent(attachSave);
+
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/downloadAttach?attachOriginal=${encodedAttachOriginal}&attachSave=${encodedAttachSave}`, null, null, 'blob');
+
+        if (result) {
+            const url = window.URL.createObjectURL(new Blob([result.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', attachOriginal); // set the file name
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        }
+    }
+}
+
+export const calldeleteDocumentAPI = (adCode) => {
+    return async (dispatch, getState) => {
+        await request('DELETE', `/approval/document/delete?adCode=${adCode}`);
+    }
+}
+
+export const callmodifyStatusAPI = (adCode) => {
+    return async (dispatch, getState) => {
+        await request ('PATCH', `/approval/modifyStatus?adCode=${adCode}`);
+    }
+}

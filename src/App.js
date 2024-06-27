@@ -38,6 +38,7 @@ import DeptManagerMent from './pages/employee/DeptManagerMent';
 import MyInfo from './pages/myInfo/MyInfo';
 import MyInfoLayout from './pages/myInfo/MyInfoLayout';
 import MyPersonalRecordCard from './pages/myInfo/MyPersonalRecordCard';
+import PostEditView from './pages/post/PostEditView'
 
 
 function App() {
@@ -94,6 +95,7 @@ function App() {
           <Route path='PostDetail/:postCode'element={<PostDetailView/>}/>
           <Route path="PostCreateView" element={<PostCreateView/>} />
           <Route path='BoradCreateView' element={<BoradCreateView/>}/>
+          <Route path='PostEditView/:postCode' element={<PostEditView/>}/>
           </Route>
         </Route>
       </Routes>

@@ -1,4 +1,5 @@
 import { handleActions, createActions } from "redux-actions";
+import PostReadyList from "../PostReadyList";
 
 const initialState = {
   Postdata: [],
@@ -12,7 +13,8 @@ const initialState = {
   CommentState:[],
   AllLowState:[],
   PostSearch:[],
-  PostEditState:[]
+  PostEditState:[],
+  PostReadyState:[]
 };
 
 const GET_POSTLIST = 'post/GET_POSTLIST';
@@ -27,9 +29,10 @@ const GET_COMMENT='post/GET_COMMENT'
 const GET_ALLLOW='post/GET_ALLLOW'
 const GET_POSTSEARCH='post/GET_POSTSEARCH'
 const GET_POSTEDIT='post/GET_POSTEDIT'
+const GET_POSTREADY='post/GET_POSTREADY'
 
 // 액션 생성자 함수 생성
-export const { post: { getPostedit,getPostsearch,getAlllow,getComment,getFile,getPostlist, getAllboard, getAlllowboard,getSortlist,getPostdatainboard,getPostdatainboardpin,getDetail } } = createActions({
+export const { post: { getReadypost,getPostedit,getPostsearch,getAlllow,getComment,getFile,getPostlist, getAllboard, getAlllowboard,getSortlist,getPostdatainboard,getPostdatainboardpin,getDetail } } = createActions({
   [GET_POSTLIST]: postlist => ({ postlist }),
   [GET_ALLBOARD]: boardlist => ({ boardlist }),
   [GET_ALLLOWBOARD]: lowboardlist => ({ lowboardlist }),
@@ -41,7 +44,8 @@ export const { post: { getPostedit,getPostsearch,getAlllow,getComment,getFile,ge
   [GET_COMMENT]:commentlist=>({commentlist}),
   [GET_ALLLOW]:alllowlist=>({alllowlist}),
   [GET_POSTSEARCH]:postsearchlist=>({postsearchlist}),
-  [GET_POSTEDIT]:posteditdata=>({posteditdata})
+  [GET_POSTEDIT]:posteditdata=>({posteditdata}),
+  [GET_POSTREADY]:postreadydata=>({postreadydata})
 });
 
 // 확인용 로그
@@ -101,6 +105,10 @@ const postReducer = handleActions(
     [GET_POSTEDIT]:(state,{payload})=>({
       ...state,
       PostEditState:payload.posteditdata
+    }),
+    [GET_POSTREADY]:(state,{payload})=>({
+      ...state,
+      PostReadyState:payload.postreadydata
     })
 
   },

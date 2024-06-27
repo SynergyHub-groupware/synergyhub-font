@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getPostedit,getPostsearch,getAlllow,getComment,getPostlist, getAlllowboard,getSortlist,getPostdatainboard,getPostdatainboardpin,getDetail,getFile } from '../module/PostReducer';
+import { getReadypost,getPostedit,getPostsearch,getAlllow,getComment,getPostlist, getAlllowboard,getSortlist,getPostdatainboard,getPostdatainboardpin,getDetail,getFile } from '../module/PostReducer';
 import {getAllboard}  from '../module/PostReducer';
 
 const DOMAIN = 'http://localhost:8080'

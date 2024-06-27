@@ -5,9 +5,9 @@ import {callboxListAPI,calldeleteBoxAPI,callmodifyBoxAPI,callregistBoxAPI} from 
 
 function Storage() {
     const dispatch = useDispatch();
-    const { employee, forms } = useSelector(state => ({
+    const { employee, boxes } = useSelector(state => ({
         employee: state.employeeReducer.employee,
-        forms: state.approvalReducer.forms,
+        boxes: state.approvalReducer.boxes,
     }));
 
     // 내정보 조회
@@ -23,11 +23,11 @@ function Storage() {
     const [inputFields, setInputFields] = useState([]);
 
     useEffect(() => {
-        setInputFields(forms.map(form => {
+        setInputFields(boxes.map(form => {
             if (!form.abCode) return null;
             return { ...form };
         }).filter(Boolean)); // Filter out null values, if any
-    }, [forms]);
+    }, [boxes]);
 
     const handleInputChange = (index, event) => {
         const { name, value } = event.target;
@@ -97,7 +97,7 @@ function Storage() {
                                 <input type="text" className="hp_w100" name="abName" value={form.abName} placeholder="보관함 이름을 입력하세요" onChange={e => handleInputChange(index, e)} />
                             </td>
                             <td>
-                                {index < forms.length ? (
+                                {index < boxes.length ? (
                                     <>
                                         <button type="button" className="el_btnS el_btnblueBord hp_ml5" onClick={() => handleModify(form.abCode)}>수정</button>
                                         <button type="button" className="el_btnS el_btn8Bord hp_ml5" onClick={() => handleDelete(form.abCode)}>삭제</button>

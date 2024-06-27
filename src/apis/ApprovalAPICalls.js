@@ -1,4 +1,13 @@
-import {getContent, getDocuments, getForms, getLineemps, getLines, getSuccess, getViewlines} from "../modules/ApprovalModules";
+import {
+    getBoxes,
+    getContent,
+    getDocuments,
+    getForms,
+    getLineemps,
+    getLines,
+    getSuccess,
+    getViewlines
+} from "../modules/ApprovalModules";
 import { request } from "./api";
 
 export const callFormListAPI = () => {              // 결재양식리스트 조회
@@ -228,7 +237,7 @@ export const callboxListAPI = (empCode) => {
     return async (dispatch, getState) => {
         console.log("empCode", empCode);
         const result = await request('GET', `/approval/boxList?empCode=${empCode}`);
-        if(result && result.status === 200) dispatch(getForms(result));
+        if(result && result.status === 200) dispatch(getBoxes(result));
     }
 }
 

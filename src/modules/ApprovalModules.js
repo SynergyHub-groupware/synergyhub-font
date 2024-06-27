@@ -8,6 +8,7 @@ const initialState = {
     content: null,
     documents: [],
     viewlines: [],
+    boxes: [],
 };
 
 const GET_FORMS = 'approval/GET_FORMS';
@@ -19,17 +20,19 @@ const GET_CONTENT = 'approval/GET_CONTENT';
 const RESET_CONTENT = 'approval/RESET_CONTENT';
 const GET_DOCUMENTS = 'approval/GET_DOCUMENTS';
 const GET_VIEWLINES = 'approval/GET_VIEWLINES';
+const GET_BOXES = 'approval/GET_BOXES';
 
-export const {approval: {getForms, getLines, getLineemps, getSuccess, resetSuccess, getContent, getDocuments, getViewlines, resetContent}} = createActions({
+export const {approval: {getForms, getLines, getLineemps, getSuccess, resetSuccess, getContent, getDocuments, getViewlines, resetContent, getBoxes}} = createActions({
     [GET_FORMS]: result => ({ forms: result.data }),
     [GET_LINES]: result => ({ lines: result.data }),
     [GET_LINEEMPS]: result => ({ lineemps: result.data }),
     [GET_SUCCESS]: result => ({ success: result }),
-    [RESET_SUCCESS]: () => ({ success: null }),
+    [RESET_SUCCESS]: () => ({success: null}),
     [GET_CONTENT]: result => ({content: result.data}),
-    [RESET_CONTENT]: () => ({ content: null }),
+    [RESET_CONTENT]: () => ({content: null}),
     [GET_DOCUMENTS]: result => ({documents: result.data}),
     [GET_VIEWLINES]: result => ({viewlines: result.data}),
+    [GET_BOXES]: result => ({boxes: result.data}),
 });
 
 const approvalReducer = handleActions({
@@ -42,6 +45,7 @@ const approvalReducer = handleActions({
     [RESET_CONTENT]: (state, action) => ({...state, content: null}),
     [GET_DOCUMENTS]: (state, {payload}) => ({...state, documents: payload.documents}),
     [GET_VIEWLINES]: (state, {payload}) => ({...state, viewlines: payload.viewlines}),
+    [GET_BOXES]: (state, {payload}) => ({...state, boxes: payload.boxes}),
 }, initialState);
 
 export default approvalReducer;

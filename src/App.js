@@ -45,6 +45,11 @@ import ViewMain from './pages/approval/view/ViewMain';
 import ImpMsg from './pages/message/storage/ImpMsg';
 import WorkMsg from './pages/message/storage/WorkMsg';
 import Bin from './pages/message/storage/Bin';
+import MyAttendance from "./pages/attendance/MyAttendance";
+import AttendanceList from "./pages/attendance/attendanceList";
+import MyDayOff from "./pages/attendance/MyDayOff";
+import DayOffList from "./pages/attendance/DayOffList";
+import Preferences from "./pages/attendance/Preferences";
 
 function App() {
   return (
@@ -72,7 +77,11 @@ function App() {
             </Route>
           </Route>
           <Route path="attendance" element={<AttendanceLayout/>}>
-            {/* 내용추가 */}
+            <Route path="myAttendance" element={<MyAttendance/>} />
+            <Route path="attendanceList" element={<AttendanceList/>} />
+            <Route path="myDayOff" element={<MyDayOff/>} />
+            <Route path="dayOffList" element={<DayOffList/>} />
+            <Route path="preferences" element={<Preferences/>} />
           </Route>
           <Route path="calendar" element={<CalendarLayout/>}>
             <Route path="myCalendar" element={<MyCalendar/>} />

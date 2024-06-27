@@ -5,6 +5,7 @@ import loginReducer from "./LoginModules";
 import messageReducer from "./MessageModules";
 import calendarReducer from "./CalendarModules";
 import employeeReducer from './EmployeeModules';
+import attendanceReducer from "./AttendanceModules";
 
 const rootReducer = combineReducers({
     post:postReducer,
@@ -12,8 +13,8 @@ const rootReducer = combineReducers({
     loginReducer,
     messageReducer,
     calendarReducer,
-    employeeReducer
-
+    employeeReducer,
+    attendanceReducer
 });
 
 export default rootReducer;

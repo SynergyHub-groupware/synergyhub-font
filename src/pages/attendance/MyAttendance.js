@@ -5,17 +5,20 @@ import TodayDateComponent from './util/TodayDateComponent';
 import '../../css/timeAndAttendance.css';
 import MonthWeekComponent from './util/MonthWeekComponent';
 import TodayDate2Component from './util/TodayDate2Component';
-import { callMyAttendanceForWeekAPI, callMyInfoAPI } from '../../apis/AttendancelAPICalls';
+import {callAttendanceTodayAPI, callMyAttendanceForWeekAPI, callMyInfoAPI} from '../../apis/AttendancelAPICalls'; // 출퇴근 시간 등록 API import 추가
 import WeekAttendance from './table/WeekAttendance';
+import AttendanceButton from "./button/AttendanceButton";
 
 function MyAttendance() {
     const dispatch = useDispatch();
     const employee = useSelector((state) => state.attendanceReducer.employee);
     const attendances = useSelector((state) => state.attendanceReducer.attendances);
+    const attendancesToday = useSelector((state) => state.attendanceReducer.attendanceToday);
 
     useEffect(() => {
         dispatch(callMyInfoAPI());
         dispatch(callMyAttendanceForWeekAPI());
+        dispatch(callAttendanceTodayAPI());
     }, [dispatch]);
 
     const [isOpenFirst, setIsOpenFirst] = useState(true);
@@ -49,11 +52,11 @@ function MyAttendance() {
                             <div className="ly_spaceBetween ly_fitemC hp_mt5">
                                 <div className="hp_fw700 hp_fs28"><TimeComponent/></div>
                                 <ul className="hp_alignR">
-                                    <li className=""><b className="hp_fw700 hp_mr15">출근 시간</b> 00:00:00</li>
-                                    <li className=""><b className="hp_fw700 hp_mr15">퇴근 시간</b> 00:00:00</li>
+                                    <li className=""><b className="hp_fw700 hp_mr15">출근 시간</b> {attendancesToday.startTime}</li>
+                                    <li className=""><b className="hp_fw700 hp_mr15">퇴근 시간</b> {attendancesToday.endTime}</li>
                                 </ul>
                             </div>
-                            <button type="button" className="el_btn0Back el_btnF hp_mt20 hp_fs16">출근하기</button>
+                            <AttendanceButton />
                         </section>
                         <section className="bl_sect hp_padding30 el_shadowD4 hp_mb30 section1">
                             <div className="hp_fw700">지정 근무시간</div>

@@ -25,6 +25,7 @@ function Bin() {
                 </div>
             </section>
         </div>
+        // 커밋용
     );
 }
 

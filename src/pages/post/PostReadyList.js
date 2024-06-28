@@ -1,30 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { callGETPostList, callGETpostSearch } from './postApi/PostAPI';
+import { callGETReadyPost } from './postApi/PostAPI';
+import { callDepartmentEmployeesAPI } from '../../apis/EmployeeAPICalls';
 
-function PostListView() {
+function PostReadyList() {
   const dispatch = useDispatch();
   const postState = useSelector(state => state.post);
   const { Postdata, PostSearch } = postState;
 
   const [postsearch, setpostSearch] = useState('');
   const [displayData, setDisplayData] = useState([]);
-
-  const [currentPage, setCurrentPage] = useState(0);
-  const pageSize = 10; // 페이지당 데이터 개수
-
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
-};
-
-const prevPage = () => {
-    setCurrentPage(currentPage - 1);
-};
-
+  const [empCode,setEmpCode]=useState('')
 
   useEffect(() => {
-    dispatch(callGETPostList(currentPage,pageSize)); // 첫 번째 페이지, 페이지당 10개의 데이터 요청
-  }, [dispatch, currentPage, pageSize]);
+    dispatch(callDepartmentEmployeesAPI());
+}, [dispatch]);
+const employees = useSelector(state => state.employeeReducer.employees?.employees || []);
+
+useEffect(() => {
+    setEmpCode(employees.map(employee => (
+      {
+        emp_code: employee.emp_code,
+      }
+    )));
+  }, [employees]);
+  
+  useEffect(() => {
+    dispatch(callGETReadyPost(empCode.emp_code)); // 첫 번째 페이지, 페이지당 10개의 데이터 요청
+  }, [dispatch]);
 
   useEffect(() => {
     setDisplayData(Postdata);
@@ -43,6 +46,8 @@ const prevPage = () => {
       return <tr><td colSpan="6">로딩 중...</td></tr>;
     }
 
+
+
     return displayData.map(item => {
       const lowBoardCode = item.lowBoardCode ? item.lowBoardCode.lowBoardCode : 'N/A';
       const lowBoardName = item.lowBoardCode ? item.lowBoardCode.lowBoardName : 'N/A';
@@ -60,35 +65,12 @@ const prevPage = () => {
     });
   };
 
-  const onChangeHandler = (e) => {
-    setpostSearch(e.target.value);
-  };
-
-  const onSearchHandler = () => {
-    const search = postsearch;
-    const encodingsearch = encodeURIComponent(search);
-    dispatch(callGETpostSearch(encodingsearch));
-  };
 
   return (
     <>      
       <div className="main">
-        <h1 style={{ fontSize: '50px' }}>전체 게시판</h1>
+        <h1 style={{ fontSize: '50px' }}>임시 저장</h1>
         <br /><br /><br />
-        <div className="searchZone">
-          <input
-            type="text"
-            value={postsearch}
-            onChange={onChangeHandler}
-          />
-          <button
-            type="button"
-            className="button"
-            onClick={onSearchHandler}
-          >
-            검색
-          </button>
-        </div>
         <table className="bl_tb1">
           <thead>
             <tr className="tableHead">
@@ -104,14 +86,9 @@ const prevPage = () => {
             {renderRows()}
           </tbody>
         </table>
-        <div className="bl_paging" style={{ display: 'flex' }}>
-          <button onClick={prevPage} disabled={currentPage === 0} className="bl_paging__btn bl_paging__prev">  </button>
-          <span>{currentPage}</span>
-          <button onClick={nextPage} className="bl_paging__btn">  </button>
-        </div>
       </div>
     </>
   );
 }
 
-export default PostListView;
+export default PostReadyList;

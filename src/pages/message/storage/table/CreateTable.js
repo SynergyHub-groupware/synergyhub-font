@@ -46,6 +46,7 @@ function CreateTable() {
             return;
         }
 
+        /* JSON 형식으로 INSERT */
         const data = {
             msgTitle,
             msgCon,

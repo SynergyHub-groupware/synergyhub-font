@@ -6,6 +6,7 @@ const initialState = {
     employee: {},
     recordCard: {},
     departments: [],
+    titles: [],
     deptDetail: {},
     success: {},
     teamRecordCard: {},
@@ -17,6 +18,7 @@ const GET_DEPT_EMPLOYEES = 'employee/GET_DEPT_EMPLOYEES';   // 부서인원
 const GET_MY_INFO = 'employee/GET_MY_INFO';                 // 내정보 조회
 const GET_RECORDCARD = 'employee/GET_RECORDCARD';           // 나의 인사기록카드
 const GET_DEPARTMENTS = 'employee/GET_DEPARTMENTS';         // 부서 목록
+const GET_TITLES = 'employee/GET_TITLES';
 const GET_DEPT_DETAIL = 'employee/GET_DEPT_DETAIL';         // 부서 상세정보
 const SUCCESS = 'employee/SUCCESS';                         // 등록, 수정, 삭제
 const GET_TEAM_RECORDCARD = 'employee/GET_TEAM_RECORDCARD'; // 팀원 인사기록카드
@@ -24,7 +26,7 @@ const REGIST_EMPLOYEES = 'employee/REGIST_EMPLOYEES';
 
 
 /* 액션 함수 */
-export const { employee : { getDeptEmployees, getMyInfo, getRecordcard, getDepartments, getDeptDetail, success, getTeamRecordcard, registEmployees } } = createActions ({
+export const { employee : { getDeptEmployees, getMyInfo, getRecordcard, getDepartments, getTitles, getDeptDetail, success, getTeamRecordcard, registEmployees } } = createActions ({
     [GET_DEPT_EMPLOYEES] : result => {
 
         console.log('GET_DEPT_EMPLOYEES Action payload:', result);
@@ -50,6 +52,9 @@ export const { employee : { getDeptEmployees, getMyInfo, getRecordcard, getDepar
 
         return {departments: result};
 
+    },
+    [GET_TITLES] : result => {
+        return {titles: result};
     },
     [GET_DEPT_DETAIL] : result => {
 
@@ -118,6 +123,12 @@ const employeeReducer = handleActions({
         return {
             ...state,
             departments: payload.departments,
+        };
+    },
+    [GET_TITLES] : (state, {payload}) => {
+        return {
+            ...state,
+            titles: payload.titles,
         };
     },
     [GET_DEPT_DETAIL] : ( state, { payload }) => {

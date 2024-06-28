@@ -6,7 +6,7 @@
 
 .el_approvalTb3__th th{width:200px;}
 
-.el_approvalRole__select{background:none;border:none;text-align:center;padding:11px 10px;}
+.el_approvalRole__select{background:none;border:none;text-align:center;padding:10px;}
 
 /* 에디터 */
 .ck-content{height:500px;}
@@ -23,4 +23,10 @@
 .hp_lh34px{line-height:34px;}
 .hp_tr__click{cursor:pointer;}
 .hp_tr__click:hover{background:rgb(232, 240, 254);}
+.hp_tr__click td{word-break:break-all;}
 
+/* 결재내용 */
+.bl_tb3 td{word-break: initial;}
+
+/* 첨부파일 */
+.el_file__downBtn:hover{text-decoration:underline;}

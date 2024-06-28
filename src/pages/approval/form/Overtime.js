@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { calculateDuration } from "../../../apis/ApprovalHandler";
 
-function Overtime({handleDetail, formRefs}){
-    const [exception, setException] = useState({});
+function Overtime({handleDetail, formRefs, writtenCont = {}}){
+    const [exception, setException] = useState({
+        aattReason: '', aattSort: '', aattStart: '', aattEnd: '', aattPlace: '', aattCon: ''
+    });
 
     const onChangeHandler = (e) => {
         const { name, value } = e.target;
@@ -25,7 +27,7 @@ function Overtime({handleDetail, formRefs}){
 
             if (endDateTime < startDateTime) {
                 alert("종료일은 시작일보다 과거일 수 없습니다.");
-                setException(prev => ({ ...prev, aattEnd: '' }));                
+                setException(prev => ({ ...prev, aattEnd: '' }));
                 setDuration('');
             } else {
                 const durationText = calculateDuration(startDateTime, endDateTime);
@@ -36,49 +38,69 @@ function Overtime({handleDetail, formRefs}){
         }
     }, [exception.aattStart, exception.aattEnd]);
 
+    // writtenCont 값이 있을 경우
+    console.log("writtenCont", writtenCont);
+    
+    useEffect(()=>{
+        if(writtenCont !== null && Object.keys(writtenCont).length > 0){
+            const formattedStart = writtenCont.aattStart?.replace(' ', 'T');
+            const formattedEnd = writtenCont.aattEnd?.replace(' ', 'T');
+
+            setException(prev => ({
+                ...prev,
+                aattReason: writtenCont.aattReason,
+                aattSort: writtenCont.aattSort,
+                aattStart: formattedStart,
+                aattEnd: formattedEnd,
+                aattPlace: writtenCont.aattPlace,
+                aattCon: writtenCont.aattCon,
+            }));
+        }
+    },[writtenCont])
+
     return(
         <table className="bl_tb3 el_approvalTb3__th">
             <tbody>
-                <tr>
-                    <th scope="col">사유</th>
-                    <td><textarea rows="2" cols="20" wrap="hard" className="hp_w100" name="aattReason" onChange={onChangeHandler} required ref={(el) => (formRefs.current['aattReason'] = el)}></textarea></td>
-                </tr>
-                <tr>
-                    <th scope="col">구분</th>
-                    <td>
-                        <select className="hp_w120px" name="aattSort" onChange={onChangeHandler} required ref={(el) => (formRefs.current['aattSort'] = el)}>
-                            <option value=''>선택</option>
-                            <option value="연장근무">연장근무</option>
-                            <option value="휴일근무">휴일근무</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="col">시작일</th>
-                    <td>
-                        <input type="datetime-local" name="aattStart" value={exception.aattStart} required
-                                onChange={(e) => setException(prev => ({ ...prev, aattStart: e.target.value }))} ref={(el) => (formRefs.current['aattStart'] = el)} />
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="col">종료일</th>
-                    <td>
-                        <input type="datetime-local" name="aattEnd" value={exception.aattEnd} min={exception.aattStart} required
-                                onChange={(e) => setException(prev => ({ ...prev, aattEnd: e.target.value }))} ref={(el) => (formRefs.current['aattEnd'] = el)} />
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="col">기간</th>
-                    <td>{duration}</td>
-                </tr>
-                <tr>
-                    <th scope="col">근무지</th>
-                    <td><input type="text" className="hp_w100" name="aattPlace" onChange={onChangeHandler} required ref={(el) => (formRefs.current['aattPlace'] = el)}/></td>
-                </tr>
-                <tr>
-                    <th scope="col">업무내용</th>
-                    <td><textarea rows="2" cols="20" wrap="hard" className="hp_w100" name="aattCon" onChange={onChangeHandler} required ref={(el) => (formRefs.current['aattCon'] = el)}></textarea></td>
-                </tr>
+            <tr>
+                <th scope="col">사유</th>
+                <td><textarea rows="2" cols="20" wrap="hard" className="hp_w100" name="aattReason" value={exception.aattReason || (writtenCont ? writtenCont.aattReason : '')} onChange={onChangeHandler} required ref={(el) => (formRefs.current['aattReason'] = el)}></textarea></td>
+            </tr>
+            <tr>
+                <th scope="col">구분</th>
+                <td>
+                    <select className="hp_w120px" name="aattSort" value={exception.aattSort || (writtenCont ? writtenCont.aattSort : '')} onChange={onChangeHandler} required ref={(el) => (formRefs.current['aattSort'] = el)}>
+                        <option value=''>선택</option>
+                        <option value="연장근무">연장근무</option>
+                        <option value="휴일근무">휴일근무</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th scope="col">시작일</th>
+                <td>
+                    <input type="datetime-local" name="aattStart" value={exception.aattStart || (writtenCont ? writtenCont.aattStart : '')} required
+                           onChange={(e) => setException(prev => ({ ...prev, aattStart: e.target.value }))} ref={(el) => (formRefs.current['aattStart'] = el)} />
+                </td>
+            </tr>
+            <tr>
+                <th scope="col">종료일</th>
+                <td>
+                    <input type="datetime-local" name="aattEnd" value={exception.aattEnd || (writtenCont ? writtenCont.aattEnd : '')} min={exception.aattStart} required
+                           onChange={(e) => setException(prev => ({ ...prev, aattEnd: e.target.value }))} ref={(el) => (formRefs.current['aattEnd'] = el)} />
+                </td>
+            </tr>
+            <tr>
+                <th scope="col">기간</th>
+                <td>{duration}</td>
+            </tr>
+            <tr>
+                <th scope="col">근무지</th>
+                <td><input type="text" className="hp_w100" name="aattPlace" value={exception.aattPlace || (writtenCont ? writtenCont.aattPlace : '')} onChange={onChangeHandler} required ref={(el) => (formRefs.current['aattPlace'] = el)}/></td>
+            </tr>
+            <tr>
+                <th scope="col">업무내용</th>
+                <td><textarea rows="2" cols="20" wrap="hard" className="hp_w100" name="aattCon" value={exception.aattCon || (writtenCont ? writtenCont.aattCon : '')} onChange={onChangeHandler} required ref={(el) => (formRefs.current['aattCon'] = el)}></textarea></td>
+            </tr>
             </tbody>
         </table>
     )

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router";
 function Progress({data}){
     const navigate = useNavigate();
 
+    console.log("data", data);
+
     return(
         <section className="bl_sect hp_mt10">
             <table className="bl_tb1">
@@ -24,8 +26,8 @@ function Progress({data}){
                 </thead>
                 <tbody>
                     {data && data.length > 0 ? (
-                        data.map(document => 
-                            <tr onClick={() => navigate(`/approval/send/waiting/${document.adCode}`)} key={document.adCode} className="hp_tr__click">
+                        data.map((document, index) =>
+                            <tr key={index} onClick={() => navigate(`/approval/view/${document.adCode}`, {state: {document}})} key={document.adCode} className="hp_tr__click">
                                 <th scope="row" className="hp_lh34px">{document.adCode}</th>
                                 <td>{document.adReportDate}</td>
                                 <td>{document.afName}</td>

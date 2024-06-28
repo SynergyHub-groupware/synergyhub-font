@@ -94,7 +94,8 @@ const employeeReducer = handleActions({
     },
     [GET_MY_INFO] : (state, { payload }) => {
 
-        console.log('Reducer GET_MY_INFO payload', payload);
+        // 이다정: 주석처리
+        // console.log('Reducer GET_MY_INFO payload', payload);
 
         return {
             ...state,

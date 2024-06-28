@@ -1,4 +1,13 @@
-import {getContent, getDocuments, getForms, getLineemps, getLines, getSuccess} from "../modules/ApprovalModules";
+import {
+    getBoxes,
+    getContent,
+    getDocuments,
+    getForms,
+    getLineemps,
+    getLines,
+    getSuccess,
+    getViewlines
+} from "../modules/ApprovalModules";
 import { request } from "./api";
 
 export const callFormListAPI = () => {              // 결재양식리스트 조회
@@ -15,9 +24,16 @@ export const callFormContentAPI = (afCode) => {     // 결재양식기본내용 
     }
 }
 
-export const callFormLineAPI = ({lsCode}) => {      // 결재라인 특정 조회
+export const callFormLineAPI = ({lsCode = null}) => {      // 결재라인 특정 조회
     return async (dispatch, getState) => {
         const result = await request('GET', `/approval/formLine?lsCode=${lsCode}`);
+        if(result && result.status === 200) dispatch(getLines(result));
+    }
+}
+
+export const callAllLineAPI = () => {      // 모든 결재라인 조회
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/allLine`);
         if(result && result.status === 200) dispatch(getLines(result));
     }
 }
@@ -49,6 +65,8 @@ export const fetchImage = async (empCode) => {      // 결재서명 이미지 �
 export const callApprovalDocRegistAPI = ({formData, temporary}) => {        // 결재 등록
     return async (dispatch, getState) => {
         try {
+            console.log("formData", formData);
+
             const response = await request('POST', `/approval/regist?temporary=${temporary}`,
                 {"Content-Type": "multipart/form-data"},
                 formData
@@ -67,6 +85,204 @@ export const callApprovalDocRegistAPI = ({formData, temporary}) => {        // �
 export const callsendDocListAPI = ({currentPage = 1, empCode, status}) => {
     return async (dispatch, getState) => {
         const result = await request('GET', `/approval/send/document?page=${currentPage}&empCode=${empCode}&status=${status}`);
+        if(result && result.status === 200) {
+            const documentsWithMenu = result.data.map(doc => ({ ...doc, menu: 'send' }));
+            dispatch(getDocuments({ data: documentsWithMenu }));
+        }
+    }
+}
+
+export const callviewLineListAPI = (adCode) => {
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/viewLine?adCode=${adCode}`);
+        if(result && result.status === 200) dispatch(getViewlines(result));
+    }
+}
+
+export const callviewDetailAPI = (adDetail) => {
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/viewDetail?adDetail=${adDetail}`);
+        if(result && result.status === 200) dispatch(getContent(result));
+    }
+}
+
+export const callviewAttachAPI = (adCode) => {
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/viewAttach?adCode=${adCode}`);
         if(result && result.status === 200) dispatch(getDocuments(result));
     }
 }
+
+export const calldownloadAttachAPI = (attachOriginal, attachSave) => {
+    const encodedAttachOriginal = encodeURIComponent(attachOriginal);
+    const encodedAttachSave = encodeURIComponent(attachSave);
+
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/downloadAttach?attachOriginal=${encodedAttachOriginal}&attachSave=${encodedAttachSave}`, null, null, 'blob');
+
+        if (result) {
+            const url = window.URL.createObjectURL(new Blob([result.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', attachOriginal); // set the file name
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        }
+    }
+}
+
+export const calldeleteDocumentAPI = (adCode) => {
+    return async (dispatch, getState) => {
+        await request('DELETE', `/approval/document/delete?adCode=${adCode}`);
+    }
+}
+
+export const callmodifyStatusAPI = (adCode) => {
+    return async (dispatch, getState) => {
+        await request ('PATCH', `/approval/modifyStatus?adCode=${adCode}`);
+    }
+}
+export const uploadImage = async (empCode, formData) => {
+    try {
+        const response = await request('PATCH', `/approval/uploadImage?empCode=${empCode}`,
+                {'Content-Type': 'multipart/form-data'},
+                formData
+            );
+        return response.data; // 업로드된 이미지의 URL 반환
+    } catch (error) {
+        console.error('이미지 업로드 실패:', error);
+        throw error; // 실패한 경우 예외 처리
+    }
+};
+
+export const callreceiveDocListAPI = ({empCode, status}) => {
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/receive/document?empCode=${empCode}&status=${status}`);
+        // if(result && result.status === 200) dispatch(getDocuments(result));
+        if(result && result.status === 200) {
+            const documentsWithMenu = result.data.map(doc => ({ ...doc, menu: 'receive' }));
+            dispatch(getDocuments({ data: documentsWithMenu }));
+        }
+    }
+}
+
+export const callacceptDocumentAPI = ({empCode, status, adCode}) => {
+    return async (dispatch, getState) => {
+        await request ('PATCH', `/approval/accept?empCode=${empCode}&status=${status}&adCode=${adCode}`);
+    }
+}
+
+export const callreturnDocumentAPI = ({empCode, adCode, talReason}) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await request('PATCH', `/approval/return?empCode=${empCode}&adCode=${adCode}`, 
+                {'Content-Type': 'application/json'},
+                talReason,
+            );
+        } catch (error) {
+            console.error('요청 실패:', error);
+            throw error; // 실패한 경우 예외 처리
+        }
+    }
+}
+
+export const callregistFormAPI = (newForm) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await request('POST', `/approval/registForm`,
+                {'Content-Type': 'application/json'},
+                newForm,
+            );
+        } catch (error) {
+            console.error('요청 실패:', error);
+            throw error; // 실패한 경우 예외 처리
+        }
+    }
+}
+
+export const calldeleteFormAPI = (afCode) => {
+    return async (dispatch, getState) => {
+        await request('DELETE', `/approval/deleteForm?afCode=${afCode}`);
+    }
+}
+
+export const callmodifyFormAPI = ({afCode, newForm}) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await request('POST', `/approval/modifyForm?afCode=${afCode}`,
+                {'Content-Type': 'application/json'},
+                newForm,
+            );
+        } catch (error) {
+            console.error('요청 실패:', error);
+            throw error; // 실패한 경우 예외 처리
+        }
+    }
+}
+
+export const callregistBoxAPI = (newBox) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await request('POST', `/approval/registBox`,
+                {'Content-Type': 'application/json'},
+                newBox,
+            );
+        } catch (error) {
+            console.error('요청 실패:', error);
+            throw error; // 실패한 경우 예외 처리
+        }
+    }
+}
+
+export const callboxListAPI = (empCode) => {
+    return async (dispatch, getState) => {
+        console.log("empCode", empCode);
+        const result = await request('GET', `/approval/boxList?empCode=${empCode}`);
+        if(result && result.status === 200) dispatch(getBoxes(result));
+    }
+}
+
+export const calldeleteBoxAPI = (abCode) => {
+    return async (dispatch, getState) => {
+        await request('DELETE', `/approval/deleteBox?abCode=${abCode}`);
+    }
+}
+
+export const callmodifyBoxAPI = ({abCode, modifyname}) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await request('PATCH', `/approval/modifybox?abCode=${abCode}`,
+                {'Content-Type': 'application/json'},
+                modifyname,
+            );
+        } catch (error) {
+            console.error('요청 실패:', error);
+            throw error; // 실패한 경우 예외 처리
+        }
+    }
+}
+
+export const calldocListInStorageAPI = (abCode) => {
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/docListInStorage?abCode=${abCode}`);
+        if(result && result.status === 200) dispatch(getDocuments(result));
+    }
+}
+
+export const callregistDocInStorageAPI = ({adCode, abCode}) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await request('POST', `/approval/registDocInStorage?adCode=${adCode}&abCode=${abCode}`);
+        } catch (error) {
+            console.error('요청 실패:', error);
+            throw error; // 실패한 경우 예외 처리
+        }
+    }
+}
+
+// export const calldeleteDocInStorageAPI = () => {
+//     return async (dispatch, getState) => {
+//         await request('DELETE', `/approval/deleteDocInStorage?asCode=${}`);
+//     }
+// }

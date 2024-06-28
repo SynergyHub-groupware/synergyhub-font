@@ -33,7 +33,7 @@ function Late({handleDetail, formRefs, writtenCont = {}}){
                 <tr>
                     <th scope="col">구분</th>
                     <td>
-                    <select className="hp_w200px" name="aattSort" value={exception.aattSort || (writtenCont ? writtenCont.aattSort : '')} onChange={onChangeHandler} required ref={(el) => (formRefs.current['aattSort'] = el)}>
+                        <select className="hp_w200px" name="aattSort" value={exception.aattSort || (writtenCont ? writtenCont.aattSort : '')} onChange={onChangeHandler} required ref={(el) => (formRefs.current['aattSort'] = el)}>
                             <option value=''>선택</option>
                             <option value="지각사유서">지각사유서</option>
                             <option value="출근시각 정정요청">출근시각 정정요청</option>

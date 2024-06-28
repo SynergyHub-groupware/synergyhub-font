@@ -84,7 +84,7 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
 
     // console.log("lines", lines);
     // console.log("lineemps", lineemps);
-    // console.log("newLines", newLines);
+    console.log("newLines", newLines);
 
     // selectEmps가 있을 경우
     useEffect(() => {

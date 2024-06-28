@@ -205,6 +205,8 @@ function FormDetail(){
             formData.append("attachOriginal", files[i].name);
         }
 
+        console.log("formData", formData);
+
         await dispatch(callApprovalDocRegistAPI({ formData: formData, temporary: temporary }));
     }
 
@@ -230,7 +232,7 @@ function FormDetail(){
         docInfo && dispatch(callviewAttachAPI (docInfo.adCode));
     }, [dispatch, docInfo]);
 
-    // console.log("documents", documents);
+    console.log("documents", documents);
 
     useEffect(() => {
         if (docInfo && documents && documents.length > 0) {

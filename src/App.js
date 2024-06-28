@@ -36,6 +36,8 @@ import MyPersonalRecordCard from './pages/myInfo/MyPersonalRecordCard';
 import ViewMain from './pages/approval/view/ViewMain';
 import ReceiveMain from './pages/approval/receive/ReceiveMain';
 import FormView from "./pages/approval/setting/FormView";
+import boxMain from "./pages/approval/personalBox/BoxMain";
+import BoxMain from "./pages/approval/personalBox/BoxMain";
 
 
 function App() {
@@ -52,6 +54,7 @@ function App() {
             <Route path="send/:status" element={<DocumentMain/>}/>
             <Route path="receive/:status" element={<ReceiveMain/>}/>
             <Route path="view/:adCode" element={<ViewMain/>}/>
+            <Route path="personalBox/:abName" element={<BoxMain/>}/>
             <Route path="setting">
               <Route path="form" element={<Form/>} />
               <Route path="formView/:afCode" element={<FormView/>} />

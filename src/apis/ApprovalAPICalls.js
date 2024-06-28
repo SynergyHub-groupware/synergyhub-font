@@ -65,6 +65,8 @@ export const fetchImage = async (empCode) => {      // 결재서명 이미지 �
 export const callApprovalDocRegistAPI = ({formData, temporary}) => {        // 결재 등록
     return async (dispatch, getState) => {
         try {
+            console.log("formData", formData);
+
             const response = await request('POST', `/approval/regist?temporary=${temporary}`,
                 {"Content-Type": "multipart/form-data"},
                 formData
@@ -260,3 +262,27 @@ export const callmodifyBoxAPI = ({abCode, modifyname}) => {
         }
     }
 }
+
+export const calldocListInStorageAPI = (abCode) => {
+    return async (dispatch, getState) => {
+        const result = await request('GET', `/approval/docListInStorage?abCode=${abCode}`);
+        if(result && result.status === 200) dispatch(getDocuments(result));
+    }
+}
+
+export const callregistDocInStorageAPI = ({adCode, abCode}) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await request('POST', `/approval/registDocInStorage?adCode=${adCode}&abCode=${abCode}`);
+        } catch (error) {
+            console.error('요청 실패:', error);
+            throw error; // 실패한 경우 예외 처리
+        }
+    }
+}
+
+// export const calldeleteDocInStorageAPI = () => {
+//     return async (dispatch, getState) => {
+//         await request('DELETE', `/approval/deleteDocInStorage?asCode=${}`);
+//     }
+// }

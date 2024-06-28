@@ -21,7 +21,7 @@ function ApprovalNav(){
         if (employee.emp_code) dispatch(callboxListAPI(employee.emp_code));
     }, [employee]);
 
-    console.log("boxes", boxes);
+    // console.log("boxes", boxes);
 
     return(
         <div className="bl_nav">
@@ -57,7 +57,7 @@ function ApprovalNav(){
                     <ul className="bl_nav__menuSub bl_navToggle__cont">
                         {boxes.map((form, index) => (
                             <li key={form.abCode}>
-                                <NavLink to={`/approval/personalBox/${form.abName}`}>{form.abName}</NavLink>
+                                <NavLink to={`/approval/personalBox/${form.abName}`} state={{ abCode: form.abCode }}>{form.abName}</NavLink>
                             </li>
                         ))}
                     </ul>

@@ -1,4 +1,5 @@
 import { handleActions, createActions } from "redux-actions";
+import PostReadyList from "../PostReadyList";
 
 const initialState = {
   Postdata: [],
@@ -10,7 +11,10 @@ const initialState = {
   DetailState:[],
   FileState:[],
   CommentState:[],
-  AllLowState:[]
+  AllLowState:[],
+  PostSearch:[],
+  PostEditState:[],
+  PostReadyState:[]
 };
 
 const GET_POSTLIST = 'post/GET_POSTLIST';
@@ -23,9 +27,12 @@ const GET_DETAIL='post/GET_DETAIL'
 const GET_FILE='post/GET_FILE'
 const GET_COMMENT='post/GET_COMMENT'
 const GET_ALLLOW='post/GET_ALLLOW'
+const GET_POSTSEARCH='post/GET_POSTSEARCH'
+const GET_POSTEDIT='post/GET_POSTEDIT'
+const GET_POSTREADY='post/GET_POSTREADY'
 
 // 액션 생성자 함수 생성
-export const { post: { getAlllow,getComment,getFile,getPostlist, getAllboard, getAlllowboard,getSortlist,getPostdatainboard,getPostdatainboardpin,getDetail } } = createActions({
+export const { post: { getReadypost,getPostedit,getPostsearch,getAlllow,getComment,getFile,getPostlist, getAllboard, getAlllowboard,getSortlist,getPostdatainboard,getPostdatainboardpin,getDetail } } = createActions({
   [GET_POSTLIST]: postlist => ({ postlist }),
   [GET_ALLBOARD]: boardlist => ({ boardlist }),
   [GET_ALLLOWBOARD]: lowboardlist => ({ lowboardlist }),
@@ -35,15 +42,18 @@ export const { post: { getAlllow,getComment,getFile,getPostlist, getAllboard, ge
   [GET_DETAIL]:detaildata=>({detaildata}),
   [GET_FILE]:filelist=>({filelist}),
   [GET_COMMENT]:commentlist=>({commentlist}),
-  [GET_ALLLOW]:alllowlist=>({alllowlist})
+  [GET_ALLLOW]:alllowlist=>({alllowlist}),
+  [GET_POSTSEARCH]:postsearchlist=>({postsearchlist}),
+  [GET_POSTEDIT]:posteditdata=>({posteditdata}),
+  [GET_POSTREADY]:postreadydata=>({postreadydata})
 });
 
-// 확인용 로그
-console.log("getPostlist", getPostlist);
-console.log("getAllBoard", getAllboard);
-console.log("getAllLowBoard", getAlllowboard);
-console.log("getSortlist",getSortlist);
-console.log("getAlllow",getAlllow);
+// 확인용 로그 : 이다정 주석처리
+// console.log("getPostlist", getPostlist);
+// console.log("getAllBoard", getAllboard);
+// console.log("getAllLowBoard", getAlllowboard);
+// console.log("getSortlist",getSortlist);
+// console.log("getAlllow",getAlllow);
 
 // 초기 상태 및 리듀서 정의
 const postReducer = handleActions(
@@ -87,21 +97,33 @@ const postReducer = handleActions(
     [GET_ALLLOW]:(state,{payload})=>({
       ...state,
       AllLowState:payload.alllowlist
+    }),
+    [GET_POSTSEARCH]:(state,{payload})=>({
+      ...state,
+      PostSearch:payload.postsearchlist
+    }),
+    [GET_POSTEDIT]:(state,{payload})=>({
+      ...state,
+      PostEditState:payload.posteditdata
+    }),
+    [GET_POSTREADY]:(state,{payload})=>({
+      ...state,
+      PostReadyState:payload.postreadydata
     })
 
   },
   initialState
 );
 
-// 콘솔 로그를 통해 상태 및 리듀서 확인
-console.log("postReducer", postReducer);
-console.log("initialState.Postdata", initialState.Postdata);
-console.log("initialState.BoardState", initialState.BoardState);
-console.log("initialState.LowBoardState", initialState.LowBoardState);
-console.log("initialState.SoftListState",initialState.SortListState);
-console.log("initialState.PostdataInBoard",initialState.PostdataInBoard);
-console.log("initialState.PostdataInBoardPin",initialState.PostdataInBoardPin);
-console.log("initialState.AllLowState",initialState.AllLowState);
+// 콘솔 로그를 통해 상태 및 리듀서 확인 : 이다정 주석처리
+// console.log("postReducer", postReducer);
+// console.log("initialState.Postdata", initialState.Postdata);
+// console.log("initialState.BoardState", initialState.BoardState);
+// console.log("initialState.LowBoardState", initialState.LowBoardState);
+// console.log("initialState.SoftListState",initialState.SortListState);
+// console.log("initialState.PostdataInBoard",initialState.PostdataInBoard);
+// console.log("initialState.PostdataInBoardPin",initialState.PostdataInBoardPin);
+// console.log("initialState.AllLowState",initialState.AllLowState);
 
 
 export default postReducer;

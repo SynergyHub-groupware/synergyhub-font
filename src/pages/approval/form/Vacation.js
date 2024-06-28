@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 import { calculateDuration } from "../../../apis/ApprovalHandler";
 
-function Vacation({handleDetail, formRefs}){
-    const [exception, setException] = useState({
-        aattSort: '',
-        aattStart: '',
-        aattEnd: ''
-    });
+function Vacation({handleDetail, formRefs, writtenCont = {}}){
+    const [exception, setException] = useState({aattSort: '',aattStart: '',aattEnd: ''});
 
     const onChangeHandler = (e) => {
         const { name, value } = e.target;
@@ -40,13 +36,28 @@ function Vacation({handleDetail, formRefs}){
         }
     }, [exception.aattStart, exception.aattEnd]);
 
+    // writtenCont 값이 있을 경우
+    useEffect(()=>{
+        if(writtenCont !== null && Object.keys(writtenCont).length > 0){
+            const formattedStart = writtenCont.aattStart.replace(' ', 'T');
+            const formattedEnd = writtenCont.aattEnd.replace(' ', 'T');
+
+            setException(prev => ({
+                ...prev,
+                aattSort: writtenCont.aattSort,
+                aattStart: formattedStart,
+                aattEnd: formattedEnd,
+            }));
+        }
+    },[writtenCont])
+
     return(
         <table className="bl_tb3 el_approvalTb3__th">
             <tbody>
             <tr>
                 <th scope="col">구분</th>
                 <td>
-                    <select className="hp_w120px" name="aattSort" onChange={onChangeHandler} required ref={(el) => (formRefs.current['aattSort'] = el)}>
+                    <select className="hp_w120px" name="aattSort" value={exception.aattSort || (writtenCont ? writtenCont.aattSort : '')} onChange={onChangeHandler} required ref={(el) => (formRefs.current['aattSort'] = el)}>
                         <option value=''>선택</option>
                         <option value="연차">연차</option>
                         <option value="오전반차">오전반차</option>
@@ -62,14 +73,14 @@ function Vacation({handleDetail, formRefs}){
             <tr>
                 <th scope="col">시작일</th>
                 <td>
-                    <input type="datetime-local" name="aattStart" value={exception.aattStart} required
+                    <input type="datetime-local" name="aattStart" value={exception.aattStart || (writtenCont ? writtenCont.aattStart : '')} required
                            onChange={(e) => setException(prev => ({ ...prev, aattStart: e.target.value }))} ref={(el) => (formRefs.current['aattStart'] = el)} />
                 </td>
             </tr>
             <tr>
                 <th scope="col">종료일</th>
                 <td>
-                    <input type="datetime-local" name="aattEnd" value={exception.aattEnd} min={exception.aattStart} required
+                    <input type="datetime-local" name="aattEnd" value={exception.aattEnd || (writtenCont ? writtenCont.aattEnd : '')} min={exception.aattStart} required
                            onChange={(e) => setException(prev => ({ ...prev, aattEnd: e.target.value }))} ref={(el) => (formRefs.current['aattEnd'] = el)} />
                 </td>
             </tr>

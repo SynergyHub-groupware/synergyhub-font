@@ -6,7 +6,7 @@ import '@ckeditor/ckeditor5-build-classic/build/translations/ko.js'; // 한국�
 import { useDispatch, useSelector } from "react-redux";
 import { callFormContentAPI } from "../../../apis/ApprovalAPICalls";
 
-function Etc({handleDetail}) {
+function Etc({handleDetail, writtenCont = {}}) {
 
     // 양식내용 출력 
     const dispatch = useDispatch();
@@ -36,6 +36,18 @@ function Etc({handleDetail}) {
     useEffect(() => {
         handleDetail(exception);
     }, [exception]);
+
+
+    // writtenCont 값이 있을 경우
+    useEffect(() => {
+        if (writtenCont && writtenCont.aeCon) {
+            setEditorData(writtenCont.aeCon);    // 입력받은 내용 에디터에 넣음
+            setException(prev => ({
+                ...prev,
+                aeCon: writtenCont.aeCon         // 입력받은 내용 exception에 넣음
+            }));
+        }
+    }, [writtenCont]);
 
     return (
         <CKEditor editor={ClassicEditor} data={editorData} onChange={handleChange} />

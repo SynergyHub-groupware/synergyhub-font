@@ -103,7 +103,7 @@ const AttendanceButton = () => {
                 </button>
             )}
             {endTime && (
-                <button type="button" className="el_btn0Back el_btnF hp_mt20 hp_fs16"
+                <button type="button" className="el_btn8Back el_btnF hp_mt20 hp_fs16"
                 >
                     업무 종료
                 </button>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const TimeDisplay = () => {
+const TimeComponent = () => {
     const [currentTime, setCurrentTime] = useState('');
 
     useEffect(() => {
@@ -24,5 +24,4 @@ const TimeDisplay = () => {
         </div>
     );
 };
-
-export default TimeDisplay;
+export default TimeComponent;

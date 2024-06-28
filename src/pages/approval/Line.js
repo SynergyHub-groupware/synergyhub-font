@@ -3,46 +3,38 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { callFormLineAPI, fetchImage } from "../../apis/ApprovalAPICalls";
 import LineApprover from "./LineApprover";
+import {callMyInfoAPI} from "../../apis/EmployeeAPICalls";
 
-function Line({handleTrueLineList}){
-    const empCode = "2021048";
-    const empName = "박하늘";
-    const deptCode = "D15";
-    const deptTitle = "정보보안팀";
-    const titleCode = "T6";
-    const titleName = "팀원";
-    // const empCode = "2021091";
-    // const empName = "이서연";
-    // const deptCode = "D3";
-    // const deptTitle = "경영지원부";
-    // const titleCode = "T4";
-    // const titleName = "팀장";
-
+function Line({handleTrueLineList, docInfo = {}, selectEmps}){
     let myRole = '';
 
     const navigate = useNavigate();
     const location = useLocation();
     const { lsCode } = { ...location.state };
-
     const dispatch = useDispatch();
 
-    const { lines } = useSelector(state => ({
-        lines: state.approvalReducer.lines
+    const { lines, employee } = useSelector(state => ({
+        lines: state.approvalReducer.lines,
+        employee: state.employeeReducer.employee
     }));
 
     useEffect(() => {
-        lsCode && dispatch(callFormLineAPI({ lsCode }));
-    }, [dispatch, lsCode]);
+        dispatch(callMyInfoAPI());
+    }, [dispatch]);
 
+    useEffect(() => {
+        if(lsCode) dispatch(callFormLineAPI({ lsCode }));
+        else if(docInfo && docInfo.lsCode) dispatch(callFormLineAPI({lsCode: docInfo.lsCode}))
+    }, [dispatch, lsCode]);
 
     // 서명 이미지 조회
     const [imageData, setImageData] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
-            if (empCode) {
+            if (employee.emp_sign) {
                 try {
-                    const imageUrl = await fetchImage (empCode);
+                    const imageUrl = await fetchImage (employee.emp_sign);
                     if (imageUrl) setImageData(imageUrl);
                     else console.error('Failed to fetch image');
                 } catch (error) {
@@ -52,7 +44,7 @@ function Line({handleTrueLineList}){
         };
 
         fetchData();
-    }, [empCode]);
+    }, [employee.emp_sign]);
 
     return(
         <>
@@ -61,7 +53,7 @@ function Line({handleTrueLineList}){
                     <tr>
                         <th>
                             {lines.map((line) => {
-                                const matchingLine = lines.find(line => line.alSort >= titleCode && line.alRole === '전결');
+                                const matchingLine = lines.find(line => line.alSort >= employee.title_code && line.alRole === '전결');
                                 myRole = matchingLine ? '(전결자)' : '';
                             })}
                             작성자 {myRole}
@@ -71,20 +63,20 @@ function Line({handleTrueLineList}){
                         <td><b className="hp_7Color">작성중</b></td>
                     </tr>
                     <tr>
-                        <td>{deptTitle}</td>
+                        <td>{employee.dept_title}</td>
                     </tr>
                     <tr>
-                        <td>{titleName}</td>
+                        <td>{employee.title_name}</td>
                     </tr>
                     <tr>
-                        <td>{empName}</td>
+                        <td>{employee.emp_name}</td>
                     </tr>
                     <tr>
                         <td className="el_approvalSign" style={{backgroundImage: imageData ? `url(${imageData})` : 'none'}}></td>
                     </tr>
                 </tbody>
             </table>
-            <LineApprover lsCode={lsCode} lines={lines} empCode={empCode} deptCode={deptCode} titleCode={titleCode} handleTrueLineList={handleTrueLineList}/>
+            <LineApprover lsCode={lsCode} lines={lines} employee={employee} handleTrueLineList={handleTrueLineList} docInfo={docInfo} selectEmps={selectEmps}/>
         </>
     )
 }

@@ -6,10 +6,6 @@ import Temporary from './pages/approval/Temporary';
 import Form from './pages/approval/setting/Form';
 import Sign from './pages/approval/setting/Sign';
 import Storage from './pages/approval/setting/Storage';
-import ReceiveComplete from './pages/approval/receive/Complete';
-import ReceiveWaiting from './pages/approval/receive/Waiting';
-import Reference from './pages/approval/receive/Reference';
-import ReceiveReturn from './pages/approval/receive/Return';
 import ApprovalLayout from './pages/approval/ApprovalLayout';
 import AttendanceLayout from './pages/attendance/AttendanceLayout';
 import CalendarLayout from './pages/calendar/CalendarLayout';
@@ -43,10 +39,24 @@ import MyInfoLayout from './pages/myInfo/MyInfoLayout';
 import MyPersonalRecordCard from './pages/myInfo/MyPersonalRecordCard';
 import PostEditView from './pages/post/PostEditView'
 import ViewMain from './pages/approval/view/ViewMain';
+import ReceiveMain from './pages/approval/receive/ReceiveMain';
+import FormView from "./pages/approval/setting/FormView";
+import BoxMain from "./pages/approval/personalBox/BoxMain";
 import ImpMsg from './pages/message/storage/ImpMsg';
 import WorkMsg from './pages/message/storage/WorkMsg';
 import Bin from './pages/message/storage/Bin';
 import PostReadyList from './pages/post/PostReadyList';
+import RevDetail from './pages/message/storage/detail/RevDetail';
+import SendDetail from './pages/message/storage/detail/SendDetail';
+import ImpDetail from './pages/message/storage/detail/ImpDetail';
+import WorkDetail from './pages/message/storage/detail/WorkDetail';
+import BinDetail from './pages/message/storage/detail/BinDetail';
+import MyAttendance from "./pages/attendance/MyAttendance";
+import AttendanceList from "./pages/attendance/attendanceList";
+import MyDayOff from "./pages/attendance/MyDayOff";
+import DayOffList from "./pages/attendance/DayOffList";
+import Preferences from "./pages/attendance/Preferences";
+import CreateMsg from './pages/message/storage/CreateMsg';
 
 function App() {
   return (
@@ -60,21 +70,22 @@ function App() {
             <Route path="temporary" element={<Temporary/>} />
             <Route path="form/:afCode" element={<FormDetail/>}/>
             <Route path="send/:status" element={<DocumentMain/>}/>
+            <Route path="receive/:status" element={<ReceiveMain/>}/>
             <Route path="view/:adCode" element={<ViewMain/>}/>
-            <Route path="receive">
-              <Route path="complete" element={<ReceiveComplete/>} />
-              <Route path="reference" element={<Reference/>} />
-              <Route path="return" element={<ReceiveReturn/>} />
-              <Route path="waiting" element={<ReceiveWaiting/>} />
-            </Route>
+            <Route path="personalBox/:abName" element={<BoxMain/>}/>
             <Route path="setting">
               <Route path="form" element={<Form/>} />
+              <Route path="formView/:afCode" element={<FormView/>} />
               <Route path="sign" element={<Sign/>} />
               <Route path="storage" element={<Storage/>} />
             </Route>
           </Route>
           <Route path="attendance" element={<AttendanceLayout/>}>
-            {/* 내용추가 */}
+            <Route path="myAttendance" element={<MyAttendance/>} />
+            <Route path="attendanceList" element={<AttendanceList/>} />
+            <Route path="myDayOff" element={<MyDayOff/>} />
+            <Route path="dayOffList" element={<DayOffList/>} />
+            <Route path="preferences" element={<Preferences/>} />
           </Route>
           <Route path="calendar" element={<CalendarLayout/>}>
             <Route path="myCalendar" element={<MyCalendar/>} />
@@ -98,12 +109,18 @@ function App() {
           <Route path="message" element={<MessageLayout/>}>
             <Route index element={<Navigate to="storage/receive" replace/>}/>
             <Route path='storage'>
+              <Route path='deliver' element={<CreateMsg/>}/>
               <Route path='receive' element={<ReceiveMsg/>}/>
+              <Route path='receive/detail/:msgCode' element={<RevDetail/>}/>
               <Route path='send' element={<SendMsg/>}/>
+              <Route path='send/detail/:msgCode' element={<SendDetail/>}/>
               <Route path='temp' element={<TempMsg/>}/>
               <Route path='important' element={<ImpMsg/>}/>
+              <Route path='imp/detail/:msgCode' element={<ImpDetail/>}/>
               <Route path='work' element={<WorkMsg/>}/>
+              <Route path='work/detail/:msgCode' element={<WorkDetail/>}/>
               <Route path='bin' element={<Bin/>}/>
+              <Route path='bin/detail/:msgCode' element={<BinDetail/>}/>
             </Route>
           </Route>
           <Route path="post" element={<PostLayout/>}>

@@ -48,12 +48,12 @@ export const { post: { getReadypost,getPostedit,getPostsearch,getAlllow,getComme
   [GET_POSTREADY]:postreadydata=>({postreadydata})
 });
 
-// 확인용 로그
-console.log("getPostlist", getPostlist);
-console.log("getAllBoard", getAllboard);
-console.log("getAllLowBoard", getAlllowboard);
-console.log("getSortlist",getSortlist);
-console.log("getAlllow",getAlllow);
+// 확인용 로그 : 이다정 주석처리
+// console.log("getPostlist", getPostlist);
+// console.log("getAllBoard", getAllboard);
+// console.log("getAllLowBoard", getAlllowboard);
+// console.log("getSortlist",getSortlist);
+// console.log("getAlllow",getAlllow);
 
 // 초기 상태 및 리듀서 정의
 const postReducer = handleActions(
@@ -115,15 +115,15 @@ const postReducer = handleActions(
   initialState
 );
 
-// 콘솔 로그를 통해 상태 및 리듀서 확인
-console.log("postReducer", postReducer);
-console.log("initialState.Postdata", initialState.Postdata);
-console.log("initialState.BoardState", initialState.BoardState);
-console.log("initialState.LowBoardState", initialState.LowBoardState);
-console.log("initialState.SoftListState",initialState.SortListState);
-console.log("initialState.PostdataInBoard",initialState.PostdataInBoard);
-console.log("initialState.PostdataInBoardPin",initialState.PostdataInBoardPin);
-console.log("initialState.AllLowState",initialState.AllLowState);
+// 콘솔 로그를 통해 상태 및 리듀서 확인 : 이다정 주석처리
+// console.log("postReducer", postReducer);
+// console.log("initialState.Postdata", initialState.Postdata);
+// console.log("initialState.BoardState", initialState.BoardState);
+// console.log("initialState.LowBoardState", initialState.LowBoardState);
+// console.log("initialState.SoftListState",initialState.SortListState);
+// console.log("initialState.PostdataInBoard",initialState.PostdataInBoard);
+// console.log("initialState.PostdataInBoardPin",initialState.PostdataInBoardPin);
+// console.log("initialState.AllLowState",initialState.AllLowState);
 
 
 export default postReducer;

@@ -2,7 +2,8 @@ import { createActions, handleActions } from "redux-actions";
 
 /* 초기값 */
 const initialState = {
-    messages: []
+    messages: [],
+    messageDetail: null
 };
 
 /* 액션 타입 */
@@ -13,9 +14,10 @@ const GET_IMP_MSG = 'message/GET_IMP_MSG';
 const GET_WORK_MSG = 'message/GET_WORK_MSG';
 const DEL_MSG = 'message/DEL_MSG';
 
-/* 액션 함수 */
-export const { message : { getRevMsg }, message : { getSendMsg }, message : { getBinMsg },
-                message : { getImpMsg }, message : { getWorkMsg }, message : { delMsg }} = createActions({
+const GET_REV_DETAIL = 'message/GET_REV_DETAIL';
+const GET_SEND_DETAIL = 'message/GET_SEND_DETAIL';
+
+export const { message : { getRevMsg, getSendMsg, getBinMsg, getImpMsg, getWorkMsg, delMsg, getRevDetail, getSendDetail }} = createActions({
     [GET_REV_MSG] : result => {
         console.log('action : ', result);
 
@@ -50,6 +52,18 @@ export const { message : { getRevMsg }, message : { getSendMsg }, message : { ge
         console.log('del action : ', msgCode);
 
         return { msgCode };
+    },
+
+    [GET_REV_DETAIL] : result => {
+        console.log('action : ', result);
+
+        return {messageDetail: result};
+    },
+
+    [GET_SEND_DETAIL] : result => {
+        console.log('action : ', result);
+
+        return {messageDetail: result};
     }
 
 }, initialState);
@@ -111,7 +125,17 @@ const messageReducer = handleActions({
                 msg.msgCode === payload.msgCode ? { ...msg, storCode: 5 } : msg
             )
         }
-    }
+    },
+
+    [GET_REV_DETAIL] : (state, {payload}) => ({
+        ...state,
+        messageDetail: payload
+    }),
+
+    [GET_SEND_DETAIL] : (state, {payload}) => ({
+        ...state,
+        messageDetail: payload
+    })
 
 }, initialState);
 

@@ -15,12 +15,6 @@ function Bin() {
                 </div>
             </div>
             <BinTable/>
-            <div className="ly_spaceBetween ly_fitemC hp_mt10">
-                <div className="hp_ml10 hp_7Color">총 1 / <b className="hp_0Color hp_fw700">1</b> 페이지</div>
-                <select className="">
-                    <option>정렬방식</option>
-                </select>
-            </div>
             <section className="bl_sect hp_mt10 hp_padding5 hp_alignC">
                 <div className="bl_paging">
                     {/* <a className="bl_paging__btn bl_paging__first" href="" title="첫 페이지로 이동"></a> */}
@@ -31,6 +25,7 @@ function Bin() {
                 </div>
             </section>
         </div>
+        // 커밋용
     );
 }
 

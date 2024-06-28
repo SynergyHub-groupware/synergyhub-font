@@ -6,6 +6,7 @@ import {calldocListInStorageAPI} from "../../../apis/ApprovalAPICalls";
 import {useLocation} from "react-router-dom";
 
 function BoxMain(){
+    const navigate = useNavigate();
     const {abName} = useParams();
     const location = useLocation();
     const {abCode} = { ...location.state };
@@ -18,7 +19,7 @@ function BoxMain(){
         abCode && dispatch(calldocListInStorageAPI(abCode));
     }, [abCode]);
 
-    console.log("documents", documents);
+    // console.log("documents", documents);
 
     // 검색
     const [searchTerm, setSearchTerm] = useState('');
@@ -89,11 +90,7 @@ function BoxMain(){
         setCurrentPage(pageNumber);
     };
 
-
-
-
-    const navigate = useNavigate();
-
+    
     // 체크박스 관련 상태 및 함수
     const [selectAllChecked, setSelectAllChecked] = useState(false);
     const [checkedRows, setCheckedRows] = useState({});
@@ -115,6 +112,8 @@ function BoxMain(){
         setCheckedRows(newCheckedRows);
         setSelectAllChecked(false);
     };
+    
+    // 삭제
 
     return (
         <div className="ly_cont">

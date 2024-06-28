@@ -281,8 +281,8 @@ export const callregistDocInStorageAPI = ({adCode, abCode}) => {
     }
 }
 
-// export const calldeleteDocInStorageAPI = () => {
-//     return async (dispatch, getState) => {
-//         await request('DELETE', `/approval/deleteDocInStorage?asCode=${}`);
-//     }
-// }
+export const calldeleteDocInStorageAPI = ({adCode, abCode}) => {
+    return async (dispatch, getState) => {
+        await request('DELETE', `/approval/deleteDocInStorage?adCode=${adCode}&abCode=${abCode}`);
+    }
+}

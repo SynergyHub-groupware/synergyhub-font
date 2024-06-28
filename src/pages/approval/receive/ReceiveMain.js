@@ -1,58 +1,56 @@
 import { useDispatch, useSelector } from "react-redux";
 import PagingBar from "../../../components/commons/PagingBar";
 import { useEffect, useState } from "react";
-import {callregistDocInStorageAPI, callsendDocListAPI} from "../../../apis/ApprovalAPICalls";
 import { useParams } from "react-router";
 import Waiting from "./Waiting";
-import Progress from "./Progress";
 import Complete from "./Complete";
 import Return from "./Return";
+import Reference from './Reference';
 import {callMyInfoAPI} from "../../../apis/EmployeeAPICalls";
+import { callreceiveDocListAPI } from "../../../apis/ApprovalAPICalls";
 
-function DocumentMain(){
+function ReceiveMain(){
     const {status} = useParams();
     const [title, setTitle] = useState();
     const dispatch = useDispatch();
-    const { employee, documents, boxes } = useSelector(state => ({
-        employee: state.employeeReducer.employee,
-        documents: state.approvalReducer.documents,
-        boxes: state.approvalReducer.boxes,
-    }));
 
+    const { employee, documents } = useSelector(state => ({
+        employee: state.employeeReducer.employee,
+        documents: state.approvalReducer.documents
+    }));
     useEffect(() => {
         dispatch(callMyInfoAPI());
     }, [dispatch]);
 
-    // console.log("employee", employee);
+    console.log("status", status);
+    console.log("employee", employee);
 
     // 접근 url에 따라 렌더링 변경
     useEffect(() => {
         switch (status) {
             case 'waiting': setTitle('대기'); break;
-            case 'progress': setTitle('진행중'); break;
             case 'complete': setTitle('완료'); break;
             case 'return': setTitle('반려'); break;
+            case 'reference': setTitle('참조/열람'); break;
             default: setTitle('');
         }
     }, [status]);
-
-    // console.log("status", status);
     
     const renderDocList = () => {
         switch(status){
             case 'waiting': return <Waiting data={currentResults} />; break;
-            case 'progress': return <Progress data={currentResults} />; break;
-            case 'complete': return <Complete data={currentResults} setSelectedAdCodes={setSelectedAdCodes} />; break;
+            case 'complete': return <Complete data={currentResults} />; break;
             case 'return': return <Return data={currentResults} />; break;
+            case 'reference': return <Reference data={currentResults} />; break;
         }
     }
 
     // 정보 받아오기
     useEffect(() => {
-        employee && dispatch(callsendDocListAPI({empCode: employee.emp_code, status}));
-    }, [employee, status]);
+        employee.emp_code && dispatch(callreceiveDocListAPI({empCode: employee.emp_code, status}));
+    }, [employee.emp_code, status]);
 
-    // console.log("documents", documents);
+    console.log("documents", documents);
 
     // 검색
     const [searchTerm, setSearchTerm] = useState('');
@@ -77,7 +75,7 @@ function DocumentMain(){
         }
     };
 
-    // console.log("searchResults", searchResults);
+    console.log("searchResults", searchResults);
 
     // 정렬방식 추가
     const [sortOption, setSortOption] = useState('');
@@ -100,7 +98,7 @@ function DocumentMain(){
         setCurrentPage(1); // 정렬 방식 변경 시 첫 페이지로 초기화
     };
 
-    // console.log("sortOption", sortOption);
+    console.log("sortOption", sortOption);
     
     // 페이징
     const [currentPage, setCurrentPage] = useState(1);
@@ -123,52 +121,11 @@ function DocumentMain(){
         setCurrentPage(pageNumber);
     };
 
-    // 개인보관함으로 이동
-    const [selectedAdCodes, setSelectedAdCodes] = useState([]);
-
-    console.log("boxes", boxes);
-    console.log("selectedAdCodes", selectedAdCodes);
-
-    const [selectedAbCode, setSelectedAbCode] = useState("");
-    const handleBoxChange = (event) => {
-        setSelectedAbCode(event.target.value);
-        console.log("Selected abCode:", event.target.value);
-
-        if(!selectedAdCodes.length>0){
-            alert("결재문서의 체크박스 선택 후, 이동할 보관함을 선택해주세요.");
-            setSelectedAbCode("");
-            return;
-        }else{
-
-            if (window.confirm("선택한 결재문서를 개인보관함에 저장 하시겠습니까?")) {
-                selectedAdCodes.forEach((adCode) => {
-                    dispatch(callregistDocInStorageAPI({adCode, abCode: event.target.value}))
-                        .then(() => {
-                            window.location.reload();
-                        })
-                        .catch((error) => {
-                            console.error("결재문서 이동 실패: ", error);
-                        });
-                });
-            }
-        }
-    };
-
-
     return(        
         <div className="ly_cont">
-            <h4 className="el_lv1Head hp_mb30">보낸결재함 [{title}]</h4>
+            <h4 className="el_lv1Head hp_mb30">받은결재함 [{title}]</h4>
             <div className="ly_spaceBetween">
-                {status == "complete" ? (
-                    <select onChange={handleBoxChange} value={selectedAbCode}>
-                        <option value=''>개인보관함으로 이동</option>
-                        {boxes && boxes.map((box, index) => (
-                            <option key={box.abCode} value={box.abCode}>
-                                {box.abName}
-                            </option>
-                        ))}
-                    </select>
-                ) : (<div></div>)}
+                <div></div>
                 <form onSubmit={handleSearch}>
                     <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="검색어를 입력해주세요"/>
                     <input type="submit" className="el_btnS el_btnblueBord hp_ml5" value="검색"/>
@@ -176,9 +133,7 @@ function DocumentMain(){
             </div>
             {renderDocList()}
             <div className="ly_spaceBetween ly_fitemC hp_mt10">
-                <div className="hp_ml10 hp_7Color">총 <b
-                    className="hp_0Color hp_fw700">{currentPage}</b> / {totalPages} 페이지
-                </div>
+                <div className="hp_ml10 hp_7Color">총 <b className="hp_0Color hp_fw700">{currentPage}</b> / {totalPages} 페이지</div>
                 <select className="" onChange={handleSortChange} value={sortOption}>
                     <option value="">정렬방식</option>
                     <option value="상신일">상신일</option>
@@ -190,4 +145,4 @@ function DocumentMain(){
         </div>
     )
 }
-export default DocumentMain;
+export default ReceiveMain;

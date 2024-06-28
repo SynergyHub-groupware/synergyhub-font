@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/layouts/Layout';
 import Main from './pages/Main';
 import FormList from './pages/approval/FormList';
@@ -21,6 +21,10 @@ import BoradCreateView from './pages/post/BoardCreateView';
 import DocumentMain from './pages/approval/send/DocumentMain'
 import Login from './pages/Login';
 import 'react-toastify/ReactToastify.css';
+import ReceiveMsg from './pages/message/storage/ReceiveMsg';
+import SendMsg from './pages/message/storage/SendMsg';
+import TempMsg from './pages/message/storage/TempMsg';
+import MyCalendar from './pages/calendar/MyCalendar';
 import Organization from './pages/employee/Organization';
 import PersonalList from './pages/employee/PersonalList';
 import PersonalRegist from './pages/employee/PersonalRegist';
@@ -36,9 +40,15 @@ import MyPersonalRecordCard from './pages/myInfo/MyPersonalRecordCard';
 import ViewMain from './pages/approval/view/ViewMain';
 import ReceiveMain from './pages/approval/receive/ReceiveMain';
 import FormView from "./pages/approval/setting/FormView";
-import boxMain from "./pages/approval/personalBox/BoxMain";
 import BoxMain from "./pages/approval/personalBox/BoxMain";
-
+import ImpMsg from './pages/message/storage/ImpMsg';
+import WorkMsg from './pages/message/storage/WorkMsg';
+import Bin from './pages/message/storage/Bin';
+import MyAttendance from "./pages/attendance/MyAttendance";
+import AttendanceList from "./pages/attendance/attendanceList";
+import MyDayOff from "./pages/attendance/MyDayOff";
+import DayOffList from "./pages/attendance/DayOffList";
+import Preferences from "./pages/attendance/Preferences";
 
 function App() {
   return (
@@ -63,9 +73,14 @@ function App() {
             </Route>
           </Route>
           <Route path="attendance" element={<AttendanceLayout/>}>
-            {/* 내용추가 */}
+            <Route path="myAttendance" element={<MyAttendance/>} />
+            <Route path="attendanceList" element={<AttendanceList/>} />
+            <Route path="myDayOff" element={<MyDayOff/>} />
+            <Route path="dayOffList" element={<DayOffList/>} />
+            <Route path="preferences" element={<Preferences/>} />
           </Route>
           <Route path="calendar" element={<CalendarLayout/>}>
+            <Route path="myCalendar" element={<MyCalendar/>} />
             {/* 내용추가 */}
           </Route>
           <Route path="employee" element={<EmployeeLayout/>}>
@@ -84,7 +99,15 @@ function App() {
             <Route path="myPersonalRecordCard" element={<MyPersonalRecordCard />} />  
           </Route>
           <Route path="message" element={<MessageLayout/>}>
-            {/* 내용추가 */}
+            <Route index element={<Navigate to="storage/receive" replace/>}/>
+            <Route path='storage'>
+              <Route path='receive' element={<ReceiveMsg/>}/>
+              <Route path='send' element={<SendMsg/>}/>
+              <Route path='temp' element={<TempMsg/>}/>
+              <Route path='important' element={<ImpMsg/>}/>
+              <Route path='work' element={<WorkMsg/>}/>
+              <Route path='bin' element={<Bin/>}/>
+            </Route>
           </Route>
           <Route path="post" element={<PostLayout/>}>
           <Route path="PostListView" element={<PostListView/>} />

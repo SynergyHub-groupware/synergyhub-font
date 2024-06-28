@@ -1,12 +1,11 @@
 import { Outlet } from "react-router-dom";
 import AttendanceNav from "../../components/commons/AttendanceNav";
 
-function EmployeeLayout(){
+function MyDayOff(){
     return(
         <>
-            <AttendanceNav/>
-            <Outlet/>
+            내 휴가 페이지
         </>
     )
 }
-export default EmployeeLayout;
+export default MyDayOff;

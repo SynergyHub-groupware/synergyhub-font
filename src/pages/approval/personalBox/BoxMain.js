@@ -1,26 +1,22 @@
-import {useDispatch, useSelector} from "react-redux";
+import PagingBar from "../../../components/commons/PagingBar";
 import {useEffect, useState} from "react";
-import {callMyInfoAPI} from "../../apis/EmployeeAPICalls";
-import {callsendDocListAPI, calldeleteDocumentAPI} from "../../apis/ApprovalAPICalls";
-import {useNavigate} from "react-router";
-import PagingBar from "../../components/commons/PagingBar";
+import {useNavigate, useParams} from "react-router";
+import {useDispatch, useSelector} from "react-redux";
+import {calldocListInStorageAPI} from "../../../apis/ApprovalAPICalls";
+import {useLocation} from "react-router-dom";
 
-function Temporary(){
-    const navigate = useNavigate();
+function BoxMain(){
+    const {abName} = useParams();
+    const location = useLocation();
+    const {abCode} = { ...location.state };
     const dispatch = useDispatch();
-
-    const { employee, documents } = useSelector(state => ({
-        employee: state.employeeReducer.employee,
-        documents: state.approvalReducer.documents
+    const { documents } = useSelector(state => ({
+        documents: state.approvalReducer.documents,
     }));
 
     useEffect(() => {
-        dispatch(callMyInfoAPI());
-    }, [dispatch]);
-
-    useEffect(() => {
-        employee.emp_code && dispatch(callsendDocListAPI({empCode: employee.emp_code, status: 'temporary'}));
-    }, [employee.emp_code]);
+        abCode && dispatch(calldocListInStorageAPI(abCode));
+    }, [abCode]);
 
     console.log("documents", documents);
 
@@ -47,15 +43,15 @@ function Temporary(){
         }
     };
 
-    console.log("searchResults", searchResults);
+    // console.log("searchResults", searchResults);
 
     // 정렬방식 추가
     const [sortOption, setSortOption] = useState('');
 
     const sortDocuments = (results, option) => {
         switch (option) {
-            case '작성일':
-                return results.slice().sort((a, b) => new Date(a.adReportDate) - new Date(b.adReportDate));
+            case '완료일':
+                return results.slice().sort((a, b) => new Date(a.talDate) - new Date(b.talDate));
             case '결재양식':
                 return results.slice().sort((a, b) => a.afName.localeCompare(b.afName));
             case '제목':
@@ -70,7 +66,7 @@ function Temporary(){
         setCurrentPage(1); // 정렬 방식 변경 시 첫 페이지로 초기화
     };
 
-    console.log("sortOption", sortOption);
+    // console.log("sortOption", sortOption);
 
     // 페이징
     const [currentPage, setCurrentPage] = useState(1);
@@ -93,6 +89,11 @@ function Temporary(){
         setCurrentPage(pageNumber);
     };
 
+
+
+
+    const navigate = useNavigate();
+
     // 체크박스 관련 상태 및 함수
     const [selectAllChecked, setSelectAllChecked] = useState(false);
     const [checkedRows, setCheckedRows] = useState({});
@@ -100,7 +101,7 @@ function Temporary(){
     const toggleSelectAll = () => {
         const newCheckedRows = {};
         if (!selectAllChecked) {
-            currentResults.forEach((doc) => {
+            documents.forEach((doc) => {
                 newCheckedRows[doc.adCode] = true;
             });
         }
@@ -115,23 +116,11 @@ function Temporary(){
         setSelectAllChecked(false);
     };
 
-    // 삭제
-    const deleteHandler = () => {
-        const selectedAdCodes = Object.keys(checkedRows).filter((adCode) => checkedRows[adCode]);
-        console.log("Selected adCodes:", selectedAdCodes);
-
-        selectedAdCodes.forEach(adCode => {
-            dispatch(calldeleteDocumentAPI(adCode));
-        });
-
-        window.location.reload();
-    }
-
-    return(
+    return (
         <div className="ly_cont">
-            <h4 className="el_lv1Head hp_mb30">임시저장</h4>
+            <h4 className="el_lv1Head hp_mb30">{abName}</h4>
             <div className="ly_spaceBetween">
-                <button type="button" className="el_btnS el_btn8Back" onClick={deleteHandler}>삭제</button>
+                <button type="button" className="el_btnS el_btn8Back">삭제</button>
                 <form onSubmit={handleSearch}>
                     <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
                            placeholder="검색어를 입력해주세요"/>
@@ -143,43 +132,50 @@ function Temporary(){
                     <colgroup>
                         <col style={{width: '50px'}}/>
                         <col style={{width: '120px'}}/>
-                        <col style={{width: '120px'}}/>
                         <col style={{width: '*'}}/>
+                        <col style={{width: '120px'}}/>
                         <col style={{width: '120px'}}/>
                     </colgroup>
                     <thead>
                     <tr>
-                        <th scope="col"><input type="checkbox" checked={selectAllChecked} onChange={toggleSelectAll} /></th>
-                        <th scope="col">작성일</th>
+                        <th scope="col"><input type="checkbox" checked={selectAllChecked} onChange={toggleSelectAll}/>
+                        </th>
                         <th scope="col">결재양식</th>
                         <th scope="col">제목</th>
-                        <th scope="col">첨부파일</th>
+                        <th scope="col">최종결재자</th>
+                        <th scope="col">완료일</th>
                     </tr>
                     </thead>
                     <tbody>
-                        {currentResults && currentResults.length > 0 ? (
-                            currentResults.map((document, index) =>
-                                <tr key={index} onClick={() => navigate(`/approval/form/${document.afCode}`, {state: {docInfo: document}})} key={document.adCode} className="hp_tr__click">
-                                    <td><input type="checkbox" checked={checkedRows[document.adCode]} onChange={() => toggleCheckbox(document.adCode)} onClick={(e) => e.stopPropagation()} /></td>
-                                    <td>{document.adReportDate}</td>
-                                    <td>{document.afName}</td>
-                                    <td className="hp_alignL">{document.adTitle}</td>
-                                    <td>{document.empName}</td>
-                                </tr>
-                            )
-                        ) : (
-                            <tr>
-                                <td colSpan="5" className="hp_pt50 hp_pb50 hp_7Color">목록이 없습니다.</td>
+                    {currentResults && currentResults.length > 0 ? (
+                        currentResults.map((document, index) =>
+                            <tr key={document.adCode}
+                                onClick={() => navigate(`/approval/view/${document.adCode}`, {state: {document}})}
+                                className="hp_tr__click">
+                                <td><input type="checkbox" checked={checkedRows[document.adCode]}
+                                           onChange={() => toggleCheckbox(document.adCode)}
+                                           onClick={(e) => e.stopPropagation()}/></td>
+                                <td>{document.afName}</td>
+                                <td className="hp_alignL">{document.adTitle}</td>
+                                <td>{document.empName}</td>
+                                <td>{document.talDate}</td>
                             </tr>
-                        )}
+                        )
+                    ) : (
+                        <tr>
+                            <td colSpan="5" className="hp_pt50 hp_pb50 hp_7Color">목록이 없습니다.</td>
+                        </tr>
+                    )}
                     </tbody>
                 </table>
             </section>
             <div className="ly_spaceBetween ly_fitemC hp_mt10">
-                <div className="hp_ml10 hp_7Color">총 <b className="hp_0Color hp_fw700">{currentPage}</b> / {totalPages} 페이지</div>
+                <div className="hp_ml10 hp_7Color">총 <b
+                    className="hp_0Color hp_fw700">{currentPage}</b> / {totalPages} 페이지
+                </div>
                 <select className="" onChange={handleSortChange} value={sortOption}>
                     <option value="">정렬방식</option>
-                    <option value="작성일">작성일</option>
+                    <option value="완료일">완료일</option>
                     <option value="결재양식">결재양식</option>
                     <option value="제목">제목</option>
                 </select>
@@ -189,4 +185,4 @@ function Temporary(){
     )
 }
 
-export default Temporary;
+export default BoxMain;

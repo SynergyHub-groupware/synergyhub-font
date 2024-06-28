@@ -6,10 +6,6 @@ import Temporary from './pages/approval/Temporary';
 import Form from './pages/approval/setting/Form';
 import Sign from './pages/approval/setting/Sign';
 import Storage from './pages/approval/setting/Storage';
-import ReceiveComplete from './pages/approval/receive/Complete';
-import ReceiveWaiting from './pages/approval/receive/Waiting';
-import Reference from './pages/approval/receive/Reference';
-import ReceiveReturn from './pages/approval/receive/Return';
 import ApprovalLayout from './pages/approval/ApprovalLayout';
 import AttendanceLayout from './pages/attendance/AttendanceLayout';
 import CalendarLayout from './pages/calendar/CalendarLayout';
@@ -42,6 +38,9 @@ import MyInfo from './pages/myInfo/MyInfo';
 import MyInfoLayout from './pages/myInfo/MyInfoLayout';
 import MyPersonalRecordCard from './pages/myInfo/MyPersonalRecordCard';
 import ViewMain from './pages/approval/view/ViewMain';
+import ReceiveMain from './pages/approval/receive/ReceiveMain';
+import FormView from "./pages/approval/setting/FormView";
+import BoxMain from "./pages/approval/personalBox/BoxMain";
 import ImpMsg from './pages/message/storage/ImpMsg';
 import WorkMsg from './pages/message/storage/WorkMsg';
 import Bin from './pages/message/storage/Bin';
@@ -69,15 +68,12 @@ function App() {
             <Route path="temporary" element={<Temporary/>} />
             <Route path="form/:afCode" element={<FormDetail/>}/>
             <Route path="send/:status" element={<DocumentMain/>}/>
+            <Route path="receive/:status" element={<ReceiveMain/>}/>
             <Route path="view/:adCode" element={<ViewMain/>}/>
-            <Route path="receive">
-              <Route path="complete" element={<ReceiveComplete/>} />
-              <Route path="reference" element={<Reference/>} />
-              <Route path="return" element={<ReceiveReturn/>} />
-              <Route path="waiting" element={<ReceiveWaiting/>} />
-            </Route>
+            <Route path="personalBox/:abName" element={<BoxMain/>}/>
             <Route path="setting">
               <Route path="form" element={<Form/>} />
+              <Route path="formView/:afCode" element={<FormView/>} />
               <Route path="sign" element={<Sign/>} />
               <Route path="storage" element={<Storage/>} />
             </Route>

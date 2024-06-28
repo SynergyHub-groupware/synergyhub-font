@@ -2,7 +2,7 @@ import { useState } from "react";
 import Line from "./Line";
 import AddressDir from './../../components/commons/address/AddressDir';
 
-function FormLine({handleTrueLineList}){
+function FormLine({handleTrueLineList, docInfo = {}}){
     // 모달창 오픈
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
@@ -12,19 +12,28 @@ function FormLine({handleTrueLineList}){
     const [selectEmps, setSelectEmps] = useState([]);
 
     // 확인 버튼 핸들러
-    const confirmHandler = (selectEmps) => {
-        setSelectEmps(selectEmps);
+    const confirmHandler = (newSelectEmps) => {
+        setSelectEmps(prev => {
+            const existingEmpCodes = prev.map(emp => emp.emp_code);
+            const filteredNewSelectEmps = newSelectEmps.filter(emp => !existingEmpCodes.includes(emp.emp_code));
+            return [...prev, ...filteredNewSelectEmps];
+        });
         closeModal();
     }
 
-    // console.log("selectEmps", selectEmps);
+    // 삭제 인원 반영
+    const clearReceiver = () => {
+        setSelectEmps([]);
+    }
+
+    console.log("selectEmps", selectEmps);
 
     return(
         <>
             <div className="ly_spaceBetween hp_mb10">
                 <h5 className="hp_fw700 hp_fs18">결재라인</h5>
-                <button type="button" className="el_btnS el_btn8Bord hp_p3-5"onClick={openModal}>결재라인 수정</button>
-                <AddressDir isOpen={isModalOpen} closeModal={closeModal} onConfirm={confirmHandler}/>
+                <button type="button" className="el_btnS el_btn8Bord hp_p3-5" onClick={openModal}>결재라인 수정</button>
+                <AddressDir isOpen={isModalOpen} closeModal={closeModal} onConfirm={confirmHandler} onClear={clearReceiver}/>
             </div>
             <div className="ly_flex hp_relative">
                 <table className="bl_tb3 hp_alignC hp_w200px ly_fshirnk">
@@ -49,7 +58,7 @@ function FormLine({handleTrueLineList}){
                         </tr>
                     </tbody>
                 </table>
-                <Line handleTrueLineList={handleTrueLineList}/>
+                <Line handleTrueLineList={handleTrueLineList} docInfo={docInfo} selectEmps={selectEmps}/>
             </div>
         </>
     )

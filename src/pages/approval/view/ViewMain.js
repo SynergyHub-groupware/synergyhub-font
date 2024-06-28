@@ -7,17 +7,27 @@ import {
     calldeleteDocumentAPI,
     calldownloadAttachAPI,
     callmodifyStatusAPI,
-    callviewAttachAPI
+    callviewAttachAPI,
+    callviewLineListAPI
 } from "../../../apis/ApprovalAPICalls";
 import {useParams} from "react-router-dom";
 
-function ViewMain(){
+function ViewMain({}){
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const location = useLocation();
     const {adCode} = useParams();
-    const {document} = {...location.state};
-    const dispatch = useDispatch();
-    const documents = useSelector(state => state.approvalReducer.documents);
+    const {document, showBtn} = {...location.state};
+    const {documents, viewlines} = useSelector(state => ({
+        viewlines: state.approvalReducer.viewlines,
+        documents: state.approvalReducer.documents,
+    }));
+
+    useEffect(() => {
+        adCode && dispatch(callviewLineListAPI(adCode));
+    }, [adCode, dispatch]);
+
+    console.log("viewlines", viewlines);
 
     const handleCancel = () => {
         if (window.confirm("해당 결재를 상신취소 및 삭제 하시겠습니까?")) {
@@ -25,7 +35,15 @@ function ViewMain(){
                 .then(() => {navigate("/approval/send/waiting");})
                 .catch((error) => {console.error("문서 삭제 실패: ", error);});
         }
-    };
+    }
+
+    const handleModify = () => {
+        if (window.confirm("해당 결재를 상신취소 및 수정 하시겠습니까?\n해당 문서는 임시저장으로 이동됩니다.")) {
+            dispatch(callmodifyStatusAPI(adCode))
+                .then(() => {navigate(`/approval/form/${document.afCode}`, {state: {adCode, afName: document.afName}});})
+                .catch((error) => {console.log("문서 수정 실패: ", error);});
+        }
+    }
 
     useEffect(() => {
         adCode && dispatch(callviewAttachAPI (adCode));
@@ -35,23 +53,36 @@ function ViewMain(){
         dispatch(calldownloadAttachAPI(attachOriginal, attachSave));
     }
 
-    const handleModify = () => {
-        if (window.confirm("해당 결재를 상신취소 및 수정 하시겠습니까?")) {
-            dispatch(callmodifyStatusAPI(adCode))
-                .then(() => {navigate(`/approval/form/${document.afCode}`, {state: {adCode, afName: document.afName}});})
-                .catch((error) => {console.log("문서 수정 실패: ", error);});
-        }
-    }
-
     console.log("document", document);
+
+    // viewlines 배열에서 talStatus가 "승인" 여부 체크
+    const hasNoApproval = viewlines.every(line => line.talStatus !== "승인" && line.talStatus !== "반려");
+
+    const handleCancelClick = () => {navigate(-1);};
+
     return(
         <div className="ly_cont">
             <h4 className="el_lv1Head hp_mb30">{document.afName}</h4>
+            {document.talReason && 
+            <section className="bl_sect hp_padding15 hp_mb30">
+                <table className="bl_tb3">
+                    <colgroup>
+                        <col style={{width:'200px'}}/>
+                        <col style={{width:'*'}}/>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th scope="col" className="hp_dBack">반려사유</th>
+                            <td>{document.talReason}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>}
             <section className="bl_sect hp_padding15">
                 <div className="ly_spaceBetween hp_mb10">
                     <h5 className="hp_fw700 hp_fs18">결재라인</h5>
                 </div>
-                <ViewLine adReportDate={document.adReportDate}/>
+                <ViewLine document={document} viewlines={viewlines} showBtn={showBtn}/>
                 <h5 className="hp_fw700 hp_fs18 hp_mb10 hp_mt30">결재정보</h5>
                 <table className="bl_tb3 el_approvalTb3__th">
                     <tbody>
@@ -65,7 +96,7 @@ function ViewMain(){
                             <ul>
                                 {documents.map((doc, index) => (
                                     <li key={index}>
-                                        <button onClick={() => handleDownload(doc.attachSave, doc.attachOriginal)}>{doc.attachOriginal}</button>
+                                        <button className="el_file__downBtn" onClick={() => handleDownload(doc.attachSave, doc.attachOriginal)} title="다운받기">{doc.attachOriginal}</button>
                                     </li>
                                 ))}
                             </ul>
@@ -81,9 +112,13 @@ function ViewMain(){
                 <ViewDetail afCode={document.afCode} adDetail={document.adDetail}/>
             </section>
             <div className="hp_mt10 hp_alignR">
-                <button type="button" className="el_btnS el_btn8Bord" onClick={() => navigate('/approval/send/waiting')}>목록</button>
-                <button type="button" className="el_btnS el_btnblueBord hp_ml5" onClick={handleModify}>수정</button>
-                <button type="button" className="el_btnS el_btn8Back hp_ml5" onClick={handleCancel}>삭제</button>
+                <button type="button" className="el_btnS el_btn8Bord" onClick={handleCancelClick}>목록</button>
+                {hasNoApproval && (
+                    <>
+                        <button type="button" className="el_btnS el_btnblueBord hp_ml5" onClick={handleModify}>수정</button>
+                        <button type="button" className="el_btnS el_btn8Back hp_ml5" onClick={handleCancel}>삭제</button>
+                    </>
+                )}
             </div>
         </div>
     )

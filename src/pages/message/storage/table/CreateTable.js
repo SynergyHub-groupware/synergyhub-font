@@ -119,6 +119,7 @@ function CreateTable() {
             // .catch(error => {
             //     console.log("error : : ", error);
             // });
+            // 머지용 커밋
             console.log("임시저장 API 작동");
         } else {
             navigate("/message/storage/receive");

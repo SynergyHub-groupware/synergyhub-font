@@ -31,8 +31,7 @@ function CreateTable() {
             .catch(error => console.log("error : ", error));
     }, []);
 
-    console.log("empSend : ", empSend);
-
+    /* 확인 버튼 처리 */
     const submitHandler = () => {
 
         /* 입력 예외처리 */
@@ -76,6 +75,55 @@ function CreateTable() {
         });
     };
 
+    const cancelHandler = ( ) => { 
+        const cancelConfirm = window.confirm("쪽지 쓰기를 취소하시겠습니까?");
+        
+        /* 취소한 경우 */
+        if ( !cancelConfirm ) {
+            return;
+        }
+    
+        /* 취소 안한 경우 */
+        if( selectEmpRev !== '' || msgTitle !== '' || msgCon !== '') {
+    
+            const tempConfirm = window.confirm("임시저장 하시겠습니까?");
+            
+            if (!tempConfirm) {
+                navigate("/message/storage/receive");
+            }
+            
+            /* 임시저장 하는 API fetch로 작성 */
+            // const data = {
+            //     msgTitle,
+            //     msgCon,
+            //     msgStatus: 'N',
+            //     emerStatus,
+            //     empRev: {emp_code: selectEmpRev },
+            //     empSend: {emp_code: empSend },
+            //     storCode: {storCode: '4'}
+            // };
+    
+            // fetch('http://localhost:8080/emp/message/temp', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type' : 'application/json'
+            //     },
+            //     body: JSON.stringify(data)
+            // })
+            // .then(res => res.json())
+            // .then(data => {
+            //     console.log('data temp success : ', data);
+            //     alert("임시저장이 완료되었습니다.");
+            //     navigate("/message/storage/temp");
+            // })
+            // .catch(error => {
+            //     console.log("error : : ", error);
+            // });
+            console.log("임시저장 API 작동");
+        } else {
+            navigate("/message/storage/receive");
+        }
+    }
     return (
         <div>
             <table className="bl_tb3">
@@ -142,7 +190,7 @@ function CreateTable() {
                 </tbody>
             </table>
             <div className="hp_alignR hp_mt10">
-                <button type="button" className="el_btnS el_btn8Back">취소</button>
+                <button type="button" className="el_btnS el_btn8Back" onClick={cancelHandler}>취소</button>
                 <button type="button" className="el_btnS el_btnblueBack hp_ml5" onClick={submitHandler}>보내기</button>
             </div>
         </div>

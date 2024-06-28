@@ -1,6 +1,7 @@
 import { delMsg, getBinMsg, getImpMsg, getRevDetail, getRevMsg, getSendMsg, getWorkMsg } from "../modules/MessageModules";
 import { request } from "./api";
 
+/* 받은 쪽지 전체 조회 API */
 export const callRevMsgListAPI = () => {
     
     return async (dispatch, getState) => {
@@ -26,6 +27,7 @@ export const callRevMsgListAPI = () => {
     };
 };
 
+/* 보낸 쪽지 전체 조회 API */
 export const callSendMsgListAPI = () => {
 
     return async (dispatch, getState) => {
@@ -49,6 +51,7 @@ export const callSendMsgListAPI = () => {
     };
 };
 
+/* 휴지통 쪽지 전체 조회 API */
 export const callBinMsgListAPI = () => {
 
     return async (dispatch, getState) => {
@@ -72,6 +75,7 @@ export const callBinMsgListAPI = () => {
     };
 };
 
+/* 중요 보관함 전체 조회 API */
 export const callImpMsgListAPI = () => {
 
     return async (dispatch, getState) => {
@@ -95,6 +99,7 @@ export const callImpMsgListAPI = () => {
     };
 };
 
+/* 업무 보관함 전체 조회 API */
 export const callWorkMsgListAPI = () => {
 
     return async (dispatch, getState) => {
@@ -118,6 +123,7 @@ export const callWorkMsgListAPI = () => {
     };
 };
 
+/* 쪽지 휴지통 이동 API */
 export const callDelMsgAPI = (msgCode) => {
     
     return async (dispatch, getState) => {
@@ -141,6 +147,7 @@ export const callDelMsgAPI = (msgCode) => {
     };
 };
 
+/* 받은 쪽지 디테일 API */
 export const callRevDetailAPI = (msgCode) => {
 
     return async (dispatch, getState) => {
@@ -164,6 +171,7 @@ export const callRevDetailAPI = (msgCode) => {
     };
 };
 
+/* 보낸 쪽지 디테일 API */
 export const callSendDetailAPI = (msgCode) => {
 
     return async (dispatch, getState) => {

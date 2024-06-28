@@ -55,6 +55,7 @@ import AttendanceList from "./pages/attendance/attendanceList";
 import MyDayOff from "./pages/attendance/MyDayOff";
 import DayOffList from "./pages/attendance/DayOffList";
 import Preferences from "./pages/attendance/Preferences";
+import CreateMsg from './pages/message/storage/CreateMsg';
 
 function App() {
   return (
@@ -110,6 +111,7 @@ function App() {
           <Route path="message" element={<MessageLayout/>}>
             <Route index element={<Navigate to="storage/receive" replace/>}/>
             <Route path='storage'>
+              <Route path='deliver' element={<CreateMsg/>}/>
               <Route path='receive' element={<ReceiveMsg/>}/>
               <Route path='receive/detail/:msgCode' element={<RevDetail/>}/>
               <Route path='send' element={<SendMsg/>}/>

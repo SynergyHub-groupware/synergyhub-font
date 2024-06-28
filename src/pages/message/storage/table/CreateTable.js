@@ -1,0 +1,151 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+function CreateTable() {
+
+    const [options, setOptions] = useState([]);
+    const [selectEmpRev, setSelectEmpRev] = useState('');
+    const [msgTitle, setMsgTitle] = useState('');
+    const [msgCon, setMsgCon] = useState('');
+    const [emerStatus, setEmerStatus] = useState('N');
+    const [empSend, setEmpSend] = useState('');
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+
+        /* 회원 주소록 조회 */
+        fetch('http://localhost:8080/address/select')
+            .then(res => res.json())
+            .then(data => setOptions(data))
+            .catch(error => console.log('error : ', error));
+
+        /* 로그인한 사용자의 정보 추출 */
+        fetch('http://localhost:8080/employee/myInfo',{
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('access-token')}`,
+            }
+        })
+            .then(res => res.json())
+            .then(data => setEmpSend(data.emp_code))
+            .catch(error => console.log("error : ", error));
+    }, []);
+
+    console.log("empSend : ", empSend);
+
+    const submitHandler = () => {
+
+        /* 입력 예외처리 */
+        if (!selectEmpRev || !msgTitle || !msgCon) {
+            alert("받는 사람, 제목, 내용을 모두 입력해주세요.");
+            return;
+        }
+
+        const confirmSend = window.confirm("쪽지를 보내시겠습니까?");
+        if(!confirmSend) {
+            return;
+        }
+
+        const data = {
+            msgTitle,
+            msgCon,
+            msgStatus: 'N',
+            emerStatus,
+            empRev: { emp_code: selectEmpRev },
+            empSend: { emp_code: empSend },
+            storCode: { storCode: '1'}
+        };
+
+        fetch('http://localhost:8080/emp/message/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log('data create success : ', data);
+            alert("쪽지를 성공적으로 보냈습니다.");
+            navigate('/message/storage/receive');
+        })
+        .catch(error => {
+            console.log("error : : ", error);
+            alert("쪽지 전송에 실패하였습니다.");
+        });
+    };
+
+    return (
+        <div>
+            <table className="bl_tb3">
+                <colgroup>
+                    <col style={{ width: "120px" }} />
+                    <col style={{ width: "*" }} />
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th scope="col">받는사람</th>
+                        <td>
+                            <div className="ly_spaceBetween ly_fshirnk">
+                                <select 
+                                    style={{ width: "90%" }}
+                                    value={selectEmpRev}
+                                    onChange={(e) => setSelectEmpRev(e.target.value)}
+                                >
+                                    <option>인원 선택</option>
+                                    {options.map((option, index) => (
+                                        <option key={index} value={option.emp_code}>
+                                            {option.emp_name} &lt;{option.dept_title} {option.position_name}&gt;  ({option.email})
+                                        </option>
+                                    ))}
+                                </select>
+                                <label>
+                                    <input 
+                                        type="checkbox" 
+                                        value="urgent" 
+                                        style={{ minHeight: "inherit" }}
+                                        onChange={(e) => setEmerStatus(e.target.checked ? 'Y' : 'N')} 
+                                    /> 긴급
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="col">첨부파일</th>
+                        <td></td>
+                    </tr>
+                    <tr style={{ height: "70px" }}>
+                        <th scope="col">제목</th>
+                        <td>
+                            <input 
+                                type="text" 
+                                style={{ height: "70px" }} 
+                                className="hp_w100" 
+                                placeholder="100자 이내로 입력해주세요."
+                                value={msgTitle}
+                                onChange={(e) => setMsgTitle(e.target.value)} 
+                            />
+                        </td>
+                    </tr>
+                    <tr style={{ height: "500px" }}>
+                        <th scope="col">내용</th>
+                        <td>
+                            <textarea 
+                                className="hp_w100"
+                                style={{ height: "500px" }} 
+                                placeholder="1000자 이내로 입력해주세요."
+                                value={msgCon}
+                                onChange={(e) => setMsgCon(e.target.value)}
+                        ></textarea></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div className="hp_alignR hp_mt10">
+                <button type="button" className="el_btnS el_btn8Back">취소</button>
+                <button type="button" className="el_btnS el_btnblueBack hp_ml5" onClick={submitHandler}>보내기</button>
+            </div>
+        </div>
+    );
+}
+
+export default CreateTable;

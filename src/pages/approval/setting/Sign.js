@@ -14,6 +14,8 @@ function Sign() {
 
     console.log("employee", employee);
 
+
+
     return (
         <div className="ly_cont">
             <h4 className="el_lv1Head hp_mb30">서명관리</h4>
@@ -40,7 +42,7 @@ function Sign() {
                         <th scope="row">서명<br/>
                             <button type="button" className="el_btnS el_btn8Bord hp_mt5">파일첨부</button>
                         </th>
-                        <td><img src="" alt={`${employee.emp_name} 서명`}/></td>
+                        <td><img src=" " alt={`${employee.emp_name} 서명`}/></td>
                     </tr>
                     </tbody>
                 </table>

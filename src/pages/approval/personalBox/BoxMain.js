@@ -136,12 +136,6 @@ function BoxMain(){
             }            
             window.location.reload();
         }
-
-        // selectedAdCodes.forEach(adCode => {
-        //     dispatch(calldeleteDocInStorageAPI({abCode: abCode, adCode}));
-        // });
-        //
-        // window.location.reload();
     }
 
     return (

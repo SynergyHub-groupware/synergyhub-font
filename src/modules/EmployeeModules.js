@@ -7,6 +7,7 @@ const initialState = {
     recordCard: {},
     departments: [],
     titles: [],
+    positions: [],
 };
 
 /* 액션 타입 */
@@ -15,9 +16,10 @@ const GET_MY_INFO = 'employee/GET_MY_INFO';
 const GET_RECORDCARD = 'employee/GET_RECORDCARD';
 const GET_DEPARTMENTS = 'employee/GET_DEPARTMENTS';
 const GET_TITLES = 'employee/GET_TITLES';
+const GET_POSITIONS = 'employee/GET_POSITIONS';
 
 /* 액션 함수 */
-export const { employee : { getDeptEmployees, getMyInfo, getRecordcard, getDepartments, getTitles } } = createActions ({
+export const { employee : { getDeptEmployees, getMyInfo, getRecordcard, getDepartments, getTitles, getPositions } } = createActions ({
     [GET_DEPT_EMPLOYEES] : result => {
 
         console.log('Action payload:', result);
@@ -46,7 +48,10 @@ export const { employee : { getDeptEmployees, getMyInfo, getRecordcard, getDepar
     },
     [GET_TITLES] : result => {
         return {titles: result};
-    }
+    },
+    [GET_POSITIONS] : result => {
+        return {positions: result};
+    },
 });
 
 /* 리듀서 함수 */
@@ -96,6 +101,12 @@ const employeeReducer = handleActions({
             titles: payload.titles,
         };
     },
+    [GET_POSITIONS] : (state, {payload}) => {
+        return {
+            ...state,
+            positions: payload.positions,
+        }
+    }
 
 }, initialState);
 

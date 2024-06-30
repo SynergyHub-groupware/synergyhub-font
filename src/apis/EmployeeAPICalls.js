@@ -1,5 +1,12 @@
 import { request } from './api';
-import {getDepartments, getDeptEmployees, getMyInfo, getRecordcard, getTitles} from '../modules/EmployeeModules';
+import {
+    getDepartments,
+    getDeptEmployees,
+    getMyInfo,
+    getPositions,
+    getRecordcard,
+    getTitles
+} from '../modules/EmployeeModules';
 
 export const callDepartmentEmployeesAPI = () => {
 
@@ -121,6 +128,25 @@ export const callTitlesAPI = () => {
             }
         } catch(error) {
             console.error('직위목록 조회 실패(error): ', error);
+        }
+    }
+}
+
+export const callPositionsAPI = () => {
+    return async (dispatch, getState) => {
+        try {
+            const result = await request('GET', '/employee/empPositions',);
+
+            if(result && result.status === 200) {
+
+                dispatch(getPositions(result.data));
+
+            } else {
+
+                console.log('직급목록 조회 실패(result): ', result);
+            }
+        } catch(error) {
+            console.error('직급목록 조회 실패(error): ', error);
         }
     }
 }

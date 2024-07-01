@@ -3,23 +3,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import '../../css/timeAndAttendance.css';
 import MonthWeekComponent from './util/MonthWeekComponent';
 import TodayDate2Component from './util/TodayDate2Component';
-import {callAttendanceTodayAPI, callMyAttendanceForWeekAPI, callMyInfoAPI} from '../../apis/AttendancelAPICalls'; // 출퇴근 시간 등록 API import 추가
+import {callAttendanceTodayAPI, callMyAttendanceForWeekAPI, callMyInfoAPI} from '../../apis/AttendancelAPICalls';
 import WeekAttendance from './component/WeekAttendance';
 import MoveButton from "./button/MoveButton";
 import AttendanceSummary from "./component/AttendanceSummary";
 import DefaultSchedule from "./component/DefaultSchedule";
 
 function MyAttendance() {
-    const dispatch = useDispatch();
+    const AttendanceDispatch = useDispatch();
     const employee = useSelector((state) => state.attendanceReducer.employee);
     const attendances = useSelector((state) => state.attendanceReducer.attendances);
     const attendancesToday = useSelector((state) => state.attendanceReducer.attendanceToday);
 
     useEffect(() => {
-        dispatch(callMyInfoAPI());
-        dispatch(callMyAttendanceForWeekAPI());
-        dispatch(callAttendanceTodayAPI());
-    }, [dispatch]);
+        AttendanceDispatch(callMyInfoAPI());
+        AttendanceDispatch(callMyAttendanceForWeekAPI());
+        AttendanceDispatch(callAttendanceTodayAPI());
+    }, [AttendanceDispatch]);
 
     const [showDiv1, setShowDiv1] = useState(true);
     const [isOpenFirst, setIsOpenFirst] = useState(true);
@@ -94,7 +94,7 @@ function MyAttendance() {
                                                 오늘도 좋은 하루 되세요! 😊
                                             </div>
                                             <div>
-                                                <button type="button" className="el_btn0Back el_btnF hp_mt20 hp_fs16"
+                                                <button type="button" className="el_btnblueBord el_btnF hp_mt20 hp_fs16"
                                                         style={{width: '200px'}}>
                                                     일정 확인하기
                                                 </button>
@@ -109,7 +109,7 @@ function MyAttendance() {
                                     >
                                         <div className="ly_flex ly_fitemC">
                                             <h4 style={{fontSize: '20px'}}>
-                                                <b>📅&nbsp;&nbsp;&nbsp;금주 근태 현황</b>
+                                                <b>🧾&nbsp;&nbsp;&nbsp;금주 근태 현황</b>
                                             </h4>
                                         </div>
                                     </section>
@@ -122,7 +122,7 @@ function MyAttendance() {
                                     >
                                         <div className="ly_flex ly_fitemC">
                                             <h4 style={{fontSize: '20px'}}>
-                                                <b>🚗&nbsp;&nbsp;&nbsp;출장 신청 현황</b>
+                                                <b>🚘&nbsp;&nbsp;&nbsp;출장 신청 현황</b>
                                             </h4>
                                         </div>
                                     </section>
@@ -148,7 +148,7 @@ function MyAttendance() {
                                     >
                                         <div className="ly_flex ly_fitemC">
                                             <h4 style={{fontSize: '20px'}}>
-                                                <b>🎈&nbsp;&nbsp;&nbsp;휴가 신청 현황</b>
+                                                <b>🚀&nbsp;&nbsp;&nbsp;휴가 신청 현황</b>
                                             </h4>
                                         </div>
                                     </section>

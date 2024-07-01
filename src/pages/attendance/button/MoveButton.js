@@ -14,11 +14,10 @@ const MoveButton = ({ toggleDiv }) => {
             <div
                 style={{
                     position: 'absolute',
-                    border: '1px solid',
                     width: '50px',
                     height: '28px',
                     zIndex: 1,
-                    backgroundColor: 'black',
+                    backgroundColor: '#006CD0',
                     borderRadius: '15px'
                 }}
             />

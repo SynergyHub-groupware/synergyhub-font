@@ -62,12 +62,11 @@ function SendDetail() {
                     </tbody>
                 </table>
                 <div className="ly_spaceBetween hp_mt10">
-                    <button type="button" className="el_btnS el_btn0Back">읽지않음 처리</button>
+                    <div></div>
                     <div className="">
                         <button type="button" className="el_btnS el_btn8Back">삭제</button>
                         <button type="button" className="el_btnS el_btn8Bord hp_ml5">이동</button>
                         <button type="button" className="el_btnS el_btnblueBord hp_ml5">전달</button>
-                        <button type="button" className="el_btnS el_btnblueBack hp_ml5">답장</button>
                     </div>
                 </div>
             </section>

@@ -8,7 +8,7 @@ function BinTable() {
 
     const dispatch = useDispatch();
     const messages = useSelector(state => state.messageReducer.messages.message);
-    const [sort, setSort] = useState("");   // 쪽지 정렬 상태
+    const [sort, setSort] = useState("desc");   // 쪽지 정렬 상태
     const [selectMsg, setSelectMsg] = useState(new Set());
     const [selectAll, setSelectAll] = useState(false);  // 전체 선택
 
@@ -167,7 +167,7 @@ function BinTable() {
             <div className="ly_spaceBetween ly_fitemC hp_mt10">
                 <div className="hp_ml10 hp_7Color">총 1 / <b className="hp_0Color hp_fw700">1</b> 페이지</div>
                 <select value={sort} onChange={sortChangeHandler}>
-                    <option value="">정렬방식</option>
+                    <option value="desc">정렬방식</option>
                     <option value="asc">날짜 오름차순</option>
                 </select>
             </div>

@@ -37,13 +37,13 @@ function Etc({handleDetail, writtenCont = {}}) {
     // writtenCont 값이 있을 경우
     useEffect(() => {
         if (writtenCont && writtenCont.aeCon !== undefined) {
-            setEditorData(writtenCont.aeCon);
+            setEditorData(writtenCont.aeCon || '');
             setException(prev => ({
                 ...prev,
                 aeCon: writtenCont.aeCon
             }));
         } else if (formdetail && formdetail.afCon !== undefined) {
-            setEditorData(formdetail.afCon);
+            setEditorData(formdetail.afCon || '');
             setException(prev => ({
                 ...prev,
                 aeCon: formdetail.afCon

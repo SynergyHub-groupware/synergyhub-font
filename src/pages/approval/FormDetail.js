@@ -31,13 +31,7 @@ function FormDetail(){
 
     useEffect(() => {
         dispatch(resetContent());
-    }, [dispatch]);
-
-    useEffect(() => {
         dispatch(resetOnedoc());
-    }, [dispatch]);
-
-    useEffect(() => {
         dispatch(callMyInfoAPI());
     }, [dispatch]);
 
@@ -69,28 +63,35 @@ function FormDetail(){
         }
     }, [dispatch, docInfo, onedoc]);
 
+    // content가 안 비워져서 복사용으로 하나더 만듦
+    const [cont, setCont] = useState({});
+
     useEffect(() => {
         if(docInfo){
             dispatch(callviewDetailAPI(docInfo.adDetail));
         }else if(onedoc){
             dispatch(callviewDetailAPI(onedoc.adDetail));
-        }else{
-            dispatch(resetContent());
         }
     }, [docInfo, onedoc, dispatch]);
 
+    useEffect(() => {
+        if(docInfo || onedoc) setCont(content);
+        else setCont({});
+    }, [content]);
+
     console.log("content", content);
+    console.log("cont", cont);
 
     const renderFormCont = () => {
         switch(afCode){
-            case '2': return <ExceptionWork handleDetail={handleDetail} formRefs={formRefs} writtenCont={content} />; break;
-            case '3': return <Overtime handleDetail={handleDetail} formRefs={formRefs} writtenCont={content} />; break;
-            case '4': return <Late handleDetail={handleDetail} formRefs={formRefs} writtenCont={content} />; break;
-            case '5': return <Vacation handleDetail={handleDetail} formRefs={formRefs} writtenCont={content} />; break;
-            case '7': return <Leave handleDetail={handleDetail} formRefs={formRefs} writtenCont={content} />; break;
-            case '8': return <Resign handleDetail={handleDetail} formRefs={formRefs} writtenCont={content} />; break;
-            case '9': return <Apology handleDetail={handleDetail} formRefs={formRefs} writtenCont={content} docInfo={docInfo} />; break;
-            default: return <Etc handleDetail={handleDetail} writtenCont={content}/>; break;
+            case '2': return <ExceptionWork handleDetail={handleDetail} formRefs={formRefs} writtenCont={cont} />; break;
+            case '3': return <Overtime handleDetail={handleDetail} formRefs={formRefs} writtenCont={cont} />; break;
+            case '4': return <Late handleDetail={handleDetail} formRefs={formRefs} writtenCont={cont} />; break;
+            case '5': return <Vacation handleDetail={handleDetail} formRefs={formRefs} writtenCont={cont} />; break;
+            case '7': return <Leave handleDetail={handleDetail} formRefs={formRefs} writtenCont={cont} />; break;
+            case '8': return <Resign handleDetail={handleDetail} formRefs={formRefs} writtenCont={cont} />; break;
+            case '9': return <Apology handleDetail={handleDetail} formRefs={formRefs} writtenCont={cont} docInfo={docInfo} />; break;
+            default: return <Etc handleDetail={handleDetail} writtenCont={cont}/>; break;
         }
     }
 
@@ -144,10 +145,9 @@ function FormDetail(){
             ...prev,
             [key]: data
         }));
-
-        // console.log("handleDetail", data);
     };
 
+    // 알림
     useEffect(() => {
         if(success){
             alert("결재문서가 " + success + " 되었습니다.");
@@ -221,9 +221,6 @@ function FormDetail(){
             formData.append("attachOriginal", files[i].name);
         }
 
-        // console.log("files", files);
-        // console.log("formData", formData);
-
         await dispatch(callApprovalDocRegistAPI({ formData: formData, temporary: temporary }));
     }
 
@@ -250,10 +247,6 @@ function FormDetail(){
         else if (parentAdCode) dispatch(callviewAttachAPI (parentAdCode));
         else dispatch(resetAttaches());
     }, [dispatch, docInfo]);
-
-
-    // console.log("attaches", attaches);
-    // console.log("files", files);
 
     useEffect(() => {
         if (attaches && attaches.length > 0) {
@@ -285,7 +278,7 @@ function FormDetail(){
         <div className="ly_cont">
             {docInfo && docInfo.afName ? <h4 className="el_lv1Head hp_mb30">{docInfo.afName}</h4> : <h4 className="el_lv1Head hp_mb30">{afName}</h4>}
             <section className="bl_sect hp_padding15">
-                <FormLine handleTrueLineList={handleTrueLineList} docInfo={docInfo}/>
+                <FormLine handleTrueLineList={handleTrueLineList} docInfo={docInfo} onedoc={onedoc}/>
                 <h5 className="hp_fw700 hp_fs18 hp_mb10 hp_mt30">결재정보</h5>
                 <table className="bl_tb3 el_approvalTb3__th">
                     <tbody>

@@ -123,6 +123,31 @@ export const callWorkMsgListAPI = () => {
     };
 };
 
+/* 임시 보관함 전체 조회 API */
+export const callTempMsgListAPI = () => {
+
+    return async (dispatch, getState) => {
+        
+        try {
+            const result = await request('GET', '/emp/message/temp', {
+                'Authorization': `Bearer ${localStorage.getItem('access-token')}`,
+                'Content-Type': 'application/json'
+            });
+
+            console.log('call API result : ', result);
+
+            if (result && result.status === 200) {
+                dispatch(getWorkMsg(result.data));
+            } else {
+                console.log("error : " ,result);
+            }
+        } catch (error) {
+            console.log("error : ", error);
+        }
+    };
+}
+
+
 /* 쪽지 휴지통 이동 API */
 export const callDelMsgAPI = (msgCode) => {
     

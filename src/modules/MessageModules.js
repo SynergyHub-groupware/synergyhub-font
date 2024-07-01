@@ -12,12 +12,15 @@ const GET_SEND_MSG = 'message/GET_SEND_MSG';
 const GET_BIN_MSG = 'message/GET_BIN_MSG';
 const GET_IMP_MSG = 'message/GET_IMP_MSG';
 const GET_WORK_MSG = 'message/GET_WORK_MSG';
+const GET_TEMP_MSG = 'message/GET_TEMP_MSG';
 const DEL_MSG = 'message/DEL_MSG';
 
 const GET_REV_DETAIL = 'message/GET_REV_DETAIL';
 const GET_SEND_DETAIL = 'message/GET_SEND_DETAIL';
 
-export const { message : { getRevMsg, getSendMsg, getBinMsg, getImpMsg, getWorkMsg, delMsg, getRevDetail, getSendDetail }} = createActions({
+export const { message : { getRevMsg, getSendMsg, getBinMsg, getImpMsg, getWorkMsg, delMsg, getRevDetail, getSendDetail 
+    , getTempMsg
+}} = createActions({
     [GET_REV_MSG] : result => {
         console.log('action : ', result);
 
@@ -43,6 +46,12 @@ export const { message : { getRevMsg, getSendMsg, getBinMsg, getImpMsg, getWorkM
     },
 
     [GET_WORK_MSG] : result => {
+        console.log('action : ', result);
+
+        return {message: result};
+    },
+
+    [GET_TEMP_MSG] : result => {
         console.log('action : ', result);
 
         return {message: result};
@@ -108,6 +117,15 @@ const messageReducer = handleActions({
     },
 
     [GET_WORK_MSG] : (state, {payload}) => {
+        console.log("reducer : ", payload);
+
+        return {
+            ...state,
+            messages: payload
+        }
+    },
+
+    [GET_TEMP_MSG] : (state, {payload}) => {
         console.log("reducer : ", payload);
 
         return {

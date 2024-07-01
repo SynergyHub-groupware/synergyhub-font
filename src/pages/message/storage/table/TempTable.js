@@ -110,7 +110,7 @@ function TempTable({ selectMsgCode, setSelectMsgCode, search }) {
                                 <td>{msg.sendDate}</td>
                                 <td>{msg.revName} {msg.revPosition}</td>
                                 <td className="hp_alighL">
-                                    <Link to={`/message/storage/send/detail/${msg.msgCode}`}>{msg.msgTitle}</Link>
+                                    <Link to={`/message/storage/create/temp/${msg.msgCode}`}>{msg.msgTitle}</Link>
                                 </td>
                                 <td>{msg.emerStatus}</td>
                                 <td>{msg.storCode}</td>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function CreateTable() {
+function CreateTable({msgCode}) {
 
     const [options, setOptions] = useState([]);
     const [selectEmpRev, setSelectEmpRev] = useState('');
@@ -29,6 +29,19 @@ function CreateTable() {
             .then(res => res.json())
             .then(data => setEmpSend(data.emp_code))
             .catch(error => console.log("error : ", error));
+
+        /* 임시저장된 쪽지 데이터 불러오기 */
+        if (msgCode) {
+            fetch(`http://localhost:8080/emp/message/send/${msgCode}`)
+                .then(res => res.json())
+                .then(data => {
+                    setMsgTitle(data.msgTitle);
+                    setMsgCon(data.msgCon);
+                    setSelectEmpRev(data.empRev.emp_code);
+                    setEmerStatus(data.emerStatus);
+                })
+                .catch(error => console.log("error : ", error));
+        }
     }, []);
 
     /* 확인 버튼 처리 */
@@ -67,6 +80,21 @@ function CreateTable() {
         .then(data => {
             console.log('data create success : ', data);
             alert("쪽지를 성공적으로 보냈습니다.");
+
+            if (msgCode) {
+                // 임시 저장된 쪽지는 삭제
+                fetch(`http://localhost:8080/emp/message/bin/${msgCode}`, {
+                    method: 'DELETE'
+                })
+                    .then(() => {
+                        console.log('임시 저장 쪽지 삭제 성공 :', msgCode);
+                    })
+                    .catch(error => {
+                        console.log("error : ", error);
+                        console.log("임시 저장된 쪽지 삭제 실패");
+                    });
+            }
+
             navigate('/message/storage/receive');
         })
         .catch(error => {

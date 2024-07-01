@@ -14,12 +14,13 @@ const GET_IMP_MSG = 'message/GET_IMP_MSG';
 const GET_WORK_MSG = 'message/GET_WORK_MSG';
 const GET_TEMP_MSG = 'message/GET_TEMP_MSG';
 const DEL_MSG = 'message/DEL_MSG';
+const DEL_SEND_MSG = 'message/DEL_SEND_MSG';
 
 const GET_REV_DETAIL = 'message/GET_REV_DETAIL';
 const GET_SEND_DETAIL = 'message/GET_SEND_DETAIL';
 
 export const { message : { getRevMsg, getSendMsg, getBinMsg, getImpMsg, getWorkMsg, delMsg, getRevDetail, getSendDetail 
-    , getTempMsg
+    , getTempMsg, delSendMsg
 }} = createActions({
     [GET_REV_MSG] : result => {
         console.log('action : ', result);
@@ -73,6 +74,12 @@ export const { message : { getRevMsg, getSendMsg, getBinMsg, getImpMsg, getWorkM
         console.log('action : ', result);
 
         return {messageDetail: result};
+    },
+
+    [DEL_SEND_MSG] : msgCode => {
+        console.log('del action : ', msgCode);
+
+        return { msgCode };
     }
 
 }, initialState);
@@ -153,7 +160,18 @@ const messageReducer = handleActions({
     [GET_SEND_DETAIL] : (state, {payload}) => ({
         ...state,
         messageDetail: payload
-    })
+    }),
+
+    [DEL_SEND_MSG] : (state, {payload}) => {
+        console.log("del reducer : ", payload);
+
+        return {
+            ...state,
+            messages: state.messages.map(msg =>
+                msg.msgCode === payload.msgCode ? { ...msg, storCode: 5 } : msg
+            )
+        }
+    }
 
 }, initialState);
 

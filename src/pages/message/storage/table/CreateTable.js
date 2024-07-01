@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function CreateTable({msgCode}) {
 
@@ -11,13 +11,29 @@ function CreateTable({msgCode}) {
     const [empSend, setEmpSend] = useState('');
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
+
+        if(location.state && location.state.msgTitle) {
+            setMsgTitle(location.state.msgTitle);
+        }
+
 
         /* 회원 주소록 조회 */
         fetch('http://localhost:8080/address/select')
             .then(res => res.json())
-            .then(data => setOptions(data))
+            .then(data => {
+                setOptions(data)
+
+                if(location.state && location.state.empRev) {
+                    const selectedOption = data.find(option => option.emp_name === location.state.empRev);
+
+                    if(selectedOption) {
+                        setSelectEmpRev(selectedOption.emp_code);
+                    }
+                }
+            })
             .catch(error => console.log('error : ', error));
 
         /* 로그인한 사용자의 정보 추출 */
@@ -38,11 +54,12 @@ function CreateTable({msgCode}) {
                     setMsgTitle(data.msgTitle);
                     setMsgCon(data.msgCon);
                     setSelectEmpRev(data.empRev.emp_code);
+                    console.log('data.empRev.emp_code : ', data.empRev.emp_code);
                     setEmerStatus(data.emerStatus);
                 })
                 .catch(error => console.log("error : ", error));
         }
-    }, []);
+    }, [location.state, msgCode]);
 
     /* 확인 버튼 처리 */
     const submitHandler = () => {
@@ -66,7 +83,8 @@ function CreateTable({msgCode}) {
             emerStatus,
             empRev: { emp_code: selectEmpRev },
             empSend: { emp_code: empSend },
-            storCode: { storCode: '1'}
+            revStor: { storCode: 1 },
+            sendStor: { storCode: 1}
         };
 
         fetch('http://localhost:8080/emp/message/send', {
@@ -118,40 +136,45 @@ function CreateTable({msgCode}) {
             
             if (!tempConfirm) {
                 navigate("/message/storage/receive");
+
+            } else {
+
+                /* 임시저장 하는 API fetch로 작성 */
+                const data = {
+                    msgTitle,
+                    msgCon,
+                    msgStatus: 'N',
+                    emerStatus,
+                    empRev: {emp_code: selectEmpRev },
+                    empSend: {emp_code: empSend },
+                    revStor: { storCode: 4},
+                    sendStor: { storCode: 4}
+                };
+
+                fetch('http://localhost:8080/emp/message/create/temp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log('data temp success : ', data);
+                    alert("임시저장이 완료되었습니다.");
+                    navigate("/message/storage/temp");
+                })
+                .catch(error => {
+                    console.log("error : : ", error);
+                });
+                console.log("임시저장 API 작동");
             }
             
-            /* 임시저장 하는 API fetch로 작성 */
-            const data = {
-                msgTitle,
-                msgCon,
-                msgStatus: 'N',
-                emerStatus,
-                empRev: {emp_code: selectEmpRev },
-                empSend: {emp_code: empSend },
-                storCode: {storCode: '4'}
-            };
-    
-            fetch('http://localhost:8080/emp/message/create/temp', {
-                method: 'POST',
-                headers: {
-                    'Content-Type' : 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(res => res.json())
-            .then(data => {
-                console.log('data temp success : ', data);
-                alert("임시저장이 완료되었습니다.");
-                navigate("/message/storage/temp");
-            })
-            .catch(error => {
-                console.log("error : : ", error);
-            });
-            console.log("임시저장 API 작동");
         } else {
             navigate("/message/storage/receive");
         }
     }
+
     return (
         <div>
             <table className="bl_tb3">
@@ -170,7 +193,7 @@ function CreateTable({msgCode}) {
                                     onChange={(e) => setSelectEmpRev(e.target.value)}
                                 >
                                     <option>인원 선택</option>
-                                    {options.map((option, index) => (
+                                    {options.length > 0 && options.map((option, index) => (
                                         <option key={index} value={option.emp_code}>
                                             {option.emp_name} &lt;{option.dept_title} {option.position_name}&gt;  ({option.email})
                                         </option>

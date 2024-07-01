@@ -53,6 +53,8 @@ function ExceptionWork({handleDetail, formRefs, writtenCont = {}}){
                 aattPlace: writtenCont.aattPlace,
                 aattCon: writtenCont.aattCon,
             }));
+        }else{
+            setException({});
         }
     },[writtenCont])
 

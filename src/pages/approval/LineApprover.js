@@ -34,8 +34,8 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
                     const matchingLine = lines && lines.find(line => line.alSort === emp.titleCode);
                     return {
                         ...emp,
-                        alRole: matchingLine ? matchingLine.alRole : "결재",
-                        alOrder: matchingLine ? matchingLine.alOrder : null
+                        talRole: matchingLine ? matchingLine.alRole : "결재",
+                        talOrder: matchingLine ? matchingLine.alOrder : null
                     };
                 });
 
@@ -53,16 +53,15 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
     }, [lineemps, myCode, lines]);
 
     // 실결재라인 배열 전달
-    useEffect(()=>{
-        const trueLineList = newLines.map((emp, index) => {
-            // const matchingLine = lines && lines.find(line => line.alSort && line.alSort.includes(emp.titleCode));
-            // const role = matchingLine ? matchingLine.alRole : "결재";
-            return {talOrder: index + 1, talRole: emp.alRole, employee: {emp_code: emp.empCode}};
-        });
-
-        handleTrueLineList(trueLineList);
-
-    }, [newLines, lines]);
+    // useEffect(()=>{
+    //     const trueLineList = newLines.map((emp, index) => {
+    //         // const matchingLine = lines && lines.find(line => line.alSort && line.alSort.includes(emp.titleCode));
+    //         // const role = matchingLine ? matchingLine.alRole : "결재";
+    //         return {talOrder: index + 1, talRole: emp.talRole, employee: {emp_code: emp.empCode}};
+    //     });
+    //     handleTrueLineList(trueLineList);
+    //
+    // }, [newLines, lines]);
 
     const handleRoleChange = (event, empCode) => {
         const updatedRole = event.target.value;
@@ -70,13 +69,13 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
         // 한 명의 전결자만 선택되도록 처리
         if (updatedRole === "전결") {
             const updatedLines = newLines.map(emp =>
-                emp.empCode === empCode ? { ...emp, alRole: updatedRole } : { ...emp, alRole: "결재" }
+                emp.empCode === empCode ? { ...emp, talRole: updatedRole } : { ...emp, talRole: "결재" }
             );
             setNewLines(updatedLines);
         } else {
             setNewLines(prevNewLines =>
                 prevNewLines.map(emp =>
-                    emp.empCode === empCode ? { ...emp, alRole: updatedRole } : emp
+                    emp.empCode === empCode ? { ...emp, talRole: updatedRole } : emp
                 )
             );
         }
@@ -84,22 +83,27 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
 
     // console.log("lines", lines);
     // console.log("lineemps", lineemps);
-    console.log("newLines", newLines);
+    // console.log("newLines", newLines);
 
     // selectEmps가 있을 경우
     useEffect(() => {
         if (selectEmps && selectEmps.length > 0) {
             const updatedLines = selectEmps.map((emp, index) => ({
-                alOrder: index + 1,
-                alRole: "결재",
+                talOrder: index + 1,
+                talRole: "결재",
                 deptTitle: emp.dept_title,
                 empCode: emp.emp_code,
                 empName: emp.emp_name,
                 titleName: emp.title_name,
             }));
             setNewLines(updatedLines);
+        }else if(newLines){
+            const trueLineList = newLines.map((emp, index) => {
+                return {talOrder: index + 1, talRole: emp.talRole, employee: {emp_code: emp.empCode}};
+            });
+            handleTrueLineList(trueLineList);
         }
-    }, [selectEmps]);
+    }, [selectEmps, newLines]);
 
     return (
         <>

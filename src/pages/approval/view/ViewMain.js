@@ -18,9 +18,9 @@ function ViewMain({}){
     const location = useLocation();
     const {adCode} = useParams();
     const {document, showBtn} = {...location.state};
-    const {documents, viewlines} = useSelector(state => ({
+    const {viewlines, attaches} = useSelector(state => ({
         viewlines: state.approvalReducer.viewlines,
-        documents: state.approvalReducer.documents,
+        attaches: state.approvalReducer.attaches,
     }));
 
     useEffect(() => {
@@ -40,7 +40,7 @@ function ViewMain({}){
     const handleModify = () => {
         if (window.confirm("해당 결재를 상신취소 및 수정 하시겠습니까?\n해당 문서는 임시저장으로 이동됩니다.")) {
             dispatch(callmodifyStatusAPI(adCode))
-                .then(() => {navigate(`/approval/form/${document.afCode}`, {state: {adCode, afName: document.afName}});})
+                .then(() => {navigate(`/approval/form/${document.afCode}`, {state: {parentAdCode: adCode, afName: document.afName}});})
                 .catch((error) => {console.log("문서 수정 실패: ", error);});
         }
     }
@@ -48,6 +48,8 @@ function ViewMain({}){
     useEffect(() => {
         adCode && dispatch(callviewAttachAPI (adCode));
     }, [dispatch, adCode]);
+
+    console.log("attaches", attaches);
 
     const handleDownload = (attachSave, attachOriginal) => {
         dispatch(calldownloadAttachAPI(attachOriginal, attachSave));
@@ -94,7 +96,7 @@ function ViewMain({}){
                         <th scope="row">첨부파일</th>
                         <td colSpan="3">
                             <ul>
-                                {documents.map((doc, index) => (
+                                {attaches && attaches.map((doc, index) => (
                                     <li key={index}>
                                         <button className="el_file__downBtn" onClick={() => handleDownload(doc.attachSave, doc.attachOriginal)} title="다운받기">{doc.attachOriginal}</button>
                                     </li>

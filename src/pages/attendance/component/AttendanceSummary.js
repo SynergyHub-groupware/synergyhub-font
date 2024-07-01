@@ -1,9 +1,12 @@
 import React from 'react';
-import TimeComponent from '../util/TimeComponent';
+import { useSelector } from 'react-redux';
 import TodayDateComponent from '../util/TodayDateComponent';
-import AttendanceButton from "../button/AttendanceButton";
+import TimeComponent from '../util/TimeComponent';
+import AttendanceButton from '../button/AttendanceButton';
 
-function AttendanceSummary({ attendancesToday }) {
+function AttendanceSummary() {
+    const attendancesToday = useSelector((state) => state.attendanceReducer.attendanceToday);
+
     return (
         <section className="bl_sect hp_padding30 el_shadowD4 hp_mb30 section1">
             <div className="hp_fw700"><TodayDateComponent /></div>
@@ -14,7 +17,7 @@ function AttendanceSummary({ attendancesToday }) {
                     <li className=""><b className="hp_fw700 hp_mr5">퇴근 시간</b> {attendancesToday?.endTime || '-'}</li>
                 </ul>
             </div>
-            <AttendanceButton />
+            <AttendanceButton attendancesToday={attendancesToday} />
         </section>
     );
 }

@@ -42,6 +42,16 @@ function RevDetail() {
         });
     };
 
+    /* 전달 핸들러 */
+    const transHandler = () => {
+        navigate('/message/storage/deliver', {
+            state: {
+                msgTitle: `FW: ${msgDetail.messageDetail.msgTitle}`,
+                msgCon: `${msgDetail.messageDetail.msgCon}`
+            }
+        })
+    }
+
     /* 삭제 핸들러 */
     const deleteHandler = async () => {
 
@@ -91,7 +101,7 @@ function RevDetail() {
                     <div>
                         <button type="button" className="el_btnS el_btn8Back" onClick={deleteHandler}>삭제</button>
                         <button type="button" className="el_btnS el_btn8Bord hp_ml5">이동</button>
-                        <button type="button" className="el_btnS el_btnblueBord hp_ml5">전달</button>
+                        <button type="button" className="el_btnS el_btnblueBord hp_ml5" onClick={transHandler}>전달</button>
                         <button type="button" className="el_btnS el_btnblueBack hp_ml5" onClick={replyHandler}>답장</button>
                     </div>
                 </div>

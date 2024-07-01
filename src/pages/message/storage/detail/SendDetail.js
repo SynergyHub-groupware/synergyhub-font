@@ -32,6 +32,16 @@ function SendDetail() {
         return <div>로딩중..</div>;
     }
 
+    /* 전달 핸들러 */
+    const transHandler = () => {
+        navigate('/message/storage/deliver', {
+            state: {
+                msgTitle: `FW: ${msgDetail.messageDetail.msgTitle}`,
+                msgCon: `${msgDetail.messageDetail.msgCon}`
+            }
+        })
+    }
+
     /* 삭제 핸들러 */
     const deleteHandler = async () => {
 
@@ -81,7 +91,7 @@ function SendDetail() {
                     <div className="">
                         <button type="button" className="el_btnS el_btn8Back" onClick={deleteHandler}>삭제</button>
                         <button type="button" className="el_btnS el_btn8Bord hp_ml5">이동</button>
-                        <button type="button" className="el_btnS el_btnblueBord hp_ml5">전달</button>
+                        <button type="button" className="el_btnS el_btnblueBord hp_ml5" onClick={transHandler}>전달</button>
                     </div>
                 </div>
             </section>

@@ -19,6 +19,9 @@ function CreateTable({msgCode}) {
             setMsgTitle(location.state.msgTitle);
         }
 
+        if(location.state && location.state.msgCon) {
+            setMsgCon(location.state.msgCon);
+        }
 
         /* 회원 주소록 조회 */
         fetch('http://localhost:8080/address/select')
@@ -53,8 +56,9 @@ function CreateTable({msgCode}) {
                 .then(data => {
                     setMsgTitle(data.msgTitle);
                     setMsgCon(data.msgCon);
-                    setSelectEmpRev(data.empRev.emp_code);
-                    console.log('data.empRev.emp_code : ', data.empRev.emp_code);
+                    if(data.empRev && data.empRev.emp_code) {
+                        setSelectEmpRev(data.empRev.emp_code);
+                    }
                     setEmerStatus(data.emerStatus);
                 })
                 .catch(error => console.log("error : ", error));

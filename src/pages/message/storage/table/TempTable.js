@@ -133,5 +133,4 @@ function TempTable({ selectMsgCode, setSelectMsgCode, search }) {
     );
 }
 
-// push commit 
 export default TempTable;

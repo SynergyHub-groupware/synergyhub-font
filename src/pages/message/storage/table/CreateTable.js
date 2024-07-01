@@ -93,33 +93,32 @@ function CreateTable() {
             }
             
             /* 임시저장 하는 API fetch로 작성 */
-            // const data = {
-            //     msgTitle,
-            //     msgCon,
-            //     msgStatus: 'N',
-            //     emerStatus,
-            //     empRev: {emp_code: selectEmpRev },
-            //     empSend: {emp_code: empSend },
-            //     storCode: {storCode: '4'}
-            // };
+            const data = {
+                msgTitle,
+                msgCon,
+                msgStatus: 'N',
+                emerStatus,
+                empRev: {emp_code: selectEmpRev },
+                empSend: {emp_code: empSend },
+                storCode: {storCode: '4'}
+            };
     
-            // fetch('http://localhost:8080/emp/message/temp', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type' : 'application/json'
-            //     },
-            //     body: JSON.stringify(data)
-            // })
-            // .then(res => res.json())
-            // .then(data => {
-            //     console.log('data temp success : ', data);
-            //     alert("임시저장이 완료되었습니다.");
-            //     navigate("/message/storage/temp");
-            // })
-            // .catch(error => {
-            //     console.log("error : : ", error);
-            // });
-            // 머지용 커밋
+            fetch('http://localhost:8080/emp/message/create/temp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('data temp success : ', data);
+                alert("임시저장이 완료되었습니다.");
+                navigate("/message/storage/temp");
+            })
+            .catch(error => {
+                console.log("error : : ", error);
+            });
             console.log("임시저장 API 작동");
         } else {
             navigate("/message/storage/receive");

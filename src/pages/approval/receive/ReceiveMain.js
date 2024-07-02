@@ -8,6 +8,7 @@ import Return from "./Return";
 import Reference from './Reference';
 import {callMyInfoAPI} from "../../../apis/EmployeeAPICalls";
 import { callreceiveDocListAPI } from "../../../apis/ApprovalAPICalls";
+import Share from "./Share";
 
 function ReceiveMain(){
     const {status} = useParams();
@@ -31,7 +32,7 @@ function ReceiveMain(){
             case 'waiting': setTitle('대기'); break;
             case 'complete': setTitle('완료'); break;
             case 'return': setTitle('반려'); break;
-            case 'reference': setTitle('참조/열람'); break;
+            case 'share': setTitle('공유'); break;
             default: setTitle('');
         }
     }, [status]);
@@ -41,7 +42,7 @@ function ReceiveMain(){
             case 'waiting': return <Waiting data={currentResults} />; break;
             case 'complete': return <Complete data={currentResults} />; break;
             case 'return': return <Return data={currentResults} />; break;
-            case 'reference': return <Reference data={currentResults} />; break;
+            case 'share': return <Share data={currentResults} />; break;
         }
     }
 
@@ -125,7 +126,9 @@ function ReceiveMain(){
         <div className="ly_cont">
             <h4 className="el_lv1Head hp_mb30">받은결재함 [{title}]</h4>
             <div className="ly_spaceBetween">
-                <div></div>
+                {status == "share" ? (
+                    <button type="button" className="el_btnS el_btn8Back">삭제</button>
+                ) : (<div></div>)}
                 <form onSubmit={handleSearch}>
                     <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="검색어를 입력해주세요"/>
                     <input type="submit" className="el_btnS el_btnblueBord hp_ml5" value="검색"/>

@@ -54,10 +54,10 @@ function ViewDetail({afCode, adDetail}){
         return name;
     };
 
-    console.log("content", content);
-    console.log("departments", departments);
-    console.log("titles", titles);
-    console.log("positions", positions);
+    // console.log("content", content);
+    // console.log("departments", departments);
+    // console.log("titles", titles);
+    // console.log("positions", positions);
 
     return(
         <div>

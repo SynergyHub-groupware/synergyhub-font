@@ -29,7 +29,7 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
         onedoc && dispatch(callviewLineListAPI(onedoc.adCode));
     }, [onedoc, dispatch]);
 
-    console.log("viewlines", viewlines);
+    // console.log("viewlines", viewlines);
 
     useEffect(() => {
         setNewLines(viewlines);
@@ -42,26 +42,35 @@ function LineApprover({lsCode, lines, employee, handleTrueLineList, docInfo = {}
         setNewLines(combinedArray);
     }, [lines, lineemps]);
 
-    // 실결재라인 배열 전달
-    useEffect(()=>{
-        const trueLineList = newLines.map((line, index) => {
-            return {talOrder: line.alOrder, talRole: line.alRole, employee: {emp_code: line.empCode}};
-        });
-        handleTrueLineList(trueLineList);
-
-    }, [newLines, lines]);
-
     // 결재역할 수정 시 반영 (전결은 한명만 설정할 수 있도록 코드 추가 필요)
     const handleRoleChange = (event, empCode) => {
         const updatedRole = event.target.value;
 
+        // 한 명의 전결자만 선택되도록 처리
         if (updatedRole === "전결") {
-            const updatedLines = newLines.map(line =>
-                line.empCode === empCode ? { ...line, alRole: updatedRole } : { ...line, alRole: "결재" }
+            const updatedLines = newLines.map(emp =>
+                emp.empCode === empCode ? { ...emp, talRole: updatedRole } : { ...emp, talRole: "결재" }
             );
             setNewLines(updatedLines);
+        } else {
+            setNewLines(prevNewLines =>
+                prevNewLines.map(emp =>
+                    emp.empCode === empCode ? { ...emp, talRole: updatedRole } : emp
+                )
+            );
         }
     };
+
+    // 실결재라인 배열 전달
+    useEffect(()=>{
+        const trueLineList = newLines.map((line, index) => {
+            return {talOrder: line.alOrder ? line.alOrder : line.talOrder,
+                    talRole: line.alRole ? line.alRole : line.talRole,
+                    employee: {emp_code: line.empCode}};
+        });
+        handleTrueLineList(trueLineList);
+
+    }, [newLines, lines]);
 
     console.log("lines", lines);
     console.log("lineemps", lineemps);

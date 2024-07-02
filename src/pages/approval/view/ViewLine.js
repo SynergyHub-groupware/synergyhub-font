@@ -56,7 +56,7 @@ function ViewLine({viewlines, document={}, showBtn}){
         fetchData();
     }, [viewlines]);
 
-    console.log("imageArr", imageArr);
+    // console.log("imageArr", imageArr);
 
     // 첫번째 미결재인 사람한테 버튼 노출
     const [firstUnapprovedIndex, setFirstUnapprovedIndex] = useState(-1);

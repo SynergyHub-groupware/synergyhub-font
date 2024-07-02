@@ -27,7 +27,7 @@ function ViewMain({}){
         adCode && dispatch(callviewLineListAPI(adCode));
     }, [adCode, dispatch]);
 
-    console.log("viewlines", viewlines);
+    // console.log("viewlines", viewlines);
 
     const handleCancel = () => {
         if (window.confirm("해당 결재를 상신취소 및 삭제 하시겠습니까?")) {
@@ -49,13 +49,13 @@ function ViewMain({}){
         adCode && dispatch(callviewAttachAPI (adCode));
     }, [dispatch, adCode]);
 
-    console.log("attaches", attaches);
+    // console.log("attaches", attaches);
 
     const handleDownload = (attachSave, attachOriginal) => {
         dispatch(calldownloadAttachAPI(attachOriginal, attachSave));
     }
 
-    console.log("document", document);
+    // console.log("document", document);
 
     // viewlines 배열에서 talStatus가 "승인" 여부 체크
     const hasNoApproval = viewlines.every(line => line.talStatus !== "승인" && line.talStatus !== "반려");

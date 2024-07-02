@@ -79,8 +79,8 @@ function FormDetail(){
         else setCont({});
     }, [content]);
 
-    console.log("content", content);
-    console.log("cont", cont);
+    // console.log("content", content);
+    // console.log("cont", cont);
 
     const renderFormCont = () => {
         switch(afCode){
@@ -96,7 +96,7 @@ function FormDetail(){
     }
 
     // 결재 상신
-    const [document, setDocument] = useState({});    
+    const [document, setDocument] = useState({});
     useEffect(() => {
         const today = new Date();
         const formattedDate = today.toISOString().split('T')[0];
@@ -293,13 +293,16 @@ function FormDetail(){
                                 <ul className="hp_w100 hp_mr10">
                                     {files.map((file, index) => (
                                         <li key={index}>
-                                            <button type="button" className="hp_mr10 hp_fw700" onClick={() => handleRemoveFile(index)} title="삭제">X</button>
+                                            <button type="button" className="hp_mr10 hp_fw700"
+                                                    onClick={() => handleRemoveFile(index)} title="삭제">X
+                                            </button>
                                             {file.name}
                                         </li>
                                     ))}
                                 </ul>
                                 <label className="bl_attachBtn__label el_btnS el_btn8Back hp_p3-5">
-                                    <input type="file" className="bl_attachBtn__input" multiple onChange={handleFileChange} /> 파일선택
+                                    <input type="file" className="bl_attachBtn__input" multiple
+                                           onChange={handleFileChange}/> 파일선택
                                 </label>
                             </div>
                         </td>
@@ -307,7 +310,9 @@ function FormDetail(){
                     <tr>
                         <th scope="row">제목</th>
                         <td colSpan="3">
-                            <input type="text" className="hp_w100" name="adTitle" value={document.adTitle} onChange={onChangeHandler} ref={(el) => (formRefs.current['field1'] = el)} placeholder="[팀명] MM/DD 기안양식명_이름" required />
+                            <input type="text" className="hp_w100" name="adTitle" value={document.adTitle}
+                                   onChange={onChangeHandler} ref={(el) => (formRefs.current['field1'] = el)}
+                                   placeholder="[팀명] MM/DD 기안양식명_이름" required/>
                         </td>
                     </tr>
                     </tbody>
@@ -316,7 +321,7 @@ function FormDetail(){
                 {renderFormCont()}
             </section>
             <div className="hp_mt10 hp_alignR">
-                <button type="button" className="el_btnS el_btnblueBord" onClick={() => onClickApprovalDocRegist(true)}>임시저장</button>
+            <button type="button" className="el_btnS el_btnblueBord" onClick={() => onClickApprovalDocRegist(true)}>임시저장</button>
                 <button type="button" className="el_btnS el_btnblueBack hp_ml5" onClick={() => onClickApprovalDocRegist(false)}>결재상신</button>
                 <button type="button" className="el_btnS el_btn8Back hp_ml5" onClick={handleCancelClick}>취소</button>
             </div>

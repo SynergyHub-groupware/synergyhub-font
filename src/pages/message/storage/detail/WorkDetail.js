@@ -6,7 +6,7 @@ import { callSendDetailAPI, callDelMsgAPI } from "../../../../apis/MessageAPICal
 function WorkDetail() {
 
     const { msgCode } = useParams();    // URL에서 msgCode 추출
-    const dispatch = useDispatch();     
+    const dispatch = useDispatch();     // commit
     const msgDetail = useSelector(state => state.messageReducer.messageDetail);
     const navigate = useNavigate();
 

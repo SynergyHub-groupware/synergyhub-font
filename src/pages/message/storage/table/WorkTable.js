@@ -4,12 +4,13 @@ import { callWorkMsgListAPI } from "../../../../apis/MessageAPICalls";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function WorkTable({ selectMsgCode, setSelectMsgCode, search }) {
+function WorkTable({ selectMsgCode, setSelectMsgCode, search, currentPage, setCurrentPage }) {
 
     const dispatch = useDispatch();
     const [allCheck, setAllCheck] = useState(false);
     const messages = useSelector(state => state.messageReducer.messages.message);
     const [sort, setSort] = useState("desc");   // 쪽지 정렬 상태
+    const itemsPerPage = 10; // 페이지당 항목 수 10개로 설정
 
     /* 쪽지 배열 정렬 */
     const sortMsg = (messages, sort) => {
@@ -46,6 +47,9 @@ function WorkTable({ selectMsgCode, setSelectMsgCode, search }) {
     };
 
     const sortedMessages = sortMsg(filterMsg(messages, search), sort);
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentMessages = sortedMessages.slice(startIndex, startIndex + itemsPerPage);
 
     useEffect(() => {
         console.log("API 호출");
@@ -98,8 +102,8 @@ function WorkTable({ selectMsgCode, setSelectMsgCode, search }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {sortedMessages && sortedMessages.length > 0 ? (
-                            sortedMessages.map(msg => (
+                        {currentMessages && currentMessages.length > 0 ? (
+                            currentMessages.map(msg => (
                                 <tr key={msg.msgCode}>
                                     <td><input type="checkbox" onChange={() => checkboxChange(msg.msgCode)} checked={selectMsgCode.includes(msg.msgCode)} /></td>
                                     <td>{msg.sendDate}</td>
@@ -120,7 +124,7 @@ function WorkTable({ selectMsgCode, setSelectMsgCode, search }) {
                 </table>
             </section>
             <div className="ly_spaceBetween ly_fitemC hp_mt10">
-                <div className="hp_ml10 hp_7Color">총 {messages ? messages.length : 0} / <b className="hp_0Color hp_fw700">1</b> 페이지</div>
+                <div className="hp_ml10 hp_7Color">총 {currentMessages.length} / <b className="hp_0Color hp_fw700">1</b> 페이지</div>
                 <select value={sort} onChange={sortChangeHandler}>
                     <option value="desc">정렬방식</option>
                     <option value="asc">날짜 오름차순</option>
